@@ -1,52 +1,77 @@
-// Admin API routes (admin-only access)
-
 import { Hono } from 'hono';
 import type { Env, User, Report } from '../lib/types';
+import { verifyToken, extractToken } from '../lib/auth';
 
 const admin = new Hono<{ Bindings: Env }>();
 
 // Middleware to check admin role
-admin.use('/*', async (c, next) => {
-  const userRole = c.get('userRole');
-  if (userRole !== 'admin') {
-    return c.json({ error: 'Forbidden: Admin access required' }, 403);
+const adminOnly = async (c: any, next: any) => {
+  const authHeader = c.req.header('Authorization');
+  const token = extractToken(authHeader);
+  if (!token) {
+    return c.json({ error: 'Not authenticated' }, 401);
   }
+
+  const payload = await verifyToken(token);
+  if (!payload || payload.role !== 'admin') {
+    return c.json({ error: 'Admin access required' }, 403);
+  }
+
+  c.set('user', payload);
   await next();
+};
+
+admin.use('/*', adminOnly);
+
+// Get dashboard statistics
+admin.get('/stats', async (c) => {
+  try {
+    const totalUsers = await c.env.DB.prepare(
+      'SELECT COUNT(*) as count FROM users WHERE status = ?'
+    ).bind('active').first<{ count: number }>();
+
+    const totalPoems = await c.env.DB.prepare(
+      'SELECT COUNT(*) as count FROM poems WHERE status = ?'
+    ).bind('published').first<{ count: number }>();
+
+    const pendingReports = await c.env.DB.prepare(
+      'SELECT COUNT(*) as count FROM reports WHERE status = ?'
+    ).bind('pending').first<{ count: number }>();
+
+    const featuredPoets = await c.env.DB.prepare(
+      'SELECT COUNT(*) as count FROM users WHERE is_featured = 1 AND (featured_until IS NULL OR featured_until > CURRENT_TIMESTAMP)'
+    ).first<{ count: number }>();
+
+    return c.json({
+      total_users: totalUsers?.count || 0,
+      total_poems: totalPoems?.count || 0,
+      pending_reports: pendingReports?.count || 0,
+      featured_poets: featuredPoets?.count || 0
+    });
+  } catch (error) {
+    console.error('Get stats error:', error);
+    return c.json({ error: 'Failed to fetch statistics' }, 500);
+  }
 });
 
 // Get all users
 admin.get('/users', async (c) => {
   try {
-    const status = c.req.query('status'); // active, banned
-    const limit = parseInt(c.req.query('limit') || '100');
+    const limit = parseInt(c.req.query('limit') || '50');
     const offset = parseInt(c.req.query('offset') || '0');
 
-    let query = `
-      SELECT id, username, email, role, status, display_name, is_featured, 
-             featured_until, created_at
+    const { results } = await c.env.DB.prepare(`
+      SELECT id, username, email, role, status, display_name, 
+             is_featured, featured_until, created_at
       FROM users
-    `;
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+    `).bind(limit, offset).all<User>();
 
-    const params: any[] = [];
-
-    if (status && ['active', 'banned'].includes(status)) {
-      query += ' WHERE status = ?';
-      params.push(status);
-    }
-
-    query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
-    params.push(limit, offset);
-
-    const result = await c.env.DB.prepare(query).bind(...params).all<User>();
-
-    return c.json({
-      users: result.results || [],
-      count: result.results?.length || 0
-    });
-
+    return c.json({ users: results || [] });
   } catch (error) {
     console.error('Get users error:', error);
-    return c.json({ error: 'Internal server error' }, 500);
+    return c.json({ error: 'Failed to fetch users' }, 500);
   }
 });
 
@@ -60,233 +85,206 @@ admin.put('/users/:id/status', async (c) => {
       return c.json({ error: 'Invalid status' }, 400);
     }
 
-    const result = await c.env.DB.prepare(
+    await c.env.DB.prepare(
       'UPDATE users SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?'
     ).bind(status, id).run();
 
-    if (!result.success) {
-      return c.json({ error: 'Failed to update user status' }, 500);
-    }
-
-    return c.json({ 
-      success: true, 
-      message: `User ${status === 'banned' ? 'banned' : 'unbanned'} successfully` 
-    });
-
+    return c.json({ message: `User ${status === 'banned' ? 'banned' : 'unbanned'} successfully` });
   } catch (error) {
     console.error('Update user status error:', error);
-    return c.json({ error: 'Internal server error' }, 500);
+    return c.json({ error: 'Failed to update user status' }, 500);
+  }
+});
+
+// Delete user (hard delete)
+admin.delete('/users/:id', async (c) => {
+  try {
+    const id = c.req.param('id');
+
+    // Don't allow deleting admin users
+    const user = await c.env.DB.prepare(
+      'SELECT role FROM users WHERE id = ?'
+    ).bind(id).first<{ role: string }>();
+
+    if (user?.role === 'admin') {
+      return c.json({ error: 'Cannot delete admin users' }, 403);
+    }
+
+    await c.env.DB.prepare('DELETE FROM users WHERE id = ?').bind(id).run();
+
+    return c.json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error('Delete user error:', error);
+    return c.json({ error: 'Failed to delete user' }, 500);
   }
 });
 
 // Get all reports
 admin.get('/reports', async (c) => {
   try {
-    const status = c.req.query('status') || 'pending';
-    const limit = parseInt(c.req.query('limit') || '100');
-    const offset = parseInt(c.req.query('offset') || '0');
-
-    const result = await c.env.DB.prepare(`
-      SELECT r.*, p.title as poem_title, p.author_id, p.language,
-             u1.username as reporter_username,
-             u2.username as reviewer_username,
-             u3.username as author_username
+    const status = c.req.query('status');
+    
+    let query = `
+      SELECT r.*, p.title as poem_title, p.content as poem_content,
+             u.username as reporter_username
       FROM reports r
-      LEFT JOIN poems p ON r.poem_id = p.id
-      LEFT JOIN users u1 ON r.reporter_id = u1.id
-      LEFT JOIN users u2 ON r.reviewed_by = u2.id
-      LEFT JOIN users u3 ON p.author_id = u3.id
-      WHERE r.status = ?
-      ORDER BY r.created_at DESC
-      LIMIT ? OFFSET ?
-    `).bind(status, limit, offset).all();
+      JOIN poems p ON r.poem_id = p.id
+      LEFT JOIN users u ON r.reporter_id = u.id
+    `;
+    
+    const params: any[] = [];
+    if (status) {
+      query += ' WHERE r.status = ?';
+      params.push(status);
+    }
 
-    return c.json({
-      reports: result.results || [],
-      count: result.results?.length || 0
-    });
+    query += ' ORDER BY r.created_at DESC';
 
+    const { results } = await c.env.DB.prepare(query).bind(...params).all<Report>();
+
+    return c.json({ reports: results || [] });
   } catch (error) {
     console.error('Get reports error:', error);
-    return c.json({ error: 'Internal server error' }, 500);
+    return c.json({ error: 'Failed to fetch reports' }, 500);
   }
 });
 
-// Review report
+// Update report status
 admin.put('/reports/:id', async (c) => {
   try {
-    const reportId = c.req.param('id');
-    const userId = c.get('userId');
+    const id = c.req.param('id');
     const { status, action } = await c.req.json();
+    const user = c.get('user');
 
-    if (!['reviewed', 'dismissed', 'action_taken'].includes(status)) {
+    if (!['pending', 'reviewed', 'dismissed', 'action_taken'].includes(status)) {
       return c.json({ error: 'Invalid status' }, 400);
     }
 
-    // Get report details
-    const report = await c.env.DB.prepare('SELECT poem_id FROM reports WHERE id = ?')
-      .bind(reportId).first<{ poem_id: number }>();
+    // If action is taken, update the poem status
+    if (action === 'delete_poem') {
+      const report = await c.env.DB.prepare(
+        'SELECT poem_id FROM reports WHERE id = ?'
+      ).bind(id).first<{ poem_id: number }>();
 
-    if (!report) {
-      return c.json({ error: 'Report not found' }, 404);
+      if (report) {
+        await c.env.DB.prepare(
+          'UPDATE poems SET status = ? WHERE id = ?'
+        ).bind('deleted', report.poem_id).run();
+      }
     }
 
-    // Update report status
     await c.env.DB.prepare(
       'UPDATE reports SET status = ?, reviewed_by = ?, reviewed_at = CURRENT_TIMESTAMP WHERE id = ?'
-    ).bind(status, userId, reportId).run();
+    ).bind(status, user.userId, id).run();
 
-    // Take action if specified
-    if (action === 'delete_poem' && status === 'action_taken') {
-      await c.env.DB.prepare(
-        'UPDATE poems SET status = \'deleted\', updated_at = CURRENT_TIMESTAMP WHERE id = ?'
-      ).bind(report.poem_id).run();
-    } else if (action === 'flag_poem' && status === 'action_taken') {
-      await c.env.DB.prepare(
-        'UPDATE poems SET status = \'flagged\', updated_at = CURRENT_TIMESTAMP WHERE id = ?'
-      ).bind(report.poem_id).run();
-    }
-
-    return c.json({ success: true, message: 'Report reviewed successfully' });
-
+    return c.json({ message: 'Report updated successfully' });
   } catch (error) {
-    console.error('Review report error:', error);
-    return c.json({ error: 'Internal server error' }, 500);
+    console.error('Update report error:', error);
+    return c.json({ error: 'Failed to update report' }, 500);
   }
 });
 
-// Flag poem directly
-admin.put('/poems/:id/flag', async (c) => {
+// Get all poems (including flagged and deleted)
+admin.get('/poems', async (c) => {
   try {
-    const id = c.req.param('id');
-    const { status } = await c.req.json();
-
-    if (!['published', 'flagged', 'deleted'].includes(status)) {
-      return c.json({ error: 'Invalid status' }, 400);
-    }
-
-    const result = await c.env.DB.prepare(
-      'UPDATE poems SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?'
-    ).bind(status, id).run();
-
-    if (!result.success) {
-      return c.json({ error: 'Failed to update poem status' }, 500);
-    }
-
-    return c.json({ success: true, message: 'Poem status updated successfully' });
-
-  } catch (error) {
-    console.error('Flag poem error:', error);
-    return c.json({ error: 'Internal server error' }, 500);
-  }
-});
-
-// Get platform statistics
-admin.get('/stats', async (c) => {
-  try {
-    // Total users
-    const totalUsers = await c.env.DB.prepare('SELECT COUNT(*) as count FROM users')
-      .first<{ count: number }>();
-
-    // Total poems
-    const totalPoems = await c.env.DB.prepare(
-      'SELECT COUNT(*) as count FROM poems WHERE status = \'published\''
-    ).first<{ count: number }>();
-
-    // Pending reports
-    const pendingReports = await c.env.DB.prepare(
-      'SELECT COUNT(*) as count FROM reports WHERE status = \'pending\''
-    ).first<{ count: number }>();
-
-    // Active subscriptions
-    const activeSubscriptions = await c.env.DB.prepare(
-      'SELECT COUNT(*) as count FROM subscriptions WHERE status = \'active\''
-    ).first<{ count: number }>();
-
-    // Poems by language
-    const poemsByLanguage = await c.env.DB.prepare(`
-      SELECT language, COUNT(*) as count 
-      FROM poems 
-      WHERE status = 'published' 
-      GROUP BY language
-    `).all<{ language: string; count: number }>();
-
-    // Recent activity (last 7 days)
-    const recentPoems = await c.env.DB.prepare(`
-      SELECT COUNT(*) as count 
-      FROM poems 
-      WHERE status = 'published' AND created_at >= datetime('now', '-7 days')
-    `).first<{ count: number }>();
-
-    const recentUsers = await c.env.DB.prepare(`
-      SELECT COUNT(*) as count 
-      FROM users 
-      WHERE created_at >= datetime('now', '-7 days')
-    `).first<{ count: number }>();
-
-    return c.json({
-      stats: {
-        total_users: totalUsers?.count || 0,
-        total_poems: totalPoems?.count || 0,
-        pending_reports: pendingReports?.count || 0,
-        active_subscriptions: activeSubscriptions?.count || 0,
-        poems_by_language: poemsByLanguage.results || [],
-        recent_poems_7d: recentPoems?.count || 0,
-        recent_users_7d: recentUsers?.count || 0
-      }
-    });
-
-  } catch (error) {
-    console.error('Get stats error:', error);
-    return c.json({ error: 'Internal server error' }, 500);
-  }
-});
-
-// Get top poems for anthology
-admin.get('/anthology/candidates', async (c) => {
-  try {
-    const language = c.req.query('language');
+    const status = c.req.query('status');
     const limit = parseInt(c.req.query('limit') || '50');
+    const offset = parseInt(c.req.query('offset') || '0');
 
     let query = `
-      SELECT p.*, u.username as author_name, u.display_name as author_display_name,
-             CASE WHEN p.rating_count > 0 THEN CAST(p.rating_sum AS REAL) / p.rating_count ELSE 0 END as average_rating
+      SELECT p.*, u.username as author_name, u.display_name as author_display_name
       FROM poems p
       JOIN users u ON p.author_id = u.id
-      WHERE p.status = 'published' AND p.anthology_eligible = 1
     `;
-
+    
     const params: any[] = [];
-
-    if (language && ['en', 'hi', 'mr'].includes(language)) {
-      query += ' AND p.language = ?';
-      params.push(language);
+    if (status) {
+      query += ' WHERE p.status = ?';
+      params.push(status);
     }
 
-    query += ` 
-      ORDER BY 
-        (CAST(p.rating_sum AS REAL) / NULLIF(p.rating_count, 0)) DESC,
-        p.like_count DESC,
-        p.view_count DESC
-      LIMIT ?
-    `;
-    params.push(limit);
+    query += ' ORDER BY p.created_at DESC LIMIT ? OFFSET ?';
+    params.push(limit, offset);
 
-    const result = await c.env.DB.prepare(query).bind(...params).all();
+    const { results } = await c.env.DB.prepare(query).bind(...params).all();
 
-    return c.json({
-      candidates: result.results || [],
-      count: result.results?.length || 0
-    });
-
+    return c.json({ poems: results || [] });
   } catch (error) {
-    console.error('Get anthology candidates error:', error);
-    return c.json({ error: 'Internal server error' }, 500);
+    console.error('Get all poems error:', error);
+    return c.json({ error: 'Failed to fetch poems' }, 500);
   }
 });
 
-// Mark poems for anthology
-admin.post('/anthology/select', async (c) => {
+// Update poem status (feature/unflag)
+admin.put('/poems/:id', async (c) => {
+  try {
+    const id = c.req.param('id');
+    const { status, is_featured, anthology_eligible } = await c.req.json();
+
+    const updates: string[] = [];
+    const params: any[] = [];
+
+    if (status !== undefined) {
+      updates.push('status = ?');
+      params.push(status);
+    }
+
+    if (is_featured !== undefined) {
+      updates.push('is_featured = ?');
+      params.push(is_featured ? 1 : 0);
+    }
+
+    if (anthology_eligible !== undefined) {
+      updates.push('anthology_eligible = ?');
+      params.push(anthology_eligible ? 1 : 0);
+    }
+
+    if (updates.length === 0) {
+      return c.json({ error: 'No updates provided' }, 400);
+    }
+
+    updates.push('updated_at = CURRENT_TIMESTAMP');
+    params.push(id);
+
+    await c.env.DB.prepare(
+      `UPDATE poems SET ${updates.join(', ')} WHERE id = ?`
+    ).bind(...params).run();
+
+    return c.json({ message: 'Poem updated successfully' });
+  } catch (error) {
+    console.error('Update poem error:', error);
+    return c.json({ error: 'Failed to update poem' }, 500);
+  }
+});
+
+// Get top-rated poems for anthology selection
+admin.get('/anthology/eligible', async (c) => {
+  try {
+    const limit = parseInt(c.req.query('limit') || '50');
+    const minRating = parseFloat(c.req.query('minRating') || '4.0');
+
+    const { results } = await c.env.DB.prepare(`
+      SELECT p.*, u.username as author_name, u.display_name as author_display_name,
+             CAST(p.rating_sum AS REAL) / p.rating_count as average_rating
+      FROM poems p
+      JOIN users u ON p.author_id = u.id
+      WHERE p.status = 'published' 
+        AND p.anthology_eligible = 1
+        AND p.rating_count >= 10
+        AND (CAST(p.rating_sum AS REAL) / p.rating_count) >= ?
+      ORDER BY (CAST(p.rating_sum AS REAL) / p.rating_count) DESC, p.rating_count DESC
+      LIMIT ?
+    `).bind(minRating, limit).all();
+
+    return c.json({ poems: results || [] });
+  } catch (error) {
+    console.error('Get anthology eligible poems error:', error);
+    return c.json({ error: 'Failed to fetch eligible poems' }, 500);
+  }
+});
+
+// Create anthology submission
+admin.post('/anthology/submit', async (c) => {
   try {
     const { poem_ids, anthology_edition } = await c.req.json();
 
@@ -299,21 +297,19 @@ admin.post('/anthology/select', async (c) => {
     }
 
     // Insert anthology submissions
-    for (const poemId of poem_ids) {
+    for (const poem_id of poem_ids) {
       await c.env.DB.prepare(
-        `INSERT OR IGNORE INTO anthology_submissions (poem_id, anthology_edition, status) 
-         VALUES (?, ?, 'selected')`
-      ).bind(poemId, anthology_edition).run();
+        'INSERT OR IGNORE INTO anthology_submissions (poem_id, anthology_edition, status) VALUES (?, ?, ?)'
+      ).bind(poem_id, anthology_edition, 'selected').run();
     }
 
     return c.json({ 
-      success: true, 
-      message: `${poem_ids.length} poems selected for anthology: ${anthology_edition}` 
+      message: 'Anthology submissions created successfully',
+      count: poem_ids.length
     });
-
   } catch (error) {
-    console.error('Select anthology error:', error);
-    return c.json({ error: 'Internal server error' }, 500);
+    console.error('Create anthology submission error:', error);
+    return c.json({ error: 'Failed to create anthology submissions' }, 500);
   }
 });
 
