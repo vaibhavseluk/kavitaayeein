@@ -4,6 +4,9 @@ import type { Env } from './lib/types';
 import auth from './routes/auth';
 import poems from './routes/poems';
 import admin from './routes/admin';
+import subscriptions from './routes/subscriptions';
+import sponsors from './routes/sponsors';
+import anthology from './routes/anthology';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -14,6 +17,9 @@ app.use('/api/*', cors());
 app.route('/api/auth', auth);
 app.route('/api/poems', poems);
 app.route('/api/admin', admin);
+app.route('/api/subscriptions', subscriptions);
+app.route('/api/sponsors', sponsors);
+app.route('/api/anthology', anthology);
 
 // Health check
 app.get('/api/health', (c) => {
@@ -30,8 +36,10 @@ app.get('/', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Poetry Platform - Share Your Voice in Marathi, Hindi & English</title>
         <meta name="description" content="A multi-author poetry platform supporting Marathi, Hindi, and English. Share your poems, discover featured poets, and join our community.">
+        <meta name="keywords" content="poetry, marathi poetry, hindi poetry, multilingual, kavita, shayari, featured poet">
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/monetization.css" rel="stylesheet">
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;600;700&family=Noto+Sans:wght@300;400;600;700&display=swap');
             
@@ -93,11 +101,13 @@ app.get('/', (c) => {
                             <option value="mr">मराठी</option>
                         </select>
                         <a href="#" onclick="showExplore()" class="nav-link text-gray-700"><i class="fas fa-compass mr-1"></i> Explore</a>
+                        <a href="#" onclick="showAdvertiserPortal()" class="nav-link text-gray-700"><i class="fas fa-ad mr-1"></i> Advertise</a>
                         <span id="authButtons">
                             <a href="#" onclick="showLogin()" class="nav-link text-gray-700"><i class="fas fa-sign-in-alt mr-1"></i> Login</a>
                             <a href="#" onclick="showSignup()" class="nav-link text-blue-600 font-semibold"><i class="fas fa-user-plus mr-1"></i> Sign Up</a>
                         </span>
                         <span id="userMenu" class="hidden">
+                            <a href="#" onclick="showSubscriptionPlans()" class="nav-link text-yellow-600 font-semibold"><i class="fas fa-star mr-1"></i> Go Featured</a>
                             <a href="#" onclick="showDashboard()" class="nav-link text-gray-700"><i class="fas fa-tachometer-alt mr-1"></i> Dashboard</a>
                             <a href="#" onclick="logout()" class="nav-link text-red-600"><i class="fas fa-sign-out-alt mr-1"></i> Logout</a>
                         </span>
@@ -382,6 +392,7 @@ app.get('/', (c) => {
                 alert('Terms of Service\\n\\nBy using this platform, you grant us the non-exclusive right to:\\n- Include your poems in paid anthologies\\n- Display your poems on the platform\\n- Promote your work\\n\\nYou retain copyright ownership of your original work.');
             }
         </script>
+        <script src="/static/monetization.js"></script>
     </body>
     </html>
   `);
