@@ -7,6 +7,7 @@ import admin from './routes/admin';
 import subscriptions from './routes/subscriptions';
 import sponsors from './routes/sponsors';
 import anthology from './routes/anthology';
+import editorRoute from './routes/editor';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -20,6 +21,9 @@ app.route('/api/admin', admin);
 app.route('/api/subscriptions', subscriptions);
 app.route('/api/sponsors', sponsors);
 app.route('/api/anthology', anthology);
+
+// Mount editor route
+app.route('/editor', editorRoute);
 
 // Health check
 app.get('/api/health', (c) => {
