@@ -232,6 +232,103 @@ app.get('/', (c) => {
                 <button onclick="filterPoems('mr')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300" id="filter-mr">मराठी</button>
             </div>
 
+            <!-- Pricing Section -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 mb-12">
+                <h3 class="text-3xl font-bold text-center text-gray-900 mb-4">
+                    <i class="fas fa-tags text-green-500 mr-2"></i>Simple, Affordable Pricing
+                </h3>
+                <p class="text-center text-gray-600 mb-8">Start free, upgrade when you need more</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <!-- Free Plan -->
+                    <div class="border-2 border-gray-200 rounded-xl p-6 hover:shadow-lg transition">
+                        <div class="text-center mb-6">
+                            <h4 class="text-2xl font-bold text-gray-900 mb-2">Free</h4>
+                            <div class="mb-4">
+                                <span class="text-5xl font-bold text-gray-600">$0</span>
+                                <span class="text-gray-500">/forever</span>
+                            </div>
+                            <p class="text-sm text-gray-600">Perfect for getting started</p>
+                        </div>
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span><strong>10 poems</strong> maximum</span>
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span>Basic editor features</span>
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span>Community access</span>
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span>Multilingual support</span>
+                            </li>
+                        </ul>
+                        <button onclick="showSignup()" class="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition">
+                            Get Started Free
+                        </button>
+                    </div>
+
+                    <!-- Premium Plan -->
+                    <div class="border-4 border-blue-500 rounded-xl p-6 relative bg-gradient-to-br from-blue-50 to-indigo-50 hover:shadow-xl transition">
+                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-1 rounded-full text-sm font-bold shadow-lg">
+                            BEST VALUE
+                        </div>
+                        <div class="text-center mb-6">
+                            <h4 class="text-2xl font-bold text-gray-900 mb-2">Premium</h4>
+                            <div class="mb-4">
+                                <span class="text-5xl font-bold text-blue-600">$4.66</span>
+                                <span class="text-gray-600">/year</span>
+                            </div>
+                            <p class="text-sm text-gray-700">Less than $0.40/month!</p>
+                        </div>
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-center text-gray-900">
+                                <i class="fas fa-check-circle text-blue-600 mr-3"></i>
+                                <span><strong>Unlimited poems</strong></span>
+                            </li>
+                            <li class="flex items-center text-gray-900">
+                                <i class="fas fa-check-circle text-blue-600 mr-3"></i>
+                                <span>Advanced editor with rich formatting</span>
+                            </li>
+                            <li class="flex items-center text-gray-900">
+                                <i class="fas fa-check-circle text-blue-600 mr-3"></i>
+                                <span>Real-time transliteration</span>
+                            </li>
+                            <li class="flex items-center text-gray-900">
+                                <i class="fas fa-check-circle text-blue-600 mr-3"></i>
+                                <span>Multiple input methods (IME)</span>
+                            </li>
+                            <li class="flex items-center text-gray-900">
+                                <i class="fas fa-check-circle text-blue-600 mr-3"></i>
+                                <span>Priority support</span>
+                            </li>
+                            <li class="flex items-center text-gray-900">
+                                <i class="fas fa-check-circle text-blue-600 mr-3"></i>
+                                <span>No advertisements</span>
+                            </li>
+                        </ul>
+                        <button onclick="currentUser ? showUpgradeModal() : showSignup()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition shadow-lg">
+                            <i class="fas fa-crown mr-2"></i>Upgrade to Premium
+                        </button>
+                        <p class="text-center text-xs text-gray-600 mt-3">
+                            <i class="fas fa-shield-alt mr-1"></i>Secure payment via Razorpay
+                        </p>
+                    </div>
+                </div>
+
+                <div class="text-center mt-8">
+                    <p class="text-sm text-gray-600">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        All plans include: Original copyright-free content only, No plagiarism policy
+                    </p>
+                </div>
+            </div>
+
             <!-- Poems Feed -->
             <div id="poemsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Poems will be loaded here -->
@@ -615,7 +712,163 @@ app.get('/', (c) => {
 
             // Show create poem (placeholder)
             function showCreatePoem() {
-                alert('Create Poem feature will be implemented with:\\n- Rich text editor\\n- Language selection\\n- Draft/Publish options');
+                // Check subscription status first
+                axios.get(API_BASE + '/poems/user/subscription-status', {
+                    headers: { Authorization: 'Bearer ' + localStorage.getItem('auth_token') }
+                })
+                .then(res => {
+                    const status = res.data;
+                    
+                    if (!status.can_create_poem) {
+                        showUpgradeModal(status);
+                        return;
+                    }
+                    
+                    alert('Create Poem feature will be implemented with:\\n- Rich text editor\\n- Language selection\\n- Draft/Publish options\\n\\nCurrent status: ' + status.poems_used + ' poems created' + 
+                        (status.subscription_tier === 'free' ? '\\nRemaining: ' + status.poems_remaining + ' poems' : ''));
+                })
+                .catch(err => {
+                    console.error('Error checking subscription:', err);
+                    alert('Create Poem feature will be implemented');
+                });
+            }
+
+            // Show upgrade modal
+            function showUpgradeModal(status = null) {
+                const modal = document.createElement('div');
+                modal.className = 'modal active fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto';
+                modal.onclick = (e) => {
+                    if (e.target === modal) modal.remove();
+                };
+
+                const limitMessage = status ? 
+                    '<div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">' +
+                        '<div class="flex items-start">' +
+                            '<i class="fas fa-exclamation-triangle text-red-500 text-xl mr-3 mt-1"></i>' +
+                            '<div>' +
+                                '<h4 class="font-bold text-red-800 mb-1">Poem Limit Reached</h4>' +
+                                '<p class="text-red-700 text-sm">' +
+                                    'You have used all ' + status.poem_limit + ' poem slots on the free plan. ' +
+                                    'Upgrade to Premium for unlimited poems!' +
+                                '</p>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>'
+                : '';
+
+                modal.innerHTML = \`
+                    <div class="bg-white rounded-lg p-8 max-w-4xl w-full mx-4 my-8">
+                        <h3 class="text-3xl font-bold text-gray-900 mb-6">
+                            <i class="fas fa-crown text-yellow-500 mr-2"></i>Upgrade Your Account
+                        </h3>
+                        
+                        \${limitMessage}
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <!-- Free Plan -->
+                            <div class="border-2 border-gray-200 rounded-lg p-6">
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Free Plan</h4>
+                                <p class="text-3xl font-bold text-gray-600 mb-1">$0</p>
+                                <p class="text-sm text-gray-500 mb-4">Forever</p>
+                                <ul class="space-y-2 mb-6">
+                                    <li class="text-sm text-gray-700"><i class="fas fa-check text-green-500 mr-2"></i>Up to 10 poems</li>
+                                    <li class="text-sm text-gray-700"><i class="fas fa-check text-green-500 mr-2"></i>Basic editor</li>
+                                    <li class="text-sm text-gray-700"><i class="fas fa-check text-green-500 mr-2"></i>Community access</li>
+                                </ul>
+                                <p class="text-xs text-gray-500">Your current plan</p>
+                            </div>
+
+                            <!-- Premium Plan -->
+                            <div class="border-4 border-blue-500 rounded-lg p-6 relative bg-blue-50">
+                                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-1 rounded-full text-xs font-bold">
+                                    RECOMMENDED
+                                </div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Premium Unlimited</h4>
+                                <p class="text-3xl font-bold text-blue-600 mb-1">$4.66</p>
+                                <p class="text-sm text-gray-600 mb-4">Per Year</p>
+                                <ul class="space-y-2 mb-6">
+                                    <li class="text-sm text-gray-900"><i class="fas fa-check text-blue-500 mr-2"></i><strong>Unlimited poems</strong></li>
+                                    <li class="text-sm text-gray-900"><i class="fas fa-check text-blue-500 mr-2"></i>Advanced editor</li>
+                                    <li class="text-sm text-gray-900"><i class="fas fa-check text-blue-500 mr-2"></i>Real-time transliteration</li>
+                                    <li class="text-sm text-gray-900"><i class="fas fa-check text-blue-500 mr-2"></i>Priority support</li>
+                                    <li class="text-sm text-gray-900"><i class="fas fa-check text-blue-500 mr-2"></i>No ads</li>
+                                </ul>
+                                <button onclick="initiatePremiumUpgrade()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
+                                    Upgrade Now
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600 mb-4">
+                                <i class="fas fa-shield-alt mr-1"></i>
+                                Secure payment powered by Razorpay
+                            </p>
+                            <button onclick="this.closest('.modal').remove()" class="text-gray-600 hover:text-gray-900">
+                                Maybe Later
+                            </button>
+                        </div>
+                    </div>
+                \`;
+
+                document.body.appendChild(modal);
+            }
+
+            // Initiate premium upgrade
+            async function initiatePremiumUpgrade() {
+                try {
+                    const response = await axios.post(API_BASE + '/subscriptions/create-checkout', 
+                        { plan: 'premium_annual' },
+                        { headers: { Authorization: 'Bearer ' + localStorage.getItem('auth_token') } }
+                    );
+                    
+                    // Initialize Razorpay
+                    const options = {
+                        key: response.data.key_id,
+                        amount: response.data.amount,
+                        currency: response.data.currency,
+                        name: 'कविता व्यासपीठ',
+                        description: 'Premium Unlimited - 1 Year',
+                        order_id: response.data.order_id,
+                        handler: function(razorpayResponse) {
+                            // Verify payment
+                            verifyPremiumPayment(razorpayResponse, response.data.plan);
+                        },
+                        prefill: {
+                            name: response.data.user.name,
+                            email: response.data.user.email
+                        },
+                        theme: {
+                            color: '#3b82f6'
+                        }
+                    };
+                    
+                    const razorpay = new Razorpay(options);
+                    razorpay.open();
+                } catch (error) {
+                    console.error('Upgrade error:', error);
+                    alert('Failed to initiate upgrade. Please try again.');
+                }
+            }
+
+            // Verify premium payment
+            async function verifyPremiumPayment(razorpayResponse, plan) {
+                try {
+                    const response = await axios.post(API_BASE + '/subscriptions/verify-payment', {
+                        razorpay_order_id: razorpayResponse.razorpay_order_id,
+                        razorpay_payment_id: razorpayResponse.razorpay_payment_id,
+                        razorpay_signature: razorpayResponse.razorpay_signature,
+                        plan: plan
+                    }, {
+                        headers: { Authorization: 'Bearer ' + localStorage.getItem('auth_token') }
+                    });
+                    
+                    alert('🎉 ' + response.data.message + '\\n\\nYou can now create unlimited poems!');
+                    location.reload();
+                } catch (error) {
+                    console.error('Payment verification error:', error);
+                    alert('Payment verification failed. Please contact support with your payment ID.');
+                }
             }
 
             // Show explore (placeholder)

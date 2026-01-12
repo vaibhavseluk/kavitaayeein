@@ -96,15 +96,76 @@ poems.post('/', async (c) => {
       return c.json({ error: 'Invalid language' }, 400);
     }
 
+    // Check user's subscription tier and poem count
+    const user = await c.env.DB.prepare(`
+      SELECT subscription_tier, subscription_expires_at, poem_limit
+      FROM users
+      WHERE id = ?
+    `).bind(payload.userId).first<{ 
+      subscription_tier: string;
+      subscription_expires_at: string | null;
+      poem_limit: number;
+    }>();
+
+    if (!user) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    // Check if subscription has expired
+    if (user.subscription_tier === 'premium' && user.subscription_expires_at) {
+      const expiresAt = new Date(user.subscription_expires_at);
+      if (expiresAt < new Date()) {
+        // Subscription expired, downgrade to free
+        await c.env.DB.prepare(`
+          UPDATE users 
+          SET subscription_tier = 'free', poem_limit = 10
+          WHERE id = ?
+        `).bind(payload.userId).run();
+        
+        user.subscription_tier = 'free';
+        user.poem_limit = 10;
+      }
+    }
+
+    // For free tier, check poem limit
+    if (user.subscription_tier === 'free') {
+      const poemCount = await c.env.DB.prepare(`
+        SELECT COUNT(*) as count
+        FROM poems
+        WHERE author_id = ? AND status != 'deleted'
+      `).bind(payload.userId).first<{ count: number }>();
+
+      if (poemCount && poemCount.count >= user.poem_limit) {
+        return c.json({ 
+          error: 'Poem limit reached',
+          message: `You have reached the limit of ${user.poem_limit} poems for the free plan. Upgrade to Premium ($4.66/year) for unlimited poems.`,
+          limit_reached: true,
+          current_count: poemCount.count,
+          limit: user.poem_limit,
+          upgrade_required: true
+        }, 403);
+      }
+    }
+
     const result = await c.env.DB.prepare(`
       INSERT INTO poems (title, content, language, author_id, status)
       VALUES (?, ?, ?, ?, ?)
       RETURNING id
     `).bind(title, content, language, payload.userId, status || 'published').first();
 
+    // Get updated poem count
+    const updatedCount = await c.env.DB.prepare(`
+      SELECT COUNT(*) as count
+      FROM poems
+      WHERE author_id = ? AND status != 'deleted'
+    `).bind(payload.userId).first<{ count: number }>();
+
     return c.json({ 
       message: 'Poem created successfully',
-      poem_id: result?.id 
+      poem_id: result?.id,
+      poems_remaining: user.subscription_tier === 'free' 
+        ? user.poem_limit - (updatedCount?.count || 0)
+        : 'unlimited'
     }, 201);
   } catch (error) {
     console.error('Create poem error:', error);
@@ -226,6 +287,76 @@ poems.get('/user/my-poems', async (c) => {
   } catch (error) {
     console.error('Get user poems error:', error);
     return c.json({ error: 'Failed to fetch poems' }, 500);
+  }
+});
+
+// Get user's subscription status (authenticated)
+poems.get('/user/subscription-status', async (c) => {
+  try {
+    const authHeader = c.req.header('Authorization');
+    const token = extractToken(authHeader);
+    if (!token) {
+      return c.json({ error: 'Not authenticated' }, 401);
+    }
+
+    const payload = await verifyToken(token);
+    if (!payload) {
+      return c.json({ error: 'Invalid token' }, 401);
+    }
+
+    const user = await c.env.DB.prepare(`
+      SELECT subscription_tier, subscription_expires_at, poem_limit
+      FROM users
+      WHERE id = ?
+    `).bind(payload.userId).first<{ 
+      subscription_tier: string;
+      subscription_expires_at: string | null;
+      poem_limit: number;
+    }>();
+
+    if (!user) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    // Check if subscription has expired
+    let isExpired = false;
+    if (user.subscription_tier === 'premium' && user.subscription_expires_at) {
+      const expiresAt = new Date(user.subscription_expires_at);
+      if (expiresAt < new Date()) {
+        isExpired = true;
+        // Auto-downgrade
+        await c.env.DB.prepare(`
+          UPDATE users 
+          SET subscription_tier = 'free', poem_limit = 10
+          WHERE id = ?
+        `).bind(payload.userId).run();
+        
+        user.subscription_tier = 'free';
+        user.poem_limit = 10;
+      }
+    }
+
+    const poemCount = await c.env.DB.prepare(`
+      SELECT COUNT(*) as count
+      FROM poems
+      WHERE author_id = ? AND status != 'deleted'
+    `).bind(payload.userId).first<{ count: number }>();
+
+    return c.json({
+      subscription_tier: user.subscription_tier,
+      expires_at: user.subscription_expires_at,
+      is_expired: isExpired,
+      poem_limit: user.poem_limit,
+      poems_used: poemCount?.count || 0,
+      poems_remaining: user.subscription_tier === 'free' 
+        ? Math.max(0, user.poem_limit - (poemCount?.count || 0))
+        : 'unlimited',
+      can_create_poem: user.subscription_tier === 'premium' || 
+        (poemCount?.count || 0) < user.poem_limit
+    });
+  } catch (error) {
+    console.error('Get subscription status error:', error);
+    return c.json({ error: 'Failed to fetch subscription status' }, 500);
   }
 });
 
