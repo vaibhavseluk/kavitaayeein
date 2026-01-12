@@ -7,7 +7,7 @@ VALUES (
   'varu',
   'varu@poetry-platform.com',
   -- Password: varu123 (SHA-256 hash)
-  'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+  '91c02cbc3dbe552d39884ad1a8c944370930240b04ef153283ba2fdf72e05e24',
   'admin',
   'varu',
   'Admin poet sharing the journey of life through multilingual poetry',
