@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import type { Env } from '../lib/types';
+import { createRazorpayOrder, usdToINR, inrToPaise, getRazorpayCurrency } from '../lib/razorpay';
 
 // Sponsored content table schema (add to migrations if needed)
 interface SponsoredContent {
@@ -18,6 +19,13 @@ interface SponsoredContent {
 
 const sponsors = new Hono<{ Bindings: Env }>();
 
+// Sponsor plans in USD (will be converted to INR)
+const SPONSOR_PLANS = {
+  bronze: { usd: 50, days: 7, inr: 4150 },
+  silver: { usd: 100, days: 30, inr: 8300 },
+  gold: { usd: 200, days: 90, inr: 16600 }
+};
+
 // Get advertiser pricing plans
 sponsors.get('/plans', (c) => {
   return c.json({
@@ -25,7 +33,8 @@ sponsors.get('/plans', (c) => {
       {
         id: 'bronze',
         name: 'Bronze Package',
-        price: 50,
+        price_usd: 50,
+        price_inr: 4150,
         duration_days: 7,
         features: [
           '1 sponsored poem',
@@ -37,7 +46,8 @@ sponsors.get('/plans', (c) => {
       {
         id: 'silver',
         name: 'Silver Package',
-        price: 100,
+        price_usd: 100,
+        price_inr: 8300,
         duration_days: 30,
         features: [
           '3 sponsored poems',
@@ -51,7 +61,8 @@ sponsors.get('/plans', (c) => {
       {
         id: 'gold',
         name: 'Gold Package',
-        price: 200,
+        price_usd: 200,
+        price_inr: 16600,
         duration_days: 90,
         features: [
           'Unlimited sponsored poems',
@@ -66,7 +77,7 @@ sponsors.get('/plans', (c) => {
   });
 });
 
-// Create sponsored content request
+// Create sponsored content request with Razorpay
 sponsors.post('/create', async (c) => {
   try {
     const { brand_name, brand_email, brand_logo_url, plan_type, message } = await c.req.json();
@@ -79,36 +90,50 @@ sponsors.post('/create', async (c) => {
       return c.json({ error: 'Invalid plan_type' }, 400);
     }
 
-    // Calculate amount and duration
-    const plans = {
-      bronze: { amount: 50, days: 7 },
-      silver: { amount: 100, days: 30 },
-      gold: { amount: 200, days: 90 }
-    };
+    // Get plan details
+    const selectedPlan = SPONSOR_PLANS[plan_type as keyof typeof SPONSOR_PLANS];
+    const amountINR = selectedPlan.inr;
+    const amountPaise = inrToPaise(amountINR);
 
-    const selectedPlan = plans[plan_type as keyof typeof plans];
+    // Create Razorpay order
+    const razorpayOrder = await createRazorpayOrder(
+      c.env.RAZORPAY_KEY_ID,
+      c.env.RAZORPAY_KEY_SECRET,
+      {
+        amount: amountPaise,
+        currency: getRazorpayCurrency(),
+        receipt: `sponsor_${Date.now()}`,
+        notes: {
+          brand_name: brand_name,
+          brand_email: brand_email,
+          plan_type: plan_type
+        }
+      }
+    );
 
-    // Create sponsored content request (stored in subscriptions table with plan_type = 'sponsored_slot')
+    // Store sponsor request in database (pending payment)
     const result = await c.env.DB.prepare(`
       INSERT INTO subscriptions 
       (user_id, plan_type, amount, currency, status, payment_provider, payment_id, end_date)
-      VALUES (0, 'sponsored_slot', ?, 'USD', 'pending', 'stripe', ?, datetime('now', '+${selectedPlan.days} days'))
+      VALUES (0, 'sponsored_slot', ?, 'USD', 'pending', 'razorpay', ?, datetime('now', '+${selectedPlan.days} days'))
       RETURNING id
     `).bind(
-      selectedPlan.amount,
-      `${plan_type}_${Date.now()}` // Temporary payment_id for tracking
+      selectedPlan.usd,
+      razorpayOrder.id
     ).first();
-
-    // In production, create Stripe checkout session here
-    const mockCheckoutUrl = `/advertise/checkout?sponsor_id=${result?.id}&plan=${plan_type}`;
 
     return c.json({
       message: 'Sponsorship request created',
       sponsor_id: result?.id,
-      checkout_url: mockCheckoutUrl,
-      amount: selectedPlan.amount,
+      order_id: razorpayOrder.id,
+      amount: amountPaise,
+      amount_inr: amountINR,
+      amount_usd: selectedPlan.usd,
+      currency: getRazorpayCurrency(),
+      key_id: c.env.RAZORPAY_KEY_ID,
       duration_days: selectedPlan.days,
-      instructions: 'Complete payment to activate sponsorship'
+      brand_name: brand_name,
+      brand_email: brand_email
     }, 201);
   } catch (error) {
     console.error('Create sponsor error:', error);

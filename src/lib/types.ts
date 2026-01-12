@@ -2,6 +2,10 @@
 
 export interface Env {
   DB: D1Database;
+  RAZORPAY_KEY_ID: string;
+  RAZORPAY_KEY_SECRET: string;
+  JWT_SECRET?: string;
+  APP_URL?: string;
 }
 
 export interface User {

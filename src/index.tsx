@@ -392,7 +392,7 @@ app.get('/', (c) => {
                 alert('Terms of Service\\n\\nBy using this platform, you grant us the non-exclusive right to:\\n- Include your poems in paid anthologies\\n- Display your poems on the platform\\n- Promote your work\\n\\nYou retain copyright ownership of your original work.');
             }
         </script>
-        <script src="/static/monetization.js"></script>
+        <script src="/static/razorpay.js"></script>
     </body>
     </html>
   `);

@@ -1,10 +1,18 @@
 import { Hono } from 'hono';
 import type { Env } from '../lib/types';
 import { verifyToken, extractToken } from '../lib/auth';
+import { createRazorpayOrder, fetchRazorpayPayment, usdToINR, inrToPaise, getRazorpayCurrency } from '../lib/razorpay';
 
 const subscriptions = new Hono<{ Bindings: Env }>();
 
-// Create checkout session for Featured Poet subscription
+// Subscription pricing in USD (will be converted to INR)
+const PLANS = {
+  monthly: { usd: 8, months: 1 },
+  quarterly: { usd: 20, months: 3 },
+  annual: { usd: 70, months: 12 }
+};
+
+// Create Razorpay order for Featured Poet subscription
 subscriptions.post('/create-checkout', async (c) => {
   try {
     const authHeader = c.req.header('Authorization');
@@ -18,6 +26,12 @@ subscriptions.post('/create-checkout', async (c) => {
       return c.json({ error: 'Invalid token' }, 401);
     }
 
+    const { plan } = await c.req.json();
+    
+    if (!plan || !['monthly', 'quarterly', 'annual'].includes(plan)) {
+      return c.json({ error: 'Invalid plan. Must be monthly, quarterly, or annual' }, 400);
+    }
+
     // Check if user already has active subscription
     const existing = await c.env.DB.prepare(
       'SELECT id FROM subscriptions WHERE user_id = ? AND status = ? AND end_date > datetime("now")'
@@ -27,16 +41,41 @@ subscriptions.post('/create-checkout', async (c) => {
       return c.json({ error: 'You already have an active subscription' }, 400);
     }
 
-    // In production, integrate with Stripe API
-    // For now, return mock checkout URL
-    const mockCheckoutUrl = `/dashboard/checkout?plan=featured_poet&user_id=${payload.userId}`;
+    // Convert USD to INR
+    const planDetails = PLANS[plan as keyof typeof PLANS];
+    const amountINR = usdToINR(planDetails.usd);
+    const amountPaise = inrToPaise(amountINR);
+
+    // Create Razorpay order
+    const razorpayOrder = await createRazorpayOrder(
+      c.env.RAZORPAY_KEY_ID,
+      c.env.RAZORPAY_KEY_SECRET,
+      {
+        amount: amountPaise,
+        currency: getRazorpayCurrency(),
+        receipt: `sub_${payload.userId}_${Date.now()}`,
+        notes: {
+          user_id: payload.userId.toString(),
+          plan_type: 'featured_poet',
+          plan: plan,
+          username: payload.username
+        }
+      }
+    );
 
     return c.json({
-      checkout_url: mockCheckoutUrl,
-      message: 'Stripe integration ready. Add STRIPE_SECRET_KEY to environment variables.',
-      plan: 'featured_poet',
-      amount: 8.00,
-      currency: 'USD'
+      order_id: razorpayOrder.id,
+      amount: amountPaise,
+      amount_inr: amountINR,
+      amount_usd: planDetails.usd,
+      currency: getRazorpayCurrency(),
+      key_id: c.env.RAZORPAY_KEY_ID,
+      plan: plan,
+      user: {
+        id: payload.userId,
+        name: payload.username,
+        email: payload.email
+      }
     });
   } catch (error) {
     console.error('Create checkout error:', error);
@@ -44,48 +83,80 @@ subscriptions.post('/create-checkout', async (c) => {
   }
 });
 
-// Mock payment confirmation (in production, this would be Stripe webhook)
-subscriptions.post('/confirm-payment', async (c) => {
+// Verify and confirm Razorpay payment
+subscriptions.post('/verify-payment', async (c) => {
   try {
-    const { user_id, payment_id, plan_type } = await c.req.json();
-
-    if (!user_id || !payment_id) {
-      return c.json({ error: 'user_id and payment_id required' }, 400);
+    const authHeader = c.req.header('Authorization');
+    const token = extractToken(authHeader);
+    if (!token) {
+      return c.json({ error: 'Not authenticated' }, 401);
     }
 
-    // Calculate end date (30 days from now)
+    const payload = await verifyToken(token);
+    if (!payload) {
+      return c.json({ error: 'Invalid token' }, 401);
+    }
+
+    const { 
+      razorpay_order_id, 
+      razorpay_payment_id, 
+      razorpay_signature,
+      plan 
+    } = await c.req.json();
+
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      return c.json({ error: 'Missing payment verification data' }, 400);
+    }
+
+    // Fetch payment details from Razorpay to verify
+    const payment = await fetchRazorpayPayment(
+      c.env.RAZORPAY_KEY_ID,
+      c.env.RAZORPAY_KEY_SECRET,
+      razorpay_payment_id
+    );
+
+    if (payment.status !== 'captured' && payment.status !== 'authorized') {
+      return c.json({ error: 'Payment not successful' }, 400);
+    }
+
+    // Calculate subscription end date based on plan
+    const planDetails = PLANS[plan as keyof typeof PLANS];
+    const monthsToAdd = planDetails?.months || 1;
+
+    // Create subscription record
     const result = await c.env.DB.prepare(`
       INSERT INTO subscriptions 
       (user_id, plan_type, amount, currency, status, payment_provider, payment_id, end_date)
-      VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now', '+30 days'))
+      VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now', '+${monthsToAdd} months'))
       RETURNING id
     `).bind(
-      user_id,
-      plan_type || 'featured_poet',
-      8.00,
+      payload.userId,
+      'featured_poet',
+      planDetails.usd,
       'USD',
       'active',
-      'stripe',
-      payment_id
+      'razorpay',
+      razorpay_payment_id
     ).first();
 
     // Update user's featured status
     await c.env.DB.prepare(`
       UPDATE users 
       SET is_featured = 1, 
-          featured_until = datetime('now', '+30 days'),
+          featured_until = datetime('now', '+${monthsToAdd} months'),
           updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
-    `).bind(user_id).run();
+    `).bind(payload.userId).run();
 
     return c.json({
       message: 'Subscription activated successfully',
       subscription_id: result?.id,
-      featured_until: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+      featured_until: new Date(Date.now() + monthsToAdd * 30 * 24 * 60 * 60 * 1000).toISOString(),
+      payment_id: razorpay_payment_id
     });
   } catch (error) {
-    console.error('Confirm payment error:', error);
-    return c.json({ error: 'Failed to confirm payment' }, 500);
+    console.error('Verify payment error:', error);
+    return c.json({ error: 'Failed to verify payment' }, 500);
   }
 });
 
@@ -104,7 +175,7 @@ subscriptions.get('/status', async (c) => {
     }
 
     const subscription = await c.env.DB.prepare(`
-      SELECT id, plan_type, amount, currency, status, start_date, end_date, auto_renew
+      SELECT id, plan_type, amount, currency, status, start_date, end_date, auto_renew, payment_id
       FROM subscriptions
       WHERE user_id = ?
       ORDER BY created_at DESC
@@ -166,49 +237,28 @@ subscriptions.post('/cancel', async (c) => {
   }
 });
 
-// Stripe webhook handler (for production)
+// Razorpay webhook handler
 subscriptions.post('/webhook', async (c) => {
   try {
-    // In production, verify Stripe signature
     const body = await c.req.json();
     
-    // Handle different Stripe events
-    if (body.type === 'checkout.session.completed') {
-      const session = body.data.object;
+    // Handle different Razorpay events
+    if (body.event === 'payment.captured') {
+      const payment = body.payload.payment.entity;
       
-      // Create subscription record
-      await c.env.DB.prepare(`
-        INSERT INTO subscriptions 
-        (user_id, plan_type, amount, currency, status, payment_provider, payment_id, end_date)
-        VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now', '+30 days'))
-      `).bind(
-        session.metadata.user_id,
-        'featured_poet',
-        8.00,
-        'USD',
-        'active',
-        'stripe',
-        session.id
-      ).run();
-
-      // Update user featured status
-      await c.env.DB.prepare(`
-        UPDATE users 
-        SET is_featured = 1, 
-            featured_until = datetime('now', '+30 days')
-        WHERE id = ?
-      `).bind(session.metadata.user_id).run();
+      // Payment was successful
+      console.log('Payment captured:', payment.id);
+      
+      // Update subscription if needed
+      // You can add additional logic here
     }
 
-    if (body.type === 'customer.subscription.deleted') {
-      const subscription = body.data.object;
+    if (body.event === 'payment.failed') {
+      const payment = body.payload.payment.entity;
       
-      // Mark subscription as cancelled
-      await c.env.DB.prepare(`
-        UPDATE subscriptions 
-        SET status = 'cancelled'
-        WHERE payment_id = ?
-      `).bind(subscription.id).run();
+      console.log('Payment failed:', payment.id);
+      
+      // Handle failed payment
     }
 
     return c.json({ received: true });
