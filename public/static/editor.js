@@ -43,9 +43,10 @@ async function checkAuth() {
         });
 
         if (response.ok) {
-            currentUser = await response.json();
+            const data = await response.json();
+            currentUser = data.user;
             document.getElementById('userInfo').textContent = 
-                `Logged in as: ${currentUser.displayName || currentUser.username} (${currentUser.role})`;
+                `Logged in as: ${currentUser.display_name || currentUser.username} (${currentUser.role})`;
             showMyPoems();
             return true;
         } else {
