@@ -135,6 +135,95 @@ app.get('/', (c) => {
                 </button>
             </div>
 
+            <!-- Key Features Section -->
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-12 shadow-lg">
+                <h3 class="text-3xl font-bold text-center text-gray-900 mb-8">
+                    <i class="fas fa-star text-yellow-500 mr-2"></i>Key Features
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Rich Text Formatting -->
+                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
+                        <div class="text-blue-600 text-3xl mb-3">
+                            <i class="fas fa-bold"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Rich Text Formatting</h4>
+                        <p class="text-gray-600 text-sm">Bold, italic, headings, lists, and more for beautiful poetry presentation</p>
+                    </div>
+
+                    <!-- Code & Fullscreen Mode -->
+                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
+                        <div class="text-green-600 text-3xl mb-3">
+                            <i class="fas fa-expand"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Code View & Fullscreen</h4>
+                        <p class="text-gray-600 text-sm">Switch between visual and code view, write in distraction-free fullscreen mode</p>
+                    </div>
+
+                    <!-- Keyboard Shortcuts -->
+                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
+                        <div class="text-purple-600 text-3xl mb-3">
+                            <i class="fas fa-keyboard"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Keyboard Shortcuts</h4>
+                        <p class="text-gray-600 text-sm">Fast editing with Ctrl+G, Ctrl+B, and more productivity shortcuts</p>
+                    </div>
+
+                    <!-- Language-Specific Fonts -->
+                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
+                        <div class="text-red-600 text-3xl mb-3">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Language-Specific Fonts</h4>
+                        <p class="text-gray-600 text-sm">Beautiful Devanagari and Latin fonts optimized for poetry</p>
+                    </div>
+
+                    <!-- Responsive Design -->
+                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
+                        <div class="text-indigo-600 text-3xl mb-3">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Responsive Design</h4>
+                        <p class="text-gray-600 text-sm">Write and read poetry seamlessly on mobile, tablet, and desktop</p>
+                    </div>
+
+                    <!-- Real-time Transliteration -->
+                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
+                        <div class="text-orange-600 text-3xl mb-3">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Real-time Transliteration</h4>
+                        <p class="text-gray-600 text-sm">Type in English and get instant Devanagari transliteration</p>
+                    </div>
+
+                    <!-- Multiple Typing Methods -->
+                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
+                        <div class="text-teal-600 text-3xl mb-3">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Multiple Input Methods</h4>
+                        <p class="text-gray-600 text-sm">Built-in IME, Google Input Tools, Pramukh IME support</p>
+                    </div>
+
+                    <!-- Multi-language Support -->
+                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
+                        <div class="text-pink-600 text-3xl mb-3">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Multi-language Platform</h4>
+                        <p class="text-gray-600 text-sm">Write in Marathi (मराठी), Hindi (हिंदी), and English seamlessly</p>
+                    </div>
+
+                    <!-- Featured Poets -->
+                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
+                        <div class="text-yellow-600 text-3xl mb-3">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Featured Poet Program</h4>
+                        <p class="text-gray-600 text-sm">Get highlighted, earn priority placement, and reach more readers</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Language Filter -->
             <div class="flex justify-center space-x-4 mb-8">
                 <button onclick="filterPoems('')" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold" id="filter-all">All</button>
@@ -250,27 +339,98 @@ app.get('/', (c) => {
             // Show login
             function showLogin() {
                 document.getElementById('app').innerHTML = \`
-                    <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-6">Login</h2>
-                        <form onsubmit="handleLogin(event)">
-                            <div class="mb-4">
-                                <label class="block text-gray-700 font-semibold mb-2">Username or Email</label>
-                                <input type="text" id="loginUsername" required class="w-full border border-gray-300 rounded px-4 py-2">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <!-- Login Form -->
+                            <div class="bg-white rounded-lg shadow-lg p-8">
+                                <h2 class="text-3xl font-bold text-gray-900 mb-6">Login</h2>
+                                <form onsubmit="handleLogin(event)">
+                                    <div class="mb-4">
+                                        <label class="block text-gray-700 font-semibold mb-2">Username or Email</label>
+                                        <input type="text" id="loginUsername" required class="w-full border border-gray-300 rounded px-4 py-2">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="block text-gray-700 font-semibold mb-2">Password</label>
+                                        <input type="password" id="loginPassword" required class="w-full border border-gray-300 rounded px-4 py-2">
+                                    </div>
+                                    <div class="mb-6">
+                                        <a href="#" onclick="showForgotPassword()" class="text-sm text-blue-600 hover:underline">Forgot Password?</a>
+                                    </div>
+                                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
+                                        Login
+                                    </button>
+                                </form>
+                                <p class="mt-4 text-center text-gray-600">
+                                    Don't have an account? <a href="#" onclick="showSignup()" class="text-blue-600 font-semibold">Sign Up</a>
+                                </p>
+                                <p class="mt-2 text-center">
+                                    <a href="#" onclick="location.reload()" class="text-gray-600 hover:text-gray-900">← Back to Home</a>
+                                </p>
                             </div>
-                            <div class="mb-6">
-                                <label class="block text-gray-700 font-semibold mb-2">Password</label>
-                                <input type="password" id="loginPassword" required class="w-full border border-gray-300 rounded px-4 py-2">
+
+                            <!-- Key Features Panel -->
+                            <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg p-8">
+                                <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                                    <i class="fas fa-star text-yellow-500 mr-2"></i>Why Join Us?
+                                </h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-start">
+                                        <div class="text-blue-600 text-xl mr-3 mt-1">
+                                            <i class="fas fa-bold"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">Rich Text Editor</h4>
+                                            <p class="text-sm text-gray-700">Bold, italic, headings, lists for beautiful poems</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="text-green-600 text-xl mr-3 mt-1">
+                                            <i class="fas fa-keyboard"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">Keyboard Shortcuts</h4>
+                                            <p class="text-sm text-gray-700">Fast editing with Ctrl+G, Ctrl+B shortcuts</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="text-purple-600 text-xl mr-3 mt-1">
+                                            <i class="fas fa-expand"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">Fullscreen Mode</h4>
+                                            <p class="text-sm text-gray-700">Distraction-free writing experience</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="text-red-600 text-xl mr-3 mt-1">
+                                            <i class="fas fa-language"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">Language Fonts</h4>
+                                            <p class="text-sm text-gray-700">Beautiful Devanagari fonts for मराठी & हिंदी</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="text-orange-600 text-xl mr-3 mt-1">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">Transliteration</h4>
+                                            <p class="text-sm text-gray-700">Type in English, get Devanagari instantly</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="text-teal-600 text-xl mr-3 mt-1">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">Responsive Design</h4>
+                                            <p class="text-sm text-gray-700">Write anywhere: mobile, tablet, desktop</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
-                                Login
-                            </button>
-                        </form>
-                        <p class="mt-4 text-center text-gray-600">
-                            Don't have an account? <a href="#" onclick="showSignup()" class="text-blue-600 font-semibold">Sign Up</a>
-                        </p>
-                        <p class="mt-2 text-center">
-                            <a href="#" onclick="location.reload()" class="text-gray-600 hover:text-gray-900">← Back to Home</a>
-                        </p>
+                        </div>
                     </div>
                 \`;
             }
@@ -296,49 +456,121 @@ app.get('/', (c) => {
             // Show signup
             function showSignup() {
                 document.getElementById('app').innerHTML = \`
-                    <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-6">Sign Up</h2>
-                        <form onsubmit="handleSignup(event)">
-                            <div class="mb-4">
-                                <label class="block text-gray-700 font-semibold mb-2">Username</label>
-                                <input type="text" id="signupUsername" required class="w-full border border-gray-300 rounded px-4 py-2">
+                    <div class="max-w-5xl mx-auto">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <!-- Signup Form -->
+                            <div class="lg:col-span-2 bg-white rounded-lg shadow-lg p-8">
+                                <h2 class="text-3xl font-bold text-gray-900 mb-6">Sign Up</h2>
+                                <form onsubmit="handleSignup(event)">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="mb-4">
+                                            <label class="block text-gray-700 font-semibold mb-2">Username</label>
+                                            <input type="text" id="signupUsername" required class="w-full border border-gray-300 rounded px-4 py-2">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="block text-gray-700 font-semibold mb-2">Email</label>
+                                            <input type="email" id="signupEmail" required class="w-full border border-gray-300 rounded px-4 py-2">
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="mb-4">
+                                            <label class="block text-gray-700 font-semibold mb-2">Password</label>
+                                            <input type="password" id="signupPassword" required class="w-full border border-gray-300 rounded px-4 py-2">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="block text-gray-700 font-semibold mb-2">Display Name</label>
+                                            <input type="text" id="signupDisplayName" class="w-full border border-gray-300 rounded px-4 py-2">
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="block text-gray-700 font-semibold mb-2">Preferred Language</label>
+                                        <select id="signupLanguage" class="w-full border border-gray-300 rounded px-4 py-2">
+                                            <option value="en">English</option>
+                                            <option value="hi">हिंदी</option>
+                                            <option value="mr">मराठी</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-6">
+                                        <label class="flex items-start">
+                                            <input type="checkbox" required class="mt-1 mr-2">
+                                            <span class="text-sm text-gray-700">I agree to the <a href="#" onclick="showTerms()" class="text-blue-600">Terms of Service</a>, including granting the platform rights to include my poems in paid anthologies.</span>
+                                        </label>
+                                    </div>
+                                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
+                                        <i class="fas fa-user-plus mr-2"></i>Sign Up
+                                    </button>
+                                </form>
+                                <p class="mt-4 text-center text-gray-600">
+                                    Already have an account? <a href="#" onclick="showLogin()" class="text-blue-600 font-semibold">Login</a>
+                                </p>
+                                <p class="mt-2 text-center">
+                                    <a href="#" onclick="location.reload()" class="text-gray-600 hover:text-gray-900">← Back to Home</a>
+                                </p>
                             </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 font-semibold mb-2">Email</label>
-                                <input type="email" id="signupEmail" required class="w-full border border-gray-300 rounded px-4 py-2">
+
+                            <!-- Key Features Panel -->
+                            <div class="bg-gradient-to-br from-indigo-50 to-purple-100 rounded-lg p-6">
+                                <h3 class="text-xl font-bold text-gray-900 mb-4">
+                                    <i class="fas fa-gift text-yellow-500 mr-2"></i>What You Get
+                                </h3>
+                                <div class="space-y-3">
+                                    <div class="bg-white bg-opacity-70 rounded-lg p-3">
+                                        <div class="flex items-center mb-1">
+                                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                            <h4 class="font-bold text-sm text-gray-900">Rich Text Formatting</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-700 ml-6">Bold, italic, headings, lists</p>
+                                    </div>
+                                    <div class="bg-white bg-opacity-70 rounded-lg p-3">
+                                        <div class="flex items-center mb-1">
+                                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                            <h4 class="font-bold text-sm text-gray-900">Code & Fullscreen Mode</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-700 ml-6">Visual & code view, fullscreen writing</p>
+                                    </div>
+                                    <div class="bg-white bg-opacity-70 rounded-lg p-3">
+                                        <div class="flex items-center mb-1">
+                                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                            <h4 class="font-bold text-sm text-gray-900">Keyboard Shortcuts</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-700 ml-6">Ctrl+G, Ctrl+B, and more</p>
+                                    </div>
+                                    <div class="bg-white bg-opacity-70 rounded-lg p-3">
+                                        <div class="flex items-center mb-1">
+                                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                            <h4 class="font-bold text-sm text-gray-900">Language Fonts</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-700 ml-6">Beautiful Devanagari typography</p>
+                                    </div>
+                                    <div class="bg-white bg-opacity-70 rounded-lg p-3">
+                                        <div class="flex items-center mb-1">
+                                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                            <h4 class="font-bold text-sm text-gray-900">Real-time Transliteration</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-700 ml-6">Type English → Get Devanagari</p>
+                                    </div>
+                                    <div class="bg-white bg-opacity-70 rounded-lg p-3">
+                                        <div class="flex items-center mb-1">
+                                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                            <h4 class="font-bold text-sm text-gray-900">Multiple Input Methods</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-700 ml-6">Built-in IME, Google Input, Pramukh</p>
+                                    </div>
+                                    <div class="bg-white bg-opacity-70 rounded-lg p-3">
+                                        <div class="flex items-center mb-1">
+                                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                            <h4 class="font-bold text-sm text-gray-900">Mobile Responsive</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-700 ml-6">Write on any device</p>
+                                    </div>
+                                </div>
+                                <div class="mt-4 p-3 bg-yellow-100 rounded-lg border border-yellow-300">
+                                    <p class="text-xs text-yellow-800 font-semibold">
+                                        <i class="fas fa-star mr-1"></i>Upgrade to Featured Poet for priority placement!
+                                    </p>
+                                </div>
                             </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 font-semibold mb-2">Password</label>
-                                <input type="password" id="signupPassword" required class="w-full border border-gray-300 rounded px-4 py-2">
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 font-semibold mb-2">Display Name</label>
-                                <input type="text" id="signupDisplayName" class="w-full border border-gray-300 rounded px-4 py-2">
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 font-semibold mb-2">Preferred Language</label>
-                                <select id="signupLanguage" class="w-full border border-gray-300 rounded px-4 py-2">
-                                    <option value="en">English</option>
-                                    <option value="hi">हिंदी</option>
-                                    <option value="mr">मराठी</option>
-                                </select>
-                            </div>
-                            <div class="mb-6">
-                                <label class="flex items-start">
-                                    <input type="checkbox" required class="mt-1 mr-2">
-                                    <span class="text-sm text-gray-700">I agree to the <a href="#" onclick="showTerms()" class="text-blue-600">Terms of Service</a>, including granting the platform rights to include my poems in paid anthologies.</span>
-                                </label>
-                            </div>
-                            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
-                                Sign Up
-                            </button>
-                        </form>
-                        <p class="mt-4 text-center text-gray-600">
-                            Already have an account? <a href="#" onclick="showLogin()" class="text-blue-600 font-semibold">Login</a>
-                        </p>
-                        <p class="mt-2 text-center">
-                            <a href="#" onclick="location.reload()" class="text-gray-600 hover:text-gray-900">← Back to Home</a>
-                        </p>
+                        </div>
                     </div>
                 \`;
             }
@@ -389,6 +621,115 @@ app.get('/', (c) => {
             // Show explore (placeholder)
             function showExplore() {
                 location.reload();
+            }
+
+            // Show forgot password
+            function showForgotPassword() {
+                document.getElementById('app').innerHTML = \`
+                    <div class="max-w-4xl mx-auto">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <!-- Forgot Password Form -->
+                            <div class="bg-white rounded-lg shadow-lg p-8">
+                                <h2 class="text-3xl font-bold text-gray-900 mb-6">
+                                    <i class="fas fa-key mr-2"></i>Forgot Password
+                                </h2>
+                                <p class="text-gray-600 mb-6">
+                                    Enter your email address and we'll send you instructions to reset your password.
+                                </p>
+                                <form onsubmit="handleForgotPassword(event)">
+                                    <div class="mb-6">
+                                        <label class="block text-gray-700 font-semibold mb-2">Email Address</label>
+                                        <input type="email" id="forgotEmail" required class="w-full border border-gray-300 rounded px-4 py-2" placeholder="your@email.com">
+                                    </div>
+                                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
+                                        <i class="fas fa-paper-plane mr-2"></i>Send Reset Link
+                                    </button>
+                                </form>
+                                <div class="mt-6 text-center space-y-2">
+                                    <p class="text-gray-600">
+                                        Remember your password? <a href="#" onclick="showLogin()" class="text-blue-600 font-semibold">Login</a>
+                                    </p>
+                                    <p>
+                                        <a href="#" onclick="location.reload()" class="text-gray-600 hover:text-gray-900">← Back to Home</a>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Key Features Panel -->
+                            <div class="bg-gradient-to-br from-green-50 to-teal-100 rounded-lg p-8">
+                                <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                                    <i class="fas fa-magic text-purple-600 mr-2"></i>Our Features
+                                </h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-start">
+                                        <div class="text-blue-600 text-xl mr-3 mt-1">
+                                            <i class="fas fa-pen-fancy"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">Advanced Editor</h4>
+                                            <p class="text-sm text-gray-700">Rich formatting, code view, fullscreen mode</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="text-green-600 text-xl mr-3 mt-1">
+                                            <i class="fas fa-keyboard"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">Productivity Shortcuts</h4>
+                                            <p class="text-sm text-gray-700">Ctrl+G for Google Input, Ctrl+B for bold</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="text-purple-600 text-xl mr-3 mt-1">
+                                            <i class="fas fa-language"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">Multilingual Support</h4>
+                                            <p class="text-sm text-gray-700">Write in मराठी, हिंदी, or English</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="text-orange-600 text-xl mr-3 mt-1">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">Smart Transliteration</h4>
+                                            <p class="text-sm text-gray-700">Instant English to Devanagari conversion</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="text-red-600 text-xl mr-3 mt-1">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">Fully Responsive</h4>
+                                            <p class="text-sm text-gray-700">Perfect on mobile, tablet, and desktop</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="text-teal-600 text-xl mr-3 mt-1">
+                                            <i class="fas fa-edit"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">Multiple IME Options</h4>
+                                            <p class="text-sm text-gray-700">Built-in, Google Input Tools, Pramukh IME</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                \`;
+            }
+
+            // Handle forgot password
+            async function handleForgotPassword(e) {
+                e.preventDefault();
+                const email = document.getElementById('forgotEmail').value;
+                
+                // TODO: Implement password reset API endpoint
+                alert('Password reset functionality will be implemented.\\n\\nAn email with reset instructions would be sent to: ' + email);
+                showLogin();
             }
 
             // Show terms
