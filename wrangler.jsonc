@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "webapp",
+  "name": "poetry-platform",
   "compatibility_date": "2026-01-10",
   "pages_build_output_dir": "./dist",
   "compatibility_flags": [
@@ -9,8 +9,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "webapp-production",
-      "database_id": "create-with-wrangler-d1-create"
+      "database_name": "poetry-platform-production",
+      "database_id": "8aac85b0-f1d8-4e3e-a26f-a0fe1f0e11b6"
     }
   ]
 }
