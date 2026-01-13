@@ -259,12 +259,22 @@ app.get('/', (c) => {
                 </div>
             </div>
 
-            <!-- Language Filter -->
-            <div class="flex justify-center space-x-4 mb-8">
-                <button onclick="filterPoems('')" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold" id="filter-all">All</button>
-                <button onclick="filterPoems('en')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300" id="filter-en">English</button>
-                <button onclick="filterPoems('hi')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300" id="filter-hi">हिंदी</button>
-                <button onclick="filterPoems('mr')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300" id="filter-mr">मराठी</button>
+            <!-- Best Poems Section Header -->
+            <div class="text-center mb-8">
+                <h3 class="text-3xl font-bold text-gray-900 mb-2">
+                    <i class="fas fa-trophy text-yellow-500 mr-2"></i>Best Poetry
+                </h3>
+                <p class="text-gray-600 mb-6">
+                    Most loved poems from our talented community
+                </p>
+                
+                <!-- Language Filter -->
+                <div class="flex justify-center space-x-4">
+                    <button onclick="filterPoems('')" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold" id="filter-all">All</button>
+                    <button onclick="filterPoems('en')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300" id="filter-en">English</button>
+                    <button onclick="filterPoems('hi')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300" id="filter-hi">हिंदी</button>
+                    <button onclick="filterPoems('mr')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300" id="filter-mr">मराठी</button>
+                </div>
             </div>
 
             <!-- Pricing Section -->
@@ -442,16 +452,20 @@ app.get('/', (c) => {
                 }
             });
 
-            // Load poems
+            // Load poems (Best, most liked poetry - limited to 10)
             async function loadPoems(language = '') {
                 try {
                     const response = await axios.get(API_BASE + '/poems', {
-                        params: { language: language || undefined, limit: 50 }
+                        params: { 
+                            language: language || undefined, 
+                            limit: 10,
+                            sort: 'popular' // Sort by most liked/highest rated
+                        }
                     });
                     
                     const container = document.getElementById('poemsContainer');
                     if (response.data.poems.length === 0) {
-                        container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">No poems found</div>';
+                        container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12"><i class="fas fa-book-open text-4xl mb-3 block"></i>No poems found. Be the first to share your poetry!</div>';
                         return;
                     }
                     
@@ -467,15 +481,16 @@ app.get('/', (c) => {
                             <div class="flex justify-between items-center text-sm text-gray-500">
                                 <span><i class="fas fa-user mr-1"></i> \${poem.author_display_name || poem.author_name}</span>
                                 <div class="space-x-3">
-                                    <span><i class="fas fa-eye mr-1"></i> \${poem.view_count}</span>
-                                    <span><i class="fas fa-heart mr-1"></i> \${poem.like_count}</span>
-                                    <span><i class="fas fa-star mr-1"></i> \${poem.average_rating ? poem.average_rating.toFixed(1) : '0.0'}</span>
+                                    <span title="Views"><i class="fas fa-eye mr-1"></i> \${poem.view_count || 0}</span>
+                                    <span title="Likes"><i class="fas fa-heart mr-1 text-red-500"></i> \${poem.like_count || 0}</span>
+                                    <span title="Rating"><i class="fas fa-star mr-1 text-yellow-500"></i> \${poem.average_rating ? poem.average_rating.toFixed(1) : '0.0'}</span>
                                 </div>
                             </div>
                         </div>
                     \`).join('');
                 } catch (error) {
                     console.error('Failed to load poems:', error);
+                    document.getElementById('poemsContainer').innerHTML = '<div class="col-span-full text-center text-red-500 py-12"><i class="fas fa-exclamation-triangle text-4xl mb-3 block"></i>Failed to load poems. Please try again later.</div>';
                 }
             }
 

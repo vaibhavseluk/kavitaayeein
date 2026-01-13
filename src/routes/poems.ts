@@ -4,11 +4,12 @@ import { verifyToken, extractToken } from '../lib/auth';
 
 const poems = new Hono<{ Bindings: Env }>();
 
-// Get all poems (public, with filters)
+// Get all poems (public, with filters and sorting)
 poems.get('/', async (c) => {
   try {
     const language = c.req.query('language');
     const featured = c.req.query('featured');
+    const sort = c.req.query('sort') || 'newest'; // newest, popular, top_rated
     const limit = parseInt(c.req.query('limit') || '50');
     const offset = parseInt(c.req.query('offset') || '0');
 
@@ -30,12 +31,34 @@ poems.get('/', async (c) => {
       query += ' AND p.is_featured = 1';
     }
 
-    query += ' ORDER BY p.created_at DESC LIMIT ? OFFSET ?';
+    // Apply sorting
+    switch (sort) {
+      case 'popular':
+        // Sort by like count, then rating, then views
+        query += ' ORDER BY p.like_count DESC, (CASE WHEN p.rating_count > 0 THEN CAST(p.rating_sum AS REAL) / p.rating_count ELSE 0 END) DESC, p.view_count DESC, p.created_at DESC';
+        break;
+      case 'top_rated':
+        // Sort by rating, then likes
+        query += ' ORDER BY (CASE WHEN p.rating_count > 0 THEN CAST(p.rating_sum AS REAL) / p.rating_count ELSE 0 END) DESC, p.like_count DESC, p.created_at DESC';
+        break;
+      case 'newest':
+      default:
+        // Sort by newest first
+        query += ' ORDER BY p.created_at DESC';
+        break;
+    }
+
+    query += ' LIMIT ? OFFSET ?';
     params.push(limit, offset);
 
     const { results } = await c.env.DB.prepare(query).bind(...params).all<Poem>();
 
-    return c.json({ poems: results || [] });
+    return c.json({ 
+      poems: results || [],
+      limit,
+      offset,
+      sort
+    });
   } catch (error) {
     console.error('Get poems error:', error);
     return c.json({ error: 'Failed to fetch poems' }, 500);
