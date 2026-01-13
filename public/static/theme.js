@@ -156,9 +156,9 @@
       }
 
       // Button doesn't exist, create it dynamically
-      const languageSelect = document.getElementById('languageSelect');
-      if (!languageSelect) {
-        console.warn('Language selector not found, theme toggle not added to navigation');
+      const navContainer = document.querySelector('nav .flex.items-center.space-x-6');
+      if (!navContainer) {
+        console.warn('Navigation container not found, theme toggle not added to navigation');
         return;
       }
 
@@ -179,8 +179,8 @@
         this.updateThemeToggleContent(themeToggle, newTheme);
       });
       
-      // Insert before language selector
-      languageSelect.parentNode.insertBefore(themeToggle, languageSelect);
+      // Insert as first child of navigation container
+      navContainer.insertBefore(themeToggle, navContainer.firstChild);
       console.log('Theme toggle button created and inserted');
     },
 

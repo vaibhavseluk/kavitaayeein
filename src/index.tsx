@@ -67,11 +67,6 @@ app.get('/', (c) => {
                             <i class="fas fa-moon"></i>
                             <span class="hidden sm:inline">Dark</span>
                         </button>
-                        <select id="languageSelect" class="border border-gray-300 rounded px-3 py-1 text-sm">
-                            <option value="en">English</option>
-                            <option value="hi">हिंदी</option>
-                            <option value="mr">मराठी</option>
-                        </select>
                         <a href="#" onclick="showExplore()" class="nav-link text-gray-700"><i class="fas fa-compass mr-1"></i> Explore</a>
                         <a href="#" onclick="showAdvertiserPortal()" class="nav-link text-gray-700"><i class="fas fa-ad mr-1"></i> Advertise</a>
                         <a href="#" onclick="HelpMenu.show()" id="helpMenuIcon" class="nav-link text-gray-700" title="Help & Support">
