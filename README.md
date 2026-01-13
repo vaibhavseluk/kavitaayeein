@@ -25,6 +25,7 @@ A modern, lightweight poetry platform built with Cloudflare Workers and Hono fra
 - ✅ **Featured Poets**: Subscription-based spotlight feature
 - ✅ **Anthology System**: Automated poem selection for paid anthologies
 - ✅ **Terms of Service**: Legal framework for anthology rights
+- ✅ **Theme System**: Beautiful light/dark modes with automatic detection
 
 ## 🎯 Current Status
 
@@ -72,6 +73,16 @@ A modern, lightweight poetry platform built with Cloudflare Workers and Hono fra
    - Poetry feed with filtering
    - Real-time updates
    - Mobile-friendly interface
+   - **Theme System**: Light/dark mode with automatic detection
+
+7. **Theme System** (NEW! ✨)
+   - Light and dark mode support
+   - Automatic system preference detection
+   - Persistent theme selection (localStorage)
+   - Smooth transitions between themes
+   - Poetic background patterns in both modes
+   - Theme toggle button in navigation
+   - See [THEME_SYSTEM.md](./THEME_SYSTEM.md) for full documentation
 
 ### 🚧 Features Not Yet Implemented
 
