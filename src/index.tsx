@@ -8,6 +8,7 @@ import subscriptions from './routes/subscriptions';
 import sponsors from './routes/sponsors';
 import anthology from './routes/anthology';
 import editorRoute from './routes/editor';
+import policies from './routes/policies';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -24,6 +25,9 @@ app.route('/api/anthology', anthology);
 
 // Mount editor route
 app.route('/editor', editorRoute);
+
+// Mount policies route
+app.route('/policies', policies);
 
 // Health check
 app.get('/api/health', (c) => {
@@ -626,8 +630,8 @@ app.get('/', (c) => {
                                     </div>
                                     <div class="mb-6">
                                         <label class="flex items-start">
-                                            <input type="checkbox" required class="mt-1 mr-2">
-                                            <span class="text-sm text-gray-700">I agree to the <a href="#" onclick="showTerms()" class="text-blue-600">Terms of Service</a>, including granting the platform rights to include my poems in paid anthologies.</span>
+                                            <input type="checkbox" id="agreeTerms" required class="mt-1 mr-2">
+                                            <span class="text-sm text-gray-700">I agree to the <a href="/terms-of-service" target="_blank" class="text-blue-600 underline">Terms of Service</a> and <a href="/privacy-policy" target="_blank" class="text-blue-600 underline">Privacy Policy</a>, including granting the platform rights to include my poems in paid anthologies.</span>
                                         </label>
                                     </div>
                                     <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
@@ -712,6 +716,14 @@ app.get('/', (c) => {
             // Handle signup
             async function handleSignup(e) {
                 e.preventDefault();
+                
+                // Validate Terms & Privacy Policy agreement
+                const agreeCheckbox = document.getElementById('agreeTerms');
+                if (!agreeCheckbox || !agreeCheckbox.checked) {
+                    alert('You must agree to the Terms of Service and Privacy Policy to create an account.');
+                    return;
+                }
+                
                 try {
                     const response = await axios.post(API_BASE + '/auth/register', {
                         username: document.getElementById('signupUsername').value,
@@ -1031,6 +1043,39 @@ app.get('/', (c) => {
         <script src="/static/onboarding-tour.js"></script>
         <script src="/static/help-menu.js"></script>
         <script src="/static/user-menu.js"></script>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-8 mt-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="text-lg font-bold mb-4"><i class="fas fa-feather-alt mr-2"></i>कविता व्यासपीठ</h3>
+                        <p class="text-sm text-gray-400">A multilingual poetry platform for sharing your voice in Marathi, Hindi & English.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#" onclick="showExplore()" class="text-gray-400 hover:text-white"><i class="fas fa-compass mr-2"></i>Explore Poems</a></li>
+                            <li><a href="#" onclick="showAdvertiserPortal()" class="text-gray-400 hover:text-white"><i class="fas fa-ad mr-2"></i>Advertise</a></li>
+                            <li><a href="#" onclick="HelpMenu.show()" class="text-gray-400 hover:text-white"><i class="fas fa-question-circle mr-2"></i>Help & Support</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold mb-4">Legal</h3>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="/policies/privacy" class="text-gray-400 hover:text-white"><i class="fas fa-shield-alt mr-2"></i>Privacy Policy</a></li>
+                            <li><a href="/policies/terms" class="text-gray-400 hover:text-white"><i class="fas fa-file-contract mr-2"></i>Terms of Service</a></li>
+                            <li><a href="/policies/refund" class="text-gray-400 hover:text-white"><i class="fas fa-undo mr-2"></i>Refund Policy</a></li>
+                            <li><a href="/policies/faq" class="text-gray-400 hover:text-white"><i class="fas fa-question mr-2"></i>FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                    <p class="text-sm text-gray-400">© 2026 कविता व्यासपीठ. All rights reserved.</p>
+                    <p class="text-xs text-gray-500 mt-2">Made with <i class="fas fa-heart text-red-500"></i> for poets worldwide</p>
+                </div>
+            </div>
+        </footer>
     </body>
     </html>
   `);
