@@ -106,14 +106,49 @@ app.get('/', (c) => {
                         </select>
                         <a href="#" onclick="showExplore()" class="nav-link text-gray-700"><i class="fas fa-compass mr-1"></i> Explore</a>
                         <a href="#" onclick="showAdvertiserPortal()" class="nav-link text-gray-700"><i class="fas fa-ad mr-1"></i> Advertise</a>
+                        <a href="#" onclick="HelpMenu.show()" id="helpMenuIcon" class="nav-link text-gray-700" title="Help & Support">
+                            <i class="fas fa-question-circle text-xl"></i>
+                        </a>
                         <span id="authButtons">
                             <a href="#" onclick="showLogin()" class="nav-link text-gray-700"><i class="fas fa-sign-in-alt mr-1"></i> Login</a>
                             <a href="#" onclick="showSignup()" class="nav-link text-blue-600 font-semibold"><i class="fas fa-user-plus mr-1"></i> Sign Up</a>
                         </span>
-                        <span id="userMenu" class="hidden">
+                        <span id="userMenu" class="hidden flex items-center space-x-4">
                             <a href="#" onclick="showSubscriptionPlans()" class="nav-link text-yellow-600 font-semibold"><i class="fas fa-star mr-1"></i> Go Featured</a>
                             <a href="#" onclick="showDashboard()" class="nav-link text-gray-700"><i class="fas fa-tachometer-alt mr-1"></i> Dashboard</a>
-                            <a href="#" onclick="logout()" class="nav-link text-red-600"><i class="fas fa-sign-out-alt mr-1"></i> Logout</a>
+                            
+                            <!-- User Profile Dropdown -->
+                            <div class="relative">
+                                <button onclick="toggleUserDropdown()" id="userDropdownBtn" class="flex items-center space-x-2 text-gray-700 hover:text-blue-600 focus:outline-none">
+                                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                        <span id="userInitial">U</span>
+                                    </div>
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </button>
+                                
+                                <div id="userDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+                                    <div class="px-4 py-3 border-b border-gray-200">
+                                        <p class="text-sm font-semibold text-gray-900" id="dropdownUsername">Username</p>
+                                        <p class="text-xs text-gray-500" id="dropdownEmail">user@example.com</p>
+                                    </div>
+                                    <a href="#" onclick="UserProfileMenu.showProfile(); toggleUserDropdown();" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
+                                        <i class="fas fa-user-circle mr-2 w-4"></i>Profile
+                                    </a>
+                                    <a href="#" onclick="UserProfileMenu.showSettings(); toggleUserDropdown();" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
+                                        <i class="fas fa-cog mr-2 w-4"></i>Settings
+                                    </a>
+                                    <a href="#" onclick="UserProfileMenu.showPreferences(); toggleUserDropdown();" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
+                                        <i class="fas fa-sliders-h mr-2 w-4"></i>Preferences
+                                    </a>
+                                    <a href="#" onclick="HelpMenu.show(); toggleUserDropdown();" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
+                                        <i class="fas fa-question-circle mr-2 w-4"></i>Help
+                                    </a>
+                                    <div class="border-t border-gray-200 my-2"></div>
+                                    <a href="#" onclick="logout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                        <i class="fas fa-sign-out-alt mr-2 w-4"></i>Logout
+                                    </a>
+                                </div>
+                            </div>
                         </span>
                     </div>
                 </div>
@@ -373,6 +408,13 @@ app.get('/', (c) => {
                 if (currentUser) {
                     document.getElementById('authButtons').classList.add('hidden');
                     document.getElementById('userMenu').classList.remove('hidden');
+                    
+                    // Update user dropdown info
+                    const initial = (currentUser.display_name || currentUser.username).charAt(0).toUpperCase();
+                    document.getElementById('userInitial').textContent = initial;
+                    document.getElementById('dropdownUsername').textContent = currentUser.display_name || currentUser.username;
+                    document.getElementById('dropdownEmail').textContent = currentUser.email || 'No email set';
+                    
                     document.getElementById('heroSection').innerHTML = \`
                         <h2 class="text-4xl font-bold text-gray-900 mb-4">
                             Welcome back, \${currentUser.display_name || currentUser.username}!
@@ -383,6 +425,22 @@ app.get('/', (c) => {
                     \`;
                 }
             }
+
+            // Toggle user dropdown menu
+            function toggleUserDropdown() {
+                const dropdown = document.getElementById('userDropdown');
+                dropdown.classList.toggle('hidden');
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                const dropdown = document.getElementById('userDropdown');
+                const button = document.getElementById('userDropdownBtn');
+                
+                if (dropdown && button && !dropdown.contains(event.target) && !button.contains(event.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            });
 
             // Load poems
             async function loadPoems(language = '') {
@@ -991,6 +1049,9 @@ app.get('/', (c) => {
             }
         </script>
         <script src="/static/razorpay.js"></script>
+        <script src="/static/onboarding-tour.js"></script>
+        <script src="/static/help-menu.js"></script>
+        <script src="/static/user-menu.js"></script>
     </body>
     </html>
   `);
