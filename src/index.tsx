@@ -41,6 +41,7 @@ app.get('/', (c) => {
         <title>Poetry Platform - Share Your Voice in Marathi, Hindi & English</title>
         <meta name="description" content="A multi-author poetry platform supporting Marathi, Hindi, and English. Share your poems, discover featured poets, and join our community.">
         <meta name="keywords" content="poetry, marathi poetry, hindi poetry, multilingual, kavita, shayari, featured poet">
+        <meta name="google-adsense-account" content="ca-pub-8929399363373996">
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;600;700&family=Noto+Sans:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
