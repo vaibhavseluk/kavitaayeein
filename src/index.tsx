@@ -51,6 +51,7 @@ app.get('/', (c) => {
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/monetization.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
+        <link href="/static/animations.css" rel="stylesheet">
         <script src="/static/theme.js"></script>
     </head>
     <body class="bg-gray-50">
@@ -68,18 +69,18 @@ app.get('/', (c) => {
                     </div>
                     <div class="flex items-center space-x-6">
                         <!-- Theme Toggle Button -->
-                        <button id="themeToggle" class="theme-toggle" onclick="window.toggleTheme()" title="Toggle theme">
-                            <i class="fas fa-moon"></i>
+                        <button id="themeToggle" class="theme-toggle hover-scale" onclick="window.toggleTheme()" title="Toggle theme">
+                            <i class="fas fa-moon icon-hover-spin"></i>
                             <span class="hidden sm:inline">Dark</span>
                         </button>
-                        <a href="#" onclick="showExplore()" class="nav-link text-gray-700"><i class="fas fa-compass mr-1"></i> Explore</a>
-                        <a href="#" onclick="showAdvertiserPortal()" class="nav-link text-gray-700"><i class="fas fa-ad mr-1"></i> Advertise</a>
-                        <a href="#" onclick="HelpMenu.show()" id="helpMenuIcon" class="nav-link text-gray-700" title="Help & Support">
-                            <i class="fas fa-question-circle text-xl"></i>
+                        <a href="#" onclick="showExplore()" class="nav-link text-gray-700 hover-underline-slide"><i class="fas fa-compass mr-1 icon-hover-spin"></i> Explore</a>
+                        <a href="#" onclick="showAdvertiserPortal()" class="nav-link text-gray-700 hover-underline-slide"><i class="fas fa-ad mr-1 icon-hover-bounce"></i> Advertise</a>
+                        <a href="#" onclick="HelpMenu.show()" id="helpMenuIcon" class="nav-link text-gray-700 hover-scale" title="Help & Support">
+                            <i class="fas fa-question-circle text-xl icon-hover-bounce"></i>
                         </a>
                         <span id="authButtons">
-                            <a href="#" onclick="showLogin()" class="nav-link text-gray-700"><i class="fas fa-sign-in-alt mr-1"></i> Login</a>
-                            <a href="#" onclick="showSignup()" class="nav-link text-blue-600 font-semibold"><i class="fas fa-user-plus mr-1"></i> Sign Up</a>
+                            <a href="#" onclick="showLogin()" class="nav-link text-gray-700 hover-underline-slide"><i class="fas fa-sign-in-alt mr-1"></i> Login</a>
+                            <a href="#" onclick="showSignup()" class="nav-link text-blue-600 font-semibold hover-lift"><i class="fas fa-user-plus mr-1"></i> Sign Up</a>
                         </span>
                         <span id="userMenu" class="hidden flex items-center space-x-4">
                             <a href="#" onclick="showSubscriptionPlans()" class="nav-link text-yellow-600 font-semibold"><i class="fas fa-star mr-1"></i> Go Featured</a>
@@ -126,27 +127,27 @@ app.get('/', (c) => {
         <!-- Main Content -->
         <div id="app" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <!-- Hero Section -->
-            <div id="heroSection" class="text-center mb-12">
+            <div id="heroSection" class="text-center mb-12 animate-fadeInDown">
                 <h2 class="text-5xl font-bold text-gray-900 mb-4">
                     Share Your Poetry
                 </h2>
-                <p class="text-xl text-gray-600 mb-8">
+                <p class="text-xl text-gray-600 mb-8 animate-fadeInUp delay-100">
                     मराठी, हिंदी आणि English - A platform for multilingual poets
                 </p>
-                <button onclick="showSignup()" class="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
+                <button onclick="showSignup()" class="btn-animated bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition animate-bounceIn delay-200 hover-lift">
                     <i class="fas fa-pen-fancy mr-2"></i> Start Writing
                 </button>
             </div>
 
             <!-- Key Features Section -->
-            <div class="content-section bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-12 shadow-lg backdrop-filter backdrop-blur-lg">
+            <div class="content-section bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-12 shadow-lg backdrop-filter backdrop-blur-lg animate-fadeInUp delay-300">
                 <h3 class="text-3xl font-bold text-center text-gray-900 mb-8">
-                    <i class="fas fa-star text-yellow-500 mr-2"></i>Key Features
+                    <i class="fas fa-star text-yellow-500 mr-2 animate-pulse"></i>Key Features
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Rich Text Formatting -->
-                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
-                        <div class="text-blue-600 text-3xl mb-3">
+                    <div class="bg-white rounded-lg p-6 shadow-md card-animated animate-fadeInUp delay-100">
+                        <div class="text-blue-600 text-3xl mb-3 icon-hover-bounce">
                             <i class="fas fa-bold"></i>
                         </div>
                         <h4 class="text-lg font-bold text-gray-900 mb-2">Rich Text Formatting</h4>
@@ -154,8 +155,8 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Code & Fullscreen Mode -->
-                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
-                        <div class="text-green-600 text-3xl mb-3">
+                    <div class="bg-white rounded-lg p-6 shadow-md card-animated animate-fadeInUp delay-200">
+                        <div class="text-green-600 text-3xl mb-3 icon-hover-bounce">
                             <i class="fas fa-expand"></i>
                         </div>
                         <h4 class="text-lg font-bold text-gray-900 mb-2">Code View & Fullscreen</h4>
@@ -163,8 +164,8 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Keyboard Shortcuts -->
-                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
-                        <div class="text-purple-600 text-3xl mb-3">
+                    <div class="bg-white rounded-lg p-6 shadow-md card-animated animate-fadeInUp delay-300">
+                        <div class="text-purple-600 text-3xl mb-3 icon-hover-bounce">
                             <i class="fas fa-keyboard"></i>
                         </div>
                         <h4 class="text-lg font-bold text-gray-900 mb-2">Keyboard Shortcuts</h4>
@@ -172,8 +173,8 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Language-Specific Fonts -->
-                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
-                        <div class="text-red-600 text-3xl mb-3">
+                    <div class="bg-white rounded-lg p-6 shadow-md card-animated animate-fadeInUp delay-400">
+                        <div class="text-red-600 text-3xl mb-3 icon-hover-bounce">
                             <i class="fas fa-language"></i>
                         </div>
                         <h4 class="text-lg font-bold text-gray-900 mb-2">Language-Specific Fonts</h4>
@@ -181,8 +182,8 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Responsive Design -->
-                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
-                        <div class="text-indigo-600 text-3xl mb-3">
+                    <div class="bg-white rounded-lg p-6 shadow-md card-animated animate-fadeInUp delay-500">
+                        <div class="text-indigo-600 text-3xl mb-3 icon-hover-bounce">
                             <i class="fas fa-mobile-alt"></i>
                         </div>
                         <h4 class="text-lg font-bold text-gray-900 mb-2">Responsive Design</h4>
@@ -190,7 +191,7 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Real-time Transliteration -->
-                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition">
+                    <div class="bg-white rounded-lg p-6 shadow-md card-animated animate-fadeInUp delay-600">
                         <div class="text-orange-600 text-3xl mb-3">
                             <i class="fas fa-sync-alt"></i>
                         </div>
@@ -228,9 +229,9 @@ app.get('/', (c) => {
             </div>
 
             <!-- Best Poems Section Header -->
-            <div class="text-center mb-8">
+            <div class="text-center mb-8 animate-fadeInUp">
                 <h3 class="text-3xl font-bold text-gray-900 mb-2">
-                    <i class="fas fa-trophy text-yellow-500 mr-2"></i>Best Poetry
+                    <i class="fas fa-trophy text-yellow-500 mr-2 animate-float"></i>Best Poetry
                 </h3>
                 <p class="text-gray-600 mb-6">
                     Most loved poems from our talented community
@@ -238,23 +239,23 @@ app.get('/', (c) => {
                 
                 <!-- Language Filter -->
                 <div class="flex justify-center space-x-4">
-                    <button onclick="filterPoems('')" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold" id="filter-all">All</button>
-                    <button onclick="filterPoems('en')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300" id="filter-en">English</button>
-                    <button onclick="filterPoems('hi')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300" id="filter-hi">हिंदी</button>
-                    <button onclick="filterPoems('mr')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300" id="filter-mr">मराठी</button>
+                    <button onclick="filterPoems('')" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover-lift btn-animated" id="filter-all">All</button>
+                    <button onclick="filterPoems('en')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 hover-lift transition" id="filter-en">English</button>
+                    <button onclick="filterPoems('hi')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 hover-lift transition" id="filter-hi">हिंदी</button>
+                    <button onclick="filterPoems('mr')" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 hover-lift transition" id="filter-mr">मराठी</button>
                 </div>
             </div>
 
             <!-- Pricing Section -->
-            <div class="content-section bg-white rounded-2xl shadow-lg p-8 mb-12 backdrop-filter backdrop-blur-lg">
+            <div class="content-section bg-white rounded-2xl shadow-lg p-8 mb-12 backdrop-filter backdrop-blur-lg animate-fadeInUp">
                 <h3 class="text-3xl font-bold text-center text-gray-900 mb-4">
-                    <i class="fas fa-tags text-green-500 mr-2"></i>Simple, Affordable Pricing
+                    <i class="fas fa-tags text-green-500 mr-2 animate-pulse"></i>Simple, Affordable Pricing
                 </h3>
                 <p class="text-center text-gray-600 mb-8">Start free, upgrade when you need more</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     <!-- Free Plan -->
-                    <div class="border-2 border-gray-200 rounded-xl p-6 hover:shadow-lg transition">
+                    <div class="border-2 border-gray-200 rounded-xl p-6 card-animated animate-fadeInLeft delay-100">
                         <div class="text-center mb-6">
                             <h4 class="text-2xl font-bold text-gray-900 mb-2">Free</h4>
                             <div class="mb-4">
@@ -281,14 +282,14 @@ app.get('/', (c) => {
                                 <span>Multilingual support</span>
                             </li>
                         </ul>
-                        <button onclick="showSignup()" class="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition">
+                        <button onclick="showSignup()" class="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition btn-animated hover-lift">
                             Get Started Free
                         </button>
                     </div>
 
                     <!-- Premium Plan -->
-                    <div class="border-4 border-blue-500 rounded-xl p-6 relative bg-gradient-to-br from-blue-50 to-indigo-50 hover:shadow-xl transition">
-                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-1 rounded-full text-sm font-bold shadow-lg">
+                    <div class="border-4 border-blue-500 rounded-xl p-6 relative bg-gradient-to-br from-blue-50 to-indigo-50 card-animated animate-fadeInRight delay-200">
+                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-1 rounded-full text-sm font-bold shadow-lg animate-pulse">
                             BEST VALUE
                         </div>
                         <div class="text-center mb-6">
@@ -325,8 +326,8 @@ app.get('/', (c) => {
                                 <span>No advertisements</span>
                             </li>
                         </ul>
-                        <button onclick="currentUser ? showUpgradeModal() : showSignup()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition shadow-lg">
-                            <i class="fas fa-crown mr-2"></i>Upgrade to Premium
+                        <button onclick="currentUser ? showUpgradeModal() : showSignup()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition shadow-lg btn-animated hover-lift hover-glow">
+                            <i class="fas fa-crown mr-2 animate-float"></i>Upgrade to Premium
                         </button>
                         <p class="text-center text-xs text-gray-600 mt-3">
                             <i class="fas fa-shield-alt mr-1"></i>Secure payment via Razorpay
@@ -437,8 +438,8 @@ app.get('/', (c) => {
                         return;
                     }
                     
-                    container.innerHTML = response.data.poems.map(poem => \`
-                        <div class="poem-card bg-white rounded-lg shadow p-6 cursor-pointer" onclick="viewPoem(\${poem.id})">
+                    container.innerHTML = response.data.poems.map((poem, index) => \`
+                        <div class="poem-card bg-white rounded-lg shadow p-6 cursor-pointer card-animated animate-fadeInUp" style="animation-delay: \${index * 0.1}s" onclick="viewPoem(\${poem.id})">
                             <div class="flex justify-between items-start mb-3">
                                 <h3 class="text-xl font-bold text-gray-900">\${poem.title}</h3>
                                 <span class="language-badge lang-\${poem.language}">\${poem.language.toUpperCase()}</span>
@@ -450,8 +451,8 @@ app.get('/', (c) => {
                                 <span><i class="fas fa-user mr-1"></i> \${poem.author_display_name || poem.author_name}</span>
                                 <div class="space-x-3">
                                     <span title="Views"><i class="fas fa-eye mr-1"></i> \${poem.view_count || 0}</span>
-                                    <span title="Likes"><i class="fas fa-heart mr-1 text-red-500"></i> \${poem.like_count || 0}</span>
-                                    <span title="Rating"><i class="fas fa-star mr-1 text-yellow-500"></i> \${poem.average_rating ? poem.average_rating.toFixed(1) : '0.0'}</span>
+                                    <span title="Likes"><i class="fas fa-heart mr-1 text-red-500 icon-hover-heartbeat"></i> \${poem.like_count || 0}</span>
+                                    <span title="Rating"><i class="fas fa-star mr-1 text-yellow-500 icon-hover-spin"></i> \${poem.average_rating ? poem.average_rating.toFixed(1) : '0.0'}</span>
                                 </div>
                             </div>
                         </div>

@@ -16,17 +16,18 @@ app.get('/privacy-policy', (c) => {
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
+        <link href="/static/animations.css" rel="stylesheet">
         <script src="/static/theme.js"></script>
     </head>
     <body class="bg-gray-50">
-        <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="bg-white shadow-sm sticky top-0 z-50 animate-fadeInDown">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-4">
                         <i class="fas fa-feather-alt text-blue-600 text-2xl"></i>
                         <h1 class="text-xl font-bold text-gray-900">कविता व्यासपीठ</h1>
                     </div>
-                    <a href="/" class="text-blue-600 hover:text-blue-700">
+                    <a href="/" class="text-blue-600 hover:text-blue-700 hover-lift">
                         <i class="fas fa-home mr-2"></i>Back to Home
                     </a>
                 </div>
@@ -34,8 +35,8 @@ app.get('/privacy-policy', (c) => {
         </nav>
 
         <div class="max-w-4xl mx-auto px-4 py-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-8">Privacy Policy</h1>
-            <div class="bg-white rounded-lg shadow-lg p-8 prose prose-lg max-w-none">
+            <h1 class="text-4xl font-bold text-gray-900 mb-8 animate-fadeInUp">Privacy Policy</h1>
+            <div class="bg-white rounded-lg shadow-lg p-8 prose prose-lg max-w-none animate-fadeInUp delay-200">
                 <p class="text-gray-600 mb-6"><strong>Effective Date:</strong> January 13, 2026</p>
 
                 <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">1. Introduction</h2>
@@ -200,17 +201,18 @@ app.get('/terms-of-service', (c) => {
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
+        <link href="/static/animations.css" rel="stylesheet">
         <script src="/static/theme.js"></script>
     </head>
     <body class="bg-gray-50">
-        <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="bg-white shadow-sm sticky top-0 z-50 animate-fadeInDown">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-4">
                         <i class="fas fa-feather-alt text-blue-600 text-2xl"></i>
                         <h1 class="text-xl font-bold text-gray-900">कविता व्यासपीठ</h1>
                     </div>
-                    <a href="/" class="text-blue-600 hover:text-blue-700">
+                    <a href="/" class="text-blue-600 hover:text-blue-700 hover-lift">
                         <i class="fas fa-home mr-2"></i>Back to Home
                     </a>
                 </div>
@@ -218,8 +220,8 @@ app.get('/terms-of-service', (c) => {
         </nav>
 
         <div class="max-w-4xl mx-auto px-4 py-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-8">Terms of Service</h1>
-            <div class="bg-white rounded-lg shadow-lg p-8 prose prose-lg max-w-none">
+            <h1 class="text-4xl font-bold text-gray-900 mb-8 animate-fadeInUp">Terms of Service</h1>
+            <div class="bg-white rounded-lg shadow-lg p-8 prose prose-lg max-w-none animate-fadeInUp delay-200">
                 <p class="text-gray-600 mb-6"><strong>Effective Date:</strong> January 13, 2026</p>
 
                 <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">1. Acceptance of Terms</h2>
@@ -396,17 +398,18 @@ app.get('/refund-policy', (c) => {
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
+        <link href="/static/animations.css" rel="stylesheet">
         <script src="/static/theme.js"></script>
     </head>
     <body class="bg-gray-50">
-        <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="bg-white shadow-sm sticky top-0 z-50 animate-fadeInDown">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-4">
                         <i class="fas fa-feather-alt text-blue-600 text-2xl"></i>
                         <h1 class="text-xl font-bold text-gray-900">कविता व्यासपीठ</h1>
                     </div>
-                    <a href="/" class="text-blue-600 hover:text-blue-700">
+                    <a href="/" class="text-blue-600 hover:text-blue-700 hover-lift">
                         <i class="fas fa-home mr-2"></i>Back to Home
                     </a>
                 </div>
@@ -414,8 +417,8 @@ app.get('/refund-policy', (c) => {
         </nav>
 
         <div class="max-w-4xl mx-auto px-4 py-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-8">Refund Policy</h1>
-            <div class="bg-white rounded-lg shadow-lg p-8 prose prose-lg max-w-none">
+            <h1 class="text-4xl font-bold text-gray-900 mb-8 animate-fadeInUp">Refund Policy</h1>
+            <div class="bg-white rounded-lg shadow-lg p-8 prose prose-lg max-w-none animate-fadeInUp delay-200">
                 <p class="text-gray-600 mb-6"><strong>Effective Date:</strong> January 13, 2026</p>
                 <p class="text-gray-600 mb-6"><strong>Last Updated:</strong> January 13, 2026</p>
 
@@ -592,17 +595,18 @@ app.get('/faq', (c) => {
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
+        <link href="/static/animations.css" rel="stylesheet">
         <script src="/static/theme.js"></script>
     </head>
     <body class="bg-gray-50">
-        <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="bg-white shadow-sm sticky top-0 z-50 animate-fadeInDown">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-4">
                         <i class="fas fa-feather-alt text-blue-600 text-2xl"></i>
                         <h1 class="text-xl font-bold text-gray-900">कविता व्यासपीठ</h1>
                     </div>
-                    <a href="/" class="text-blue-600 hover:text-blue-700">
+                    <a href="/" class="text-blue-600 hover:text-blue-700 hover-lift">
                         <i class="fas fa-home mr-2"></i>Back to Home
                     </a>
                 </div>
@@ -610,10 +614,10 @@ app.get('/faq', (c) => {
         </nav>
 
         <div class="max-w-4xl mx-auto px-4 py-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-8">Frequently Asked Questions (FAQ)</h1>
+            <h1 class="text-4xl font-bold text-gray-900 mb-8 animate-fadeInUp">Frequently Asked Questions (FAQ)</h1>
             <div class="space-y-6">
                 <!-- General Questions -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="bg-white rounded-lg shadow-lg p-6 card-animated animate-fadeInUp">
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">
                         <i class="fas fa-question-circle text-blue-600 mr-2"></i>General Questions
                     </h2>
@@ -643,7 +647,7 @@ app.get('/faq', (c) => {
                 </div>
 
                 <!-- Subscription & Pricing -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="bg-white rounded-lg shadow-lg p-6 card-animated animate-fadeInUp">
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">
                         <i class="fas fa-credit-card text-green-600 mr-2"></i>Subscription & Pricing
                     </h2>
@@ -680,7 +684,7 @@ app.get('/faq', (c) => {
                 </div>
 
                 <!-- Refunds & Cancellation -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="bg-white rounded-lg shadow-lg p-6 card-animated animate-fadeInUp">
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">
                         <i class="fas fa-undo text-orange-600 mr-2"></i>Refunds & Cancellation
                     </h2>
@@ -724,7 +728,7 @@ app.get('/faq', (c) => {
                 </div>
 
                 <!-- Writing & Publishing -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="bg-white rounded-lg shadow-lg p-6 card-animated animate-fadeInUp">
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">
                         <i class="fas fa-pen text-purple-600 mr-2"></i>Writing & Publishing
                     </h2>
@@ -761,7 +765,7 @@ app.get('/faq', (c) => {
                 </div>
 
                 <!-- Anthologies -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="bg-white rounded-lg shadow-lg p-6 card-animated animate-fadeInUp">
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">
                         <i class="fas fa-book text-red-600 mr-2"></i>Anthologies
                     </h2>
@@ -791,7 +795,7 @@ app.get('/faq', (c) => {
                 </div>
 
                 <!-- Account & Security -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="bg-white rounded-lg shadow-lg p-6 card-animated animate-fadeInUp">
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">
                         <i class="fas fa-shield-alt text-indigo-600 mr-2"></i>Account & Security
                     </h2>
@@ -821,7 +825,7 @@ app.get('/faq', (c) => {
                 </div>
 
                 <!-- Contact & Support -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="bg-white rounded-lg shadow-lg p-6 card-animated animate-fadeInUp">
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">
                         <i class="fas fa-headset text-teal-600 mr-2"></i>Contact & Support
                     </h2>
