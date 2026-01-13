@@ -69,7 +69,7 @@ app.get('/', (c) => {
                     </div>
                     <div class="flex items-center space-x-6">
                         <!-- Theme Toggle Button -->
-                        <button id="themeToggle" class="theme-toggle hover-scale" onclick="window.toggleTheme()" title="Toggle theme">
+                        <button id="themeToggle" class="theme-toggle hover-scale" title="Toggle theme">
                             <i class="fas fa-moon icon-hover-spin"></i>
                             <span class="hidden sm:inline">Dark</span>
                         </button>
