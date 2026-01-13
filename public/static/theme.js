@@ -137,7 +137,25 @@
         return;
       }
 
-      // Find language selector to insert theme toggle next to it
+      // Check if button already exists in HTML
+      let themeToggle = document.getElementById('themeToggle');
+      
+      if (themeToggle) {
+        // Button exists in HTML, just update its content and attach handler
+        const currentTheme = document.documentElement.getAttribute('data-theme') || THEMES.LIGHT;
+        this.updateThemeToggleContent(themeToggle, currentTheme);
+        
+        // Add click handler
+        themeToggle.addEventListener('click', () => {
+          const newTheme = this.toggleTheme();
+          this.updateThemeToggleContent(themeToggle, newTheme);
+        });
+        
+        console.log('Theme toggle button found and initialized');
+        return;
+      }
+
+      // Button doesn't exist, create it dynamically
       const languageSelect = document.getElementById('languageSelect');
       if (!languageSelect) {
         console.warn('Language selector not found, theme toggle not added to navigation');
@@ -145,7 +163,7 @@
       }
 
       // Create theme toggle button
-      const themeToggle = document.createElement('button');
+      themeToggle = document.createElement('button');
       themeToggle.id = 'themeToggle';
       themeToggle.className = 'theme-toggle';
       themeToggle.setAttribute('aria-label', 'Toggle theme');
@@ -163,6 +181,7 @@
       
       // Insert before language selector
       languageSelect.parentNode.insertBefore(themeToggle, languageSelect);
+      console.log('Theme toggle button created and inserted');
     },
 
     /**

@@ -62,6 +62,11 @@ app.get('/', (c) => {
                         <h1 class="text-xl font-bold text-gray-900">कविता व्यासपीठ</h1>
                     </div>
                     <div class="flex items-center space-x-6">
+                        <!-- Theme Toggle Button -->
+                        <button id="themeToggle" class="theme-toggle" onclick="window.toggleTheme()" title="Toggle theme">
+                            <i class="fas fa-moon"></i>
+                            <span class="hidden sm:inline">Dark</span>
+                        </button>
                         <select id="languageSelect" class="border border-gray-300 rounded px-3 py-1 text-sm">
                             <option value="en">English</option>
                             <option value="hi">हिंदी</option>

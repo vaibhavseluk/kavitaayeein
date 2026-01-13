@@ -261,7 +261,7 @@ const HelpMenu = {
             <i class="fas fa-lightbulb text-yellow-600 mr-2"></i>Still have questions?
           </h4>
           <p class="text-gray-700 text-sm">
-            Contact us at <a href="mailto:support@poetryplatform.com" class="text-blue-600 hover:underline">support@poetryplatform.com</a> or use the contact form in your dashboard. We're here to help!
+            Contact us at <a href="mailto:heyshabdly@gmail.com" class="text-blue-600 hover:underline">heyshabdly@gmail.com</a> or use the contact form in your dashboard. We're here to help!
           </p>
         </div>
       </div>
