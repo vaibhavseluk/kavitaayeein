@@ -26,8 +26,8 @@ app.route('/api/anthology', anthology);
 // Mount editor route
 app.route('/editor', editorRoute);
 
-// Mount policies route
-app.route('/policies', policies);
+// Mount policies routes (at root level)
+app.route('/', policies);
 
 // Health check
 app.get('/api/health', (c) => {
@@ -1063,10 +1063,10 @@ app.get('/', (c) => {
                     <div>
                         <h3 class="text-lg font-bold mb-4">Legal</h3>
                         <ul class="space-y-2 text-sm">
-                            <li><a href="/policies/privacy" class="text-gray-400 hover:text-white"><i class="fas fa-shield-alt mr-2"></i>Privacy Policy</a></li>
-                            <li><a href="/policies/terms" class="text-gray-400 hover:text-white"><i class="fas fa-file-contract mr-2"></i>Terms of Service</a></li>
-                            <li><a href="/policies/refund" class="text-gray-400 hover:text-white"><i class="fas fa-undo mr-2"></i>Refund Policy</a></li>
-                            <li><a href="/policies/faq" class="text-gray-400 hover:text-white"><i class="fas fa-question mr-2"></i>FAQ</a></li>
+                            <li><a href="/privacy-policy" target="_blank" class="text-gray-400 hover:text-white"><i class="fas fa-shield-alt mr-2"></i>Privacy Policy</a></li>
+                            <li><a href="/terms-of-service" target="_blank" class="text-gray-400 hover:text-white"><i class="fas fa-file-contract mr-2"></i>Terms of Service</a></li>
+                            <li><a href="/refund-policy" target="_blank" class="text-gray-400 hover:text-white"><i class="fas fa-undo mr-2"></i>Refund Policy</a></li>
+                            <li><a href="/faq" target="_blank" class="text-gray-400 hover:text-white"><i class="fas fa-question mr-2"></i>FAQ</a></li>
                         </ul>
                     </div>
                 </div>
