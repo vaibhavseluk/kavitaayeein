@@ -310,7 +310,7 @@ function showAdvertiserPortal() {
             </div>
 
             <div class="text-center">
-                <p class="text-gray-600 mb-4">Questions? Email us at <a href="mailto:advertise@poetryplatform.com" class="text-blue-600 font-semibold">advertise@poetryplatform.com</a></p>
+                <p class="text-gray-600 mb-4">Questions? Email us at <a href="mailto:heyshabdly@gmail.com" class="text-blue-600 font-semibold">heyshabdly@gmail.com</a></p>
                 <a href="#" onclick="location.reload()" class="text-gray-600 hover:text-gray-900">← Back to Home</a>
             </div>
         </div>
