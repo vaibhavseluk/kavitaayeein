@@ -45,21 +45,97 @@ app.get('/', (c) => {
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/monetization.css" rel="stylesheet">
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;600;700&family=Noto+Sans:wght@300;400;600;700&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;600;700&family=Noto+Sans:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
             
             body {
                 font-family: 'Noto Sans', 'Noto Sans Devanagari', sans-serif;
+                position: relative;
+            }
+            
+            /* Elegant Poetry Background */
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: 
+                    linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%),
+                    repeating-linear-gradient(45deg, transparent, transparent 100px, rgba(99, 102, 241, 0.02) 100px, rgba(99, 102, 241, 0.02) 200px);
+                z-index: -2;
+            }
+            
+            /* Poetic pattern overlay */
+            body::after {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: 
+                    radial-gradient(circle at 20% 50%, rgba(236, 72, 153, 0.03) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+                    radial-gradient(circle at 40% 20%, rgba(168, 85, 247, 0.03) 0%, transparent 50%);
+                z-index: -1;
+                animation: poeticFlow 30s ease-in-out infinite;
+            }
+            
+            @keyframes poeticFlow {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.7; }
+            }
+            
+            /* Floating poetic elements */
+            .poetic-accent {
+                position: fixed;
+                opacity: 0.03;
+                font-family: 'Playfair Display', serif;
+                font-size: 200px;
+                font-weight: 700;
+                color: #6366f1;
+                pointer-events: none;
+                user-select: none;
+                z-index: -1;
+            }
+            
+            .accent-1 {
+                top: 10%;
+                left: -5%;
+                transform: rotate(-15deg);
+                animation: floatAccent1 20s ease-in-out infinite;
+            }
+            
+            .accent-2 {
+                bottom: 10%;
+                right: -5%;
+                transform: rotate(15deg);
+                animation: floatAccent2 25s ease-in-out infinite;
+            }
+            
+            @keyframes floatAccent1 {
+                0%, 100% { transform: rotate(-15deg) translateY(0px); }
+                50% { transform: rotate(-15deg) translateY(-30px); }
+            }
+            
+            @keyframes floatAccent2 {
+                0%, 100% { transform: rotate(15deg) translateY(0px); }
+                50% { transform: rotate(15deg) translateY(30px); }
             }
             
             .poem-card {
                 transition: all 0.3s ease;
                 border-left: 4px solid transparent;
+                backdrop-filter: blur(10px);
+                background: rgba(255, 255, 255, 0.95);
             }
             
             .poem-card:hover {
                 transform: translateY(-4px);
                 box-shadow: 0 10px 25px rgba(0,0,0,0.1);
                 border-left-color: #3b82f6;
+                background: rgba(255, 255, 255, 1);
             }
             
             .language-badge {
@@ -87,9 +163,38 @@ app.get('/', (c) => {
             .nav-link:hover {
                 color: #3b82f6;
             }
+            
+            /* Hero section with elegant overlay */
+            #heroSection {
+                position: relative;
+                padding: 4rem 2rem;
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
+                border-radius: 1rem;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            }
+            
+            /* Content sections with subtle glass effect */
+            .content-section {
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(10px);
+            }
+            
+            /* Feather accent decorations */
+            .feather-decoration {
+                position: absolute;
+                opacity: 0.05;
+                font-size: 120px;
+                color: #6366f1;
+                transform: rotate(-25deg);
+            }
         </style>
     </head>
     <body class="bg-gray-50">
+        <!-- Floating Poetic Accents -->
+        <div class="poetic-accent accent-1" aria-hidden="true">❝</div>
+        <div class="poetic-accent accent-2" aria-hidden="true">❞</div>
+        
         <!-- Navigation -->
         <nav class="bg-white shadow-sm sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -171,7 +276,7 @@ app.get('/', (c) => {
             </div>
 
             <!-- Key Features Section -->
-            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-12 shadow-lg">
+            <div class="content-section bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-12 shadow-lg backdrop-filter backdrop-blur-lg">
                 <h3 class="text-3xl font-bold text-center text-gray-900 mb-8">
                     <i class="fas fa-star text-yellow-500 mr-2"></i>Key Features
                 </h3>
@@ -278,7 +383,7 @@ app.get('/', (c) => {
             </div>
 
             <!-- Pricing Section -->
-            <div class="bg-white rounded-2xl shadow-lg p-8 mb-12">
+            <div class="content-section bg-white rounded-2xl shadow-lg p-8 mb-12 backdrop-filter backdrop-blur-lg">
                 <h3 class="text-3xl font-bold text-center text-gray-900 mb-4">
                     <i class="fas fa-tags text-green-500 mr-2"></i>Simple, Affordable Pricing
                 </h3>
