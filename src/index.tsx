@@ -478,43 +478,43 @@ app.get('/', (c) => {
             // Show login
             function showLogin() {
                 document.getElementById('app').innerHTML = \`
-                    <div class="max-w-4xl mx-auto">
+                    <div class="max-w-4xl mx-auto animate-fadeInUp">
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <!-- Login Form -->
-                            <div class="bg-white rounded-lg shadow-lg p-8">
+                            <div class="bg-white rounded-lg shadow-lg p-8 animate-fadeInLeft">
                                 <h2 class="text-3xl font-bold text-gray-900 mb-6">Login</h2>
                                 <form onsubmit="handleLogin(event)">
                                     <div class="mb-4">
                                         <label class="block text-gray-700 font-semibold mb-2">Username or Email</label>
-                                        <input type="text" id="loginUsername" required class="w-full border border-gray-300 rounded px-4 py-2">
+                                        <input type="text" id="loginUsername" required class="w-full border border-gray-300 rounded px-4 py-2 input-animated">
                                     </div>
                                     <div class="mb-4">
                                         <label class="block text-gray-700 font-semibold mb-2">Password</label>
-                                        <input type="password" id="loginPassword" required class="w-full border border-gray-300 rounded px-4 py-2">
+                                        <input type="password" id="loginPassword" required class="w-full border border-gray-300 rounded px-4 py-2 input-animated">
                                     </div>
                                     <div class="mb-6">
-                                        <a href="#" onclick="showForgotPassword()" class="text-sm text-blue-600 hover:underline">Forgot Password?</a>
+                                        <a href="#" onclick="showForgotPassword()" class="text-sm text-blue-600 hover-underline-slide">Forgot Password?</a>
                                     </div>
-                                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
-                                        Login
+                                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 btn-animated hover-lift">
+                                        <i class="fas fa-sign-in-alt mr-2"></i>Login
                                     </button>
                                 </form>
                                 <p class="mt-4 text-center text-gray-600">
-                                    Don't have an account? <a href="#" onclick="showSignup()" class="text-blue-600 font-semibold">Sign Up</a>
+                                    Don't have an account? <a href="#" onclick="showSignup()" class="text-blue-600 font-semibold hover-underline-slide">Sign Up</a>
                                 </p>
                                 <p class="mt-2 text-center">
-                                    <a href="#" onclick="location.reload()" class="text-gray-600 hover:text-gray-900">← Back to Home</a>
+                                    <a href="#" onclick="location.reload()" class="text-gray-600 hover:text-gray-900 hover-underline-slide">← Back to Home</a>
                                 </p>
                             </div>
 
                             <!-- Key Features Panel -->
-                            <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg p-8">
+                            <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg p-8 animate-fadeInRight delay-200">
                                 <h3 class="text-2xl font-bold text-gray-900 mb-6">
-                                    <i class="fas fa-star text-yellow-500 mr-2"></i>Why Join Us?
+                                    <i class="fas fa-star text-yellow-500 mr-2 animate-pulse"></i>Why Join Us?
                                 </h3>
                                 <div class="space-y-4">
-                                    <div class="flex items-start">
-                                        <div class="text-blue-600 text-xl mr-3 mt-1">
+                                    <div class="flex items-start animate-fadeInUp delay-100">
+                                        <div class="text-blue-600 text-xl mr-3 mt-1 icon-hover-bounce">
                                             <i class="fas fa-bold"></i>
                                         </div>
                                         <div>
@@ -522,8 +522,8 @@ app.get('/', (c) => {
                                             <p class="text-sm text-gray-700">Bold, italic, headings, lists for beautiful poems</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-start">
-                                        <div class="text-green-600 text-xl mr-3 mt-1">
+                                    <div class="flex items-start animate-fadeInUp delay-200">
+                                        <div class="text-green-600 text-xl mr-3 mt-1 icon-hover-bounce">
                                             <i class="fas fa-keyboard"></i>
                                         </div>
                                         <div>
@@ -531,8 +531,8 @@ app.get('/', (c) => {
                                             <p class="text-sm text-gray-700">Fast editing with Ctrl+G, Ctrl+B shortcuts</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-start">
-                                        <div class="text-purple-600 text-xl mr-3 mt-1">
+                                    <div class="flex items-start animate-fadeInUp delay-300">
+                                        <div class="text-purple-600 text-xl mr-3 mt-1 icon-hover-bounce">
                                             <i class="fas fa-expand"></i>
                                         </div>
                                         <div>
@@ -540,8 +540,8 @@ app.get('/', (c) => {
                                             <p class="text-sm text-gray-700">Distraction-free writing experience</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-start">
-                                        <div class="text-red-600 text-xl mr-3 mt-1">
+                                    <div class="flex items-start animate-fadeInUp delay-400">
+                                        <div class="text-red-600 text-xl mr-3 mt-1 icon-hover-bounce">
                                             <i class="fas fa-language"></i>
                                         </div>
                                         <div>
@@ -549,8 +549,8 @@ app.get('/', (c) => {
                                             <p class="text-sm text-gray-700">Beautiful Devanagari fonts for मराठी & हिंदी</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-start">
-                                        <div class="text-orange-600 text-xl mr-3 mt-1">
+                                    <div class="flex items-start animate-fadeInUp delay-500">
+                                        <div class="text-orange-600 text-xl mr-3 mt-1 icon-hover-bounce">
                                             <i class="fas fa-sync-alt"></i>
                                         </div>
                                         <div>
@@ -558,8 +558,8 @@ app.get('/', (c) => {
                                             <p class="text-sm text-gray-700">Type in English, get Devanagari instantly</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-start">
-                                        <div class="text-teal-600 text-xl mr-3 mt-1">
+                                    <div class="flex items-start animate-fadeInUp delay-600">
+                                        <div class="text-teal-600 text-xl mr-3 mt-1 icon-hover-bounce">
                                             <i class="fas fa-mobile-alt"></i>
                                         </div>
                                         <div>
@@ -595,35 +595,35 @@ app.get('/', (c) => {
             // Show signup
             function showSignup() {
                 document.getElementById('app').innerHTML = \`
-                    <div class="max-w-5xl mx-auto">
+                    <div class="max-w-5xl mx-auto animate-fadeInUp">
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             <!-- Signup Form -->
-                            <div class="lg:col-span-2 bg-white rounded-lg shadow-lg p-8">
+                            <div class="lg:col-span-2 bg-white rounded-lg shadow-lg p-8 animate-fadeInLeft">
                                 <h2 class="text-3xl font-bold text-gray-900 mb-6">Sign Up</h2>
                                 <form onsubmit="handleSignup(event)">
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div class="mb-4">
                                             <label class="block text-gray-700 font-semibold mb-2">Username</label>
-                                            <input type="text" id="signupUsername" required class="w-full border border-gray-300 rounded px-4 py-2">
+                                            <input type="text" id="signupUsername" required class="w-full border border-gray-300 rounded px-4 py-2 input-animated">
                                         </div>
                                         <div class="mb-4">
                                             <label class="block text-gray-700 font-semibold mb-2">Email</label>
-                                            <input type="email" id="signupEmail" required class="w-full border border-gray-300 rounded px-4 py-2">
+                                            <input type="email" id="signupEmail" required class="w-full border border-gray-300 rounded px-4 py-2 input-animated">
                                         </div>
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div class="mb-4">
                                             <label class="block text-gray-700 font-semibold mb-2">Password</label>
-                                            <input type="password" id="signupPassword" required class="w-full border border-gray-300 rounded px-4 py-2">
+                                            <input type="password" id="signupPassword" required class="w-full border border-gray-300 rounded px-4 py-2 input-animated">
                                         </div>
                                         <div class="mb-4">
                                             <label class="block text-gray-700 font-semibold mb-2">Display Name</label>
-                                            <input type="text" id="signupDisplayName" class="w-full border border-gray-300 rounded px-4 py-2">
+                                            <input type="text" id="signupDisplayName" class="w-full border border-gray-300 rounded px-4 py-2 input-animated">
                                         </div>
                                     </div>
                                     <div class="mb-4">
                                         <label class="block text-gray-700 font-semibold mb-2">Preferred Language</label>
-                                        <select id="signupLanguage" class="w-full border border-gray-300 rounded px-4 py-2">
+                                        <select id="signupLanguage" class="w-full border border-gray-300 rounded px-4 py-2 input-animated">
                                             <option value="en">English</option>
                                             <option value="hi">हिंदी</option>
                                             <option value="mr">मराठी</option>
@@ -631,26 +631,26 @@ app.get('/', (c) => {
                                     </div>
                                     <div class="mb-6">
                                         <label class="flex items-start">
-                                            <input type="checkbox" id="agreeTerms" required class="mt-1 mr-2">
-                                            <span class="text-sm text-gray-700">I agree to the <a href="/terms-of-service" target="_blank" class="text-blue-600 underline">Terms of Service</a> and <a href="/privacy-policy" target="_blank" class="text-blue-600 underline">Privacy Policy</a>, including granting the platform rights to include my poems in paid anthologies.</span>
+                                            <input type="checkbox" id="agreeTerms" required class="mt-1 mr-2 checkbox-animated">
+                                            <span class="text-sm text-gray-700">I agree to the <a href="/terms-of-service" target="_blank" class="text-blue-600 underline hover-underline-slide">Terms of Service</a> and <a href="/privacy-policy" target="_blank" class="text-blue-600 underline hover-underline-slide">Privacy Policy</a>, including granting the platform rights to include my poems in paid anthologies.</span>
                                         </label>
                                     </div>
-                                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
+                                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 btn-animated hover-lift">
                                         <i class="fas fa-user-plus mr-2"></i>Sign Up
                                     </button>
                                 </form>
                                 <p class="mt-4 text-center text-gray-600">
-                                    Already have an account? <a href="#" onclick="showLogin()" class="text-blue-600 font-semibold">Login</a>
+                                    Already have an account? <a href="#" onclick="showLogin()" class="text-blue-600 font-semibold hover-underline-slide">Login</a>
                                 </p>
                                 <p class="mt-2 text-center">
-                                    <a href="#" onclick="location.reload()" class="text-gray-600 hover:text-gray-900">← Back to Home</a>
+                                    <a href="#" onclick="location.reload()" class="text-gray-600 hover:text-gray-900 hover-underline-slide">← Back to Home</a>
                                 </p>
                             </div>
 
                             <!-- Key Features Panel -->
-                            <div class="bg-gradient-to-br from-indigo-50 to-purple-100 rounded-lg p-6">
+                            <div class="bg-gradient-to-br from-indigo-50 to-purple-100 rounded-lg p-6 animate-fadeInRight delay-200">
                                 <h3 class="text-xl font-bold text-gray-900 mb-4">
-                                    <i class="fas fa-gift text-yellow-500 mr-2"></i>What You Get
+                                    <i class="fas fa-gift text-yellow-500 mr-2 animate-float"></i>What You Get
                                 </h3>
                                 <div class="space-y-3">
                                     <div class="bg-white bg-opacity-70 rounded-lg p-3">
@@ -929,12 +929,12 @@ app.get('/', (c) => {
             // Show forgot password
             function showForgotPassword() {
                 document.getElementById('app').innerHTML = \`
-                    <div class="max-w-4xl mx-auto">
+                    <div class="max-w-4xl mx-auto animate-fadeInUp">
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <!-- Forgot Password Form -->
-                            <div class="bg-white rounded-lg shadow-lg p-8">
+                            <div class="bg-white rounded-lg shadow-lg p-8 animate-fadeInLeft">
                                 <h2 class="text-3xl font-bold text-gray-900 mb-6">
-                                    <i class="fas fa-key mr-2"></i>Forgot Password
+                                    <i class="fas fa-key mr-2 icon-hover-spin"></i>Forgot Password
                                 </h2>
                                 <p class="text-gray-600 mb-6">
                                     Enter your email address and we'll send you instructions to reset your password.
@@ -942,30 +942,30 @@ app.get('/', (c) => {
                                 <form onsubmit="handleForgotPassword(event)">
                                     <div class="mb-6">
                                         <label class="block text-gray-700 font-semibold mb-2">Email Address</label>
-                                        <input type="email" id="forgotEmail" required class="w-full border border-gray-300 rounded px-4 py-2" placeholder="your@email.com">
+                                        <input type="email" id="forgotEmail" required class="w-full border border-gray-300 rounded px-4 py-2 input-animated" placeholder="your@email.com">
                                     </div>
-                                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
+                                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 btn-animated hover-lift">
                                         <i class="fas fa-paper-plane mr-2"></i>Send Reset Link
                                     </button>
                                 </form>
                                 <div class="mt-6 text-center space-y-2">
                                     <p class="text-gray-600">
-                                        Remember your password? <a href="#" onclick="showLogin()" class="text-blue-600 font-semibold">Login</a>
+                                        Remember your password? <a href="#" onclick="showLogin()" class="text-blue-600 font-semibold hover-underline-slide">Login</a>
                                     </p>
                                     <p>
-                                        <a href="#" onclick="location.reload()" class="text-gray-600 hover:text-gray-900">← Back to Home</a>
+                                        <a href="#" onclick="location.reload()" class="text-gray-600 hover:text-gray-900 hover-underline-slide">← Back to Home</a>
                                     </p>
                                 </div>
                             </div>
 
                             <!-- Key Features Panel -->
-                            <div class="bg-gradient-to-br from-green-50 to-teal-100 rounded-lg p-8">
+                            <div class="bg-gradient-to-br from-green-50 to-teal-100 rounded-lg p-8 animate-fadeInRight delay-200">
                                 <h3 class="text-2xl font-bold text-gray-900 mb-6">
-                                    <i class="fas fa-magic text-purple-600 mr-2"></i>Our Features
+                                    <i class="fas fa-magic text-purple-600 mr-2 animate-pulse"></i>Our Features
                                 </h3>
                                 <div class="space-y-4">
-                                    <div class="flex items-start">
-                                        <div class="text-blue-600 text-xl mr-3 mt-1">
+                                    <div class="flex items-start animate-fadeInUp delay-100">
+                                        <div class="text-blue-600 text-xl mr-3 mt-1 icon-hover-bounce">
                                             <i class="fas fa-pen-fancy"></i>
                                         </div>
                                         <div>
@@ -973,8 +973,8 @@ app.get('/', (c) => {
                                             <p class="text-sm text-gray-700">Rich formatting, code view, fullscreen mode</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-start">
-                                        <div class="text-green-600 text-xl mr-3 mt-1">
+                                    <div class="flex items-start animate-fadeInUp delay-200">
+                                        <div class="text-green-600 text-xl mr-3 mt-1 icon-hover-bounce">
                                             <i class="fas fa-keyboard"></i>
                                         </div>
                                         <div>
@@ -982,8 +982,8 @@ app.get('/', (c) => {
                                             <p class="text-sm text-gray-700">Ctrl+G for Google Input, Ctrl+B for bold</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-start">
-                                        <div class="text-purple-600 text-xl mr-3 mt-1">
+                                    <div class="flex items-start animate-fadeInUp delay-300">
+                                        <div class="text-purple-600 text-xl mr-3 mt-1 icon-hover-bounce">
                                             <i class="fas fa-language"></i>
                                         </div>
                                         <div>
@@ -991,8 +991,8 @@ app.get('/', (c) => {
                                             <p class="text-sm text-gray-700">Write in मराठी, हिंदी, or English</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-start">
-                                        <div class="text-orange-600 text-xl mr-3 mt-1">
+                                    <div class="flex items-start animate-fadeInUp delay-400">
+                                        <div class="text-orange-600 text-xl mr-3 mt-1 icon-hover-bounce">
                                             <i class="fas fa-sync-alt"></i>
                                         </div>
                                         <div>
@@ -1000,8 +1000,8 @@ app.get('/', (c) => {
                                             <p class="text-sm text-gray-700">Instant English to Devanagari conversion</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-start">
-                                        <div class="text-red-600 text-xl mr-3 mt-1">
+                                    <div class="flex items-start animate-fadeInUp delay-500">
+                                        <div class="text-red-600 text-xl mr-3 mt-1 icon-hover-bounce">
                                             <i class="fas fa-mobile-alt"></i>
                                         </div>
                                         <div>
