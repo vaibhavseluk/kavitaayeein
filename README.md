@@ -3,7 +3,7 @@
 > A full-stack web application for poets to share their work in Marathi, Hindi, and English with administrative control and monetization features.
 
 ## 🌟 Live Demo
-**Last Updated:** January 18, 2026 - Interactive mascot feature added
+**Last Updated:** January 18, 2026 - Smart mascot with idle activation & toggle control
 
 **🌐 Production Site:** https://www.shabdly.online  
 **📦 Cloudflare Pages:** https://poetry-platform.pages.dev  
