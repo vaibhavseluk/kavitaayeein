@@ -83,12 +83,14 @@
      */
     applyTheme(theme, animate = true) {
       const html = document.documentElement;
-      const body = document.body;
+      const body = document.body; // May be null if called before body exists
       
       // If not animating, temporarily disable transitions
       if (!animate) {
         html.classList.add('preload');
-        body.classList.add('preload');
+        if (body) {
+          body.classList.add('preload');
+        }
       }
       
       // Set theme attribute
@@ -101,7 +103,9 @@
       if (!animate) {
         setTimeout(() => {
           html.classList.remove('preload');
-          body.classList.remove('preload');
+          if (body) {
+            body.classList.remove('preload');
+          }
         }, 50);
       }
       
