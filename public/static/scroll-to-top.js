@@ -128,9 +128,23 @@
   // Expose to global scope
   window.ScrollToTop = ScrollToTop;
 
-  // Re-check button existence periodically (for SPA page changes)
+  // Watch for app content changes (SPA navigation)
+  const observer = new MutationObserver(() => {
+    ScrollToTop.ensureButton();
+  });
+
+  // Observe changes to the app container
+  const appElement = document.getElementById('app');
+  if (appElement) {
+    observer.observe(appElement, {
+      childList: true,
+      subtree: false
+    });
+  }
+
+  // Also re-check button existence periodically (backup)
   setInterval(() => {
     ScrollToTop.ensureButton();
-  }, 2000);
+  }, 3000);
 
 })();

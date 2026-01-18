@@ -33,6 +33,11 @@
       // Reset scroll position to top
       window.scrollTo(0, 0);
 
+      // Ensure scroll-to-top button exists
+      if (window.ScrollToTop) {
+        window.ScrollToTop.ensureButton();
+      }
+
       // Reset state
       this.currentPage = 0;
       this.hasMore = true;
