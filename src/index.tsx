@@ -751,8 +751,262 @@ app.get('/', (c) => {
             }
 
             // View poem (placeholder)
-            function viewPoem(id) {
-                alert('Poem viewing feature - ID: ' + id + '\\nFull poem detail page will be implemented');
+            async function viewPoem(id) {
+                const appDiv = document.getElementById('app');
+                if (!appDiv) return;
+                
+                // Show loading
+                appDiv.innerHTML = '<div class="flex justify-center items-center h-screen"><i class="fas fa-spinner fa-spin text-4xl text-blue-600"></i></div>';
+                
+                try {
+                    // Fetch poem details
+                    const response = await axios.get(API_BASE + '/poems/' + id);
+                    const poem = response.data;
+                    
+                    // Format published date
+                    const publishedDate = new Date(poem.published_at).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    
+                    // Display poem detail page
+                    appDiv.innerHTML = \`
+                        <div class="min-h-screen bg-gray-50 py-8">
+                            <!-- Header with back button -->
+                            <div class="max-w-4xl mx-auto px-4 mb-6">
+                                <button onclick="showExplore()" class="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition">
+                                    <i class="fas fa-arrow-left"></i>
+                                    <span>Back to Feed</span>
+                                </button>
+                            </div>
+                            
+                            <!-- Poem Content Card -->
+                            <div class="max-w-4xl mx-auto px-4">
+                                <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+                                    <!-- Author Info -->
+                                    <div class="flex items-center space-x-4 mb-6 pb-6 border-b">
+                                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-2xl">
+                                            \${(poem.author_display_name || poem.author_name || 'U')[0].toUpperCase()}
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-xl text-gray-900">\${poem.author_display_name || poem.author_name || 'Anonymous'}</h4>
+                                            <p class="text-gray-600">
+                                                <i class="far fa-clock mr-1"></i>\${publishedDate}
+                                                <span class="ml-3 language-badge lang-\${poem.language}">\${poem.language.toUpperCase()}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Poem Title -->
+                                    <h1 class="text-4xl font-bold text-gray-900 mb-6">\${poem.title}</h1>
+                                    
+                                    <!-- Poem Content -->
+                                    <div class="poem-content text-lg text-gray-800 leading-relaxed whitespace-pre-line mb-8">
+                                        \${poem.content}
+                                    </div>
+                                    
+                                    <!-- Engagement Stats -->
+                                    <div class="flex items-center space-x-6 py-4 border-t border-b border-gray-200 mb-6">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-eye text-gray-500"></i>
+                                            <span class="text-gray-700 font-semibold">\${poem.view_count || 0}</span>
+                                            <span class="text-gray-500 text-sm">views</span>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-heart text-red-500"></i>
+                                            <span class="text-gray-700 font-semibold">\${poem.like_count || 0}</span>
+                                            <span class="text-gray-500 text-sm">likes</span>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-star text-yellow-500"></i>
+                                            <span class="text-gray-700 font-semibold">\${poem.average_rating ? poem.average_rating.toFixed(1) : '0.0'}</span>
+                                            <span class="text-gray-500 text-sm">rating</span>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-comment text-blue-500"></i>
+                                            <span class="text-gray-700 font-semibold">\${poem.comment_count || 0}</span>
+                                            <span class="text-gray-500 text-sm">comments</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="flex items-center space-x-4">
+                                        <button onclick="likePoem(\${poem.id})" class="flex-1 flex items-center justify-center space-x-2 py-3 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition font-semibold">
+                                            <i class="fas fa-heart"></i>
+                                            <span>Like</span>
+                                        </button>
+                                        <button onclick="sharePoem(\${poem.id})" class="flex-1 flex items-center justify-center space-x-2 py-3 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition font-semibold">
+                                            <i class="fas fa-share-alt"></i>
+                                            <span>Share</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Comments Section -->
+                                <div class="bg-white rounded-lg shadow-lg p-8">
+                                    <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                                        <i class="fas fa-comments mr-2"></i>
+                                        Comments (\${poem.comment_count || 0})
+                                    </h3>
+                                    
+                                    <!-- Add Comment Form -->
+                                    <div class="mb-6 pb-6 border-b">
+                                        <textarea id="commentInput" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" placeholder="Add a comment..."></textarea>
+                                        <button onclick="addComment(\${poem.id})" class="mt-3 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold">
+                                            Post Comment
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Comments List -->
+                                    <div id="commentsList">
+                                        <p class="text-gray-500 text-center py-8">
+                                            <i class="fas fa-comment-dots text-4xl mb-3 block"></i>
+                                            No comments yet. Be the first to comment!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    \`;
+                    
+                    // Load comments
+                    loadComments(id);
+                    
+                } catch (error) {
+                    console.error('Error loading poem:', error);
+                    appDiv.innerHTML = \`
+                        <div class="max-w-2xl mx-auto px-4 py-16 text-center">
+                            <i class="fas fa-exclamation-triangle text-6xl text-red-500 mb-4"></i>
+                            <h2 class="text-2xl font-bold text-gray-900 mb-2">Failed to Load Poem</h2>
+                            <p class="text-gray-600 mb-6">The poem could not be loaded. It may have been deleted or you don't have permission to view it.</p>
+                            <button onclick="showExplore()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Back to Feed
+                            </button>
+                        </div>
+                    \`;
+                }
+            }
+            
+            // Load comments for a poem
+            async function loadComments(poemId) {
+                try {
+                    const response = await axios.get(API_BASE + '/poems/' + poemId + '/comments');
+                    const comments = response.data;
+                    
+                    const commentsList = document.getElementById('commentsList');
+                    if (!commentsList) return;
+                    
+                    if (comments.length === 0) {
+                        commentsList.innerHTML = \`
+                            <p class="text-gray-500 text-center py-8">
+                                <i class="fas fa-comment-dots text-4xl mb-3 block"></i>
+                                No comments yet. Be the first to comment!
+                            </p>
+                        \`;
+                        return;
+                    }
+                    
+                    commentsList.innerHTML = comments.map(comment => \`
+                        <div class="border-b border-gray-200 py-4 last:border-0">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    \${(comment.author_name || 'U')[0].toUpperCase()}
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2 mb-1">
+                                        <span class="font-semibold text-gray-900">\${comment.author_name || 'Anonymous'}</span>
+                                        <span class="text-gray-500 text-sm">•</span>
+                                        <span class="text-gray-500 text-sm">\${new Date(comment.created_at).toLocaleDateString()}</span>
+                                    </div>
+                                    <p class="text-gray-700">\${comment.comment_text}</p>
+                                </div>
+                            </div>
+                        </div>
+                    \`).join('');
+                    
+                } catch (error) {
+                    console.error('Error loading comments:', error);
+                }
+            }
+            
+            // Add a comment
+            async function addComment(poemId) {
+                const commentInput = document.getElementById('commentInput');
+                if (!commentInput) return;
+                
+                const commentText = commentInput.value.trim();
+                if (!commentText) {
+                    alert('Please enter a comment');
+                    return;
+                }
+                
+                try {
+                    const token = localStorage.getItem('auth_token');
+                    if (!token) {
+                        alert('Please login to comment');
+                        showLogin();
+                        return;
+                    }
+                    
+                    await axios.post(
+                        API_BASE + '/poems/' + poemId + '/comments',
+                        { comment_text: commentText },
+                        { headers: { Authorization: 'Bearer ' + token } }
+                    );
+                    
+                    commentInput.value = '';
+                    loadComments(poemId);
+                    
+                    alert('Comment posted successfully!');
+                } catch (error) {
+                    console.error('Error posting comment:', error);
+                    alert('Failed to post comment. Please try again.');
+                }
+            }
+            
+            // Like a poem
+            async function likePoem(poemId) {
+                try {
+                    const token = localStorage.getItem('auth_token');
+                    if (!token) {
+                        alert('Please login to like poems');
+                        showLogin();
+                        return;
+                    }
+                    
+                    await axios.post(
+                        API_BASE + '/poems/' + poemId + '/like',
+                        {},
+                        { headers: { Authorization: 'Bearer ' + token } }
+                    );
+                    
+                    alert('Poem liked!');
+                    viewPoem(poemId); // Reload to update like count
+                } catch (error) {
+                    console.error('Error liking poem:', error);
+                    alert('Failed to like poem. You may have already liked it.');
+                }
+            }
+            
+            // Share a poem
+            function sharePoem(poemId) {
+                const url = window.location.origin + '?poem=' + poemId;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Check out this poem!',
+                        url: url
+                    }).catch(err => console.log('Error sharing:', err));
+                } else {
+                    // Fallback: copy to clipboard
+                    navigator.clipboard.writeText(url).then(() => {
+                        alert('Link copied to clipboard!\\n' + url);
+                    }).catch(err => {
+                        prompt('Copy this link:', url);
+                    });
+                }
             }
 
             // Show dashboard (placeholder)
