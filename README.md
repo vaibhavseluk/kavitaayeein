@@ -15,7 +15,7 @@
 - **English Poet:** `english_poet` / `admin123`
 
 **Deployment Status:** ✅ **LIVE on Production**  
-**Last Deployed:** January 18, 2026 (Logo now clickable - returns to homepage)
+**Last Deployed:** January 18, 2026 (Scroll-to-top button now works on all pages)
 
 ## 📋 Project Overview
 
