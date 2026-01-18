@@ -63,10 +63,10 @@ app.get('/', (c) => {
         <nav class="bg-white shadow-sm sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
-                    <div class="flex items-center space-x-4">
+                    <a href="#" onclick="location.reload()" class="flex items-center space-x-4 cursor-pointer hover:opacity-80 transition">
                         <i class="fas fa-feather-alt text-blue-600 text-2xl"></i>
                         <h1 class="text-xl font-bold text-gray-900">कविता व्यासपीठ</h1>
-                    </div>
+                    </a>
                     <div class="flex items-center space-x-6">
                         <!-- Theme Toggle Button -->
                         <button id="themeToggle" class="theme-toggle hover-scale" title="Toggle theme">
