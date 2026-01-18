@@ -623,3 +623,209 @@ textarea:focus {
     font-size: 16px;
   }
 }
+
+/* ============================================
+   SITE MASCOT - Interactive Poetry Companion
+   ============================================ */
+
+.site-mascot {
+  position: fixed;
+  width: 80px;
+  height: 80px;
+  pointer-events: auto;
+  z-index: 9999;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  will-change: transform;
+}
+
+.mascot-body {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50% 50% 48% 48%;
+  position: relative;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transition: background 1s ease;
+}
+
+/* Wings */
+.mascot-wing {
+  position: absolute;
+  width: 20px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50% 10px 50% 10px;
+  top: 15px;
+}
+
+.mascot-wing-left {
+  left: -8px;
+  transform: rotate(-20deg);
+  animation: mascot-flap-left 2s ease-in-out infinite;
+}
+
+.mascot-wing-right {
+  right: -8px;
+  transform: rotate(20deg) scaleX(-1);
+  animation: mascot-flap-right 2s ease-in-out infinite;
+}
+
+@keyframes mascot-flap-left {
+  0%, 100% { transform: rotate(-20deg); }
+  50% { transform: rotate(-35deg); }
+}
+
+@keyframes mascot-flap-right {
+  0%, 100% { transform: rotate(20deg) scaleX(-1); }
+  50% { transform: rotate(35deg) scaleX(-1); }
+}
+
+/* Face */
+.mascot-face {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+}
+
+.mascot-eyes {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 5px;
+}
+
+.mascot-eye {
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mascot-pupil {
+  width: 8px;
+  height: 8px;
+  background: #333;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: mascot-blink 4s infinite;
+}
+
+@keyframes mascot-blink {
+  0%, 48%, 52%, 100% { transform: translate(-50%, -50%) scaleY(1); }
+  50% { transform: translate(-50%, -50%) scaleY(0.1); }
+}
+
+.mascot-beak {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 10px solid #ff9500;
+  margin: 0 auto;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+}
+
+/* Feet */
+.mascot-feet {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.mascot-foot {
+  width: 12px;
+  height: 8px;
+  background: #ff9500;
+  border-radius: 0 0 50% 50%;
+}
+
+/* Sparkles */
+.mascot-sparkles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 12px;
+  opacity: 0;
+  animation: mascot-sparkle 2s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  left: 50%;
+  top: 50%;
+  transform: translate(var(--x, 0), var(--y, 0));
+}
+
+@keyframes mascot-sparkle {
+  0%, 100% { opacity: 0; transform: translate(var(--x, 0), var(--y, 0)) scale(0); }
+  50% { opacity: 1; transform: translate(calc(var(--x, 0) * 1.5), calc(var(--y, 0) * 1.5)) scale(1); }
+}
+
+/* Animations */
+@keyframes mascot-bounce {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-15px); }
+  50% { transform: translateY(0); }
+  75% { transform: translateY(-8px); }
+}
+
+@keyframes mascot-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Hover effect */
+.site-mascot:hover .mascot-body {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .site-mascot {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .mascot-body {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .mascot-wing {
+    width: 15px;
+    height: 25px;
+  }
+  
+  .mascot-eye {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .mascot-pupil {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* Dark mode styles */
+[data-theme="dark"] .mascot-body {
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .site-mascot:hover .mascot-body {
+  box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
+}
