@@ -29,12 +29,16 @@
      * Initialize mascot
      */
     init() {
+      console.log('Mascot: Starting initialization...');
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => this.create());
+        document.addEventListener('DOMContentLoaded', () => {
+          console.log('Mascot: DOM loaded, creating mascot...');
+          this.create();
+        });
       } else {
+        console.log('Mascot: DOM already loaded, creating mascot...');
         this.create();
       }
-      console.log('Mascot initialized');
     },
 
     /**
@@ -82,11 +86,16 @@
 
       // Add to body
       document.body.appendChild(this.mascot);
+      console.log('Mascot: Added to DOM');
 
       // Set initial position (bottom right)
       this.currentX = window.innerWidth - 120;
       this.currentY = window.innerHeight - 120;
-      this.updatePosition();
+      this.mascot.style.left = this.currentX + 'px';
+      this.mascot.style.top = this.currentY + 'px';
+      this.mascot.style.display = 'block';
+      this.mascot.style.opacity = '1';
+      console.log('Mascot: Positioned at', this.currentX, this.currentY);
 
       // Start tracking cursor
       this.startTracking();
