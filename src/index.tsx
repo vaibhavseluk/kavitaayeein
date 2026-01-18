@@ -1322,6 +1322,7 @@ app.get('/', (c) => {
                         <h3 class="text-lg font-bold mb-4">Legal</h3>
                         <ul class="space-y-2 text-sm">
                             <li><a href="/privacy-policy" target="_blank" class="text-gray-400 hover:text-white"><i class="fas fa-shield-alt mr-2"></i>Privacy Policy</a></li>
+                            <li><a href="/community-standards" target="_blank" class="text-gray-400 hover:text-white"><i class="fas fa-users mr-2"></i>Community Standards</a></li>
                             <li><a href="/terms-of-service" target="_blank" class="text-gray-400 hover:text-white"><i class="fas fa-file-contract mr-2"></i>Terms of Service</a></li>
                             <li><a href="/refund-policy" target="_blank" class="text-gray-400 hover:text-white"><i class="fas fa-undo mr-2"></i>Refund Policy</a></li>
                             <li><a href="/faq" target="_blank" class="text-gray-400 hover:text-white"><i class="fas fa-question mr-2"></i>FAQ</a></li>
@@ -1334,6 +1335,312 @@ app.get('/', (c) => {
                 </div>
             </div>
         </footer>
+    </body>
+    </html>
+  `);
+});
+
+// Community Standards route
+app.get('/community-standards', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="hi">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>समुदाय मानक - कविता व्यासपीठ</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+      <link href="/static/styles.css" rel="stylesheet">
+    </head>
+    <body class="bg-gray-50 dark:bg-gray-900 transition-colors">
+      <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg sticky top-0 z-50">
+          <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                  <i class="fas fa-feather-alt text-3xl"></i>
+                  <h1 class="text-2xl font-bold">कविता व्यासपीठ</h1>
+                </a>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-4xl mx-auto px-4 py-8">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+            <!-- Back Button -->
+            <a href="/" class="inline-flex items-center text-purple-600 hover:text-purple-700 mb-6">
+              <i class="fas fa-arrow-left mr-2"></i>
+              वापस जाएं
+            </a>
+
+            <!-- Title -->
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">
+              <i class="fas fa-users mr-3"></i>
+              समुदाय मानक
+            </h1>
+            <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
+              Community Standards for Shabdly
+            </p>
+
+            <div class="prose prose-lg dark:prose-invert max-w-none">
+              <!-- Introduction -->
+              <div class="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg mb-8">
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  Welcome to Shabdly! Our platform is built on respect, creativity, and community. 
+                  These guidelines help us maintain a positive, respectful, and inspiring environment 
+                  for all poets and poetry lovers. By using Shabdly, you agree to follow these standards.
+                </p>
+              </div>
+
+              <!-- 1. Respect and Community -->
+              <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                  <i class="fas fa-heart text-red-500 mr-2"></i>
+                  1. सम्मान और समुदाय (Respect and Community)
+                </h2>
+                <div class="space-y-4">
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-globe text-blue-500 mr-2"></i>
+                      Shabdly is Global
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Our community spans across cultures and languages. Treat everyone with dignity and respect.
+                    </p>
+                  </div>
+
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-smile text-yellow-500 mr-2"></i>
+                      Be Kind
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Harassment, bullying, or abusive behavior will not be tolerated under any circumstances.
+                    </p>
+                  </div>
+
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-comments text-green-500 mr-2"></i>
+                      Constructive Feedback
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Focus on the content, not the creator. Provide thoughtful, helpful feedback.
+                    </p>
+                  </div>
+
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-shield-alt text-purple-500 mr-2"></i>
+                      Respect Privacy
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Do not share private information about others without their explicit consent.
+                    </p>
+                  </div>
+
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-user-check text-indigo-500 mr-2"></i>
+                      No Impersonation
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Stage names are allowed, but impersonating others is strictly prohibited.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- 2. Intellectual Property -->
+              <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                  <i class="fas fa-copyright text-orange-500 mr-2"></i>
+                  2. बौद्धिक संपदा और अधिकार (Intellectual Property & Rights)
+                </h2>
+                <div class="space-y-4">
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-eye text-blue-500 mr-2"></i>
+                      Visibility
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Public content may be featured on the Shabdly homepage. Link-only content is not private.
+                    </p>
+                  </div>
+
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-recycle text-green-500 mr-2"></i>
+                      Reuse Features
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Prompts or lyrics may be reusable by those with access. Be mindful of what you share.
+                    </p>
+                  </div>
+
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-lock text-red-500 mr-2"></i>
+                      Copyright Protection
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      AI-generated works may have limited copyright protection. Personal lyrics you wrote remain yours—take appropriate precautions to protect your work.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- 3. Promotion and Engagement -->
+              <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                  <i class="fas fa-bullhorn text-pink-500 mr-2"></i>
+                  3. प्रचार और जुड़ाव (Promotion and Engagement)
+                </h2>
+                <div class="space-y-4">
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-handshake text-blue-500 mr-2"></i>
+                      Build Genuine Relationships
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Focus on authentic connections and meaningful interactions with fellow poets.
+                    </p>
+                  </div>
+
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-ban text-red-500 mr-2"></i>
+                      No Spamming
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Repetitive posts, excessive self-promotion, and spam are not allowed.
+                    </p>
+                  </div>
+
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-robot text-purple-500 mr-2"></i>
+                      Fake Engagement
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Do not use bots, fake profiles, or artificial engagement tactics.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- 4. Forbidden Content -->
+              <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                  <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>
+                  4. निषिद्ध सामग्री (Forbidden Content)
+                </h2>
+                <div class="space-y-4">
+                  <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border-l-4 border-red-500">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-times-circle text-red-500 mr-2"></i>
+                      Sexual Content
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Explicit sexual content and any content targeting minors are strictly prohibited.
+                    </p>
+                  </div>
+
+                  <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border-l-4 border-red-500">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-fist-raised text-red-500 mr-2"></i>
+                      Violence and Hate Speech
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      No content promoting violence, discrimination, or hatred based on race, religion, ethnicity, gender, or sexual orientation.
+                    </p>
+                  </div>
+
+                  <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border-l-4 border-red-500">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-gavel text-red-500 mr-2"></i>
+                      Illegal Activities
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Do not promote illegal goods, firearms, drugs, scams, or any unlawful activities.
+                    </p>
+                  </div>
+
+                  <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border-l-4 border-red-500">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-exclamation text-red-500 mr-2"></i>
+                      False Information
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Misinformation and deliberately false content are banned.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- 5. Reporting and Consequences -->
+              <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                  <i class="fas fa-flag text-orange-500 mr-2"></i>
+                  5. रिपोर्टिंग और परिणाम (Reporting and Consequences)
+                </h2>
+                <div class="space-y-4">
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-bell text-yellow-500 mr-2"></i>
+                      Reporting
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      If you see content that violates these standards, use the report function or contact support at <a href="mailto:support@shabdly.online" class="text-purple-600 hover:text-purple-700">support@shabdly.online</a>
+                    </p>
+                  </div>
+
+                  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                      <i class="fas fa-balance-scale text-blue-500 mr-2"></i>
+                      Enforcement
+                    </h3>
+                    <p class="text-gray-700 dark:text-gray-300">
+                      Violations may result in warnings, temporary suspension, or permanent account termination. Repeated offenses will be dealt with more severely.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Updates Notice -->
+              <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-6 rounded-lg">
+                <h3 class="font-semibold text-gray-800 dark:text-white mb-2 flex items-center">
+                  <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                  Updates to Guidelines
+                </h3>
+                <p class="text-gray-700 dark:text-gray-300">
+                  These guidelines may be updated periodically. Please check regularly for the latest version.
+                </p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                  Last Updated: January 2026
+                </p>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gradient-to-r from-purple-800 to-pink-800 text-white py-8 mt-16">
+          <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="mb-2">© 2026 कविता व्यासपीठ | Shabdly</p>
+            <p class="text-sm opacity-80">Together, we create a respectful and inspiring poetry community 🎨</p>
+          </div>
+        </footer>
+      </div>
+
+      <!-- Load scripts -->
+      <script src="/static/theme.js"></script>
+      <script src="/static/mascot.js"></script>
     </body>
     </html>
   `);
