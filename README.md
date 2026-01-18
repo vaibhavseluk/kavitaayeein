@@ -3,7 +3,7 @@
 > A full-stack web application for poets to share their work in Marathi, Hindi, and English with administrative control and monetization features.
 
 ## 🌟 Live Demo
-**Last Updated:** January 18, 2026 - Full poem detail page with comments & engagement
+**Last Updated:** January 18, 2026 - Community Standards page added
 
 **🌐 Production Site:** https://www.shabdly.online  
 **📦 Cloudflare Pages:** https://poetry-platform.pages.dev  
@@ -16,7 +16,7 @@
 - **English Poet:** `english_poet` / `admin123`
 
 **Deployment Status:** ✅ **LIVE on Production**  
-**Last Deployed:** January 18, 2026 (Scroll-to-top button now works on all pages)
+**Last Deployed:** January 18, 2026 (Community Standards page with comprehensive guidelines)
 
 ## 📋 Project Overview
 
@@ -89,6 +89,15 @@ A modern, lightweight poetry platform built with Cloudflare Workers and Hono fra
    - Poetic background patterns in both modes
    - Theme toggle button in navigation
    - See [THEME_SYSTEM.md](./THEME_SYSTEM.md) for full documentation
+
+8. **Community Standards** (NEW! ✨)
+   - Comprehensive guidelines for respectful community
+   - 5 core sections: Respect, IP Rights, Promotion, Forbidden Content, Reporting
+   - Bilingual (English + Hindi) content
+   - Accessible from footer on all pages
+   - Beautiful UI with icons and color-coded sections
+   - See [COMMUNITY_STANDARDS.md](./COMMUNITY_STANDARDS.md) for full documentation
+   - **Live Page**: https://www.shabdly.online/community-standards
 
 ### 🚧 Features Not Yet Implemented
 
@@ -398,15 +407,5 @@ For questions or issues:
 ---
 
 **Last Updated**: January 18, 2026  
-**Version**: 1.1.0  
-**Status**: ✅ **LIVE on Production** (www.shabdly.online)
-rs
-- UTF-8 support for Indic scripts
-- TailwindCSS for styling
-- Font Awesome for icons
-
----
-
-**Last Updated**: January 18, 2026  
-**Version**: 1.1.0  
+**Version**: 1.2.0  
 **Status**: ✅ **LIVE on Production** (www.shabdly.online)
