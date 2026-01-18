@@ -15,7 +15,7 @@
 - **English Poet:** `english_poet` / `admin123`
 
 **Deployment Status:** ✅ **LIVE on Production**  
-**Last Deployed:** January 18, 2026 (Scroll to top button added)
+**Last Deployed:** January 18, 2026 (Social media-style poem feed added)
 
 ## 📋 Project Overview
 
