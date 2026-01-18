@@ -634,11 +634,17 @@ textarea:focus {
   top: 0;
   width: 80px;
   height: 80px;
-  pointer-events: auto;
+  pointer-events: none; /* Don't block clicks by default */
   z-index: 9999;
   cursor: pointer;
-  transition: none; /* Remove transition for smooth tracking */
-  will-change: transform;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.2s ease;
+  will-change: transform, opacity;
+}
+
+.site-mascot.visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .mascot-body {
@@ -830,4 +836,97 @@ textarea:focus {
 
 [data-theme="dark"] .site-mascot:hover .mascot-body {
   box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   MASCOT TOGGLE BUTTON
+   ============================================ */
+
+.mascot-toggle-btn {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 9998;
+  opacity: 0.8;
+}
+
+.mascot-toggle-btn:hover {
+  opacity: 1;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  transform: scale(1.05);
+}
+
+.mascot-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.mascot-toggle-btn.active {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  box-shadow: 0 4px 12px rgba(67, 233, 123, 0.4);
+}
+
+.mascot-toggle-btn.active:hover {
+  box-shadow: 0 6px 20px rgba(67, 233, 123, 0.6);
+}
+
+.mascot-toggle-tooltip {
+  position: absolute;
+  right: 60px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  border: 1px solid var(--border-light);
+}
+
+.mascot-toggle-btn:hover .mascot-toggle-tooltip {
+  opacity: 1;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .mascot-toggle-btn {
+    bottom: 80px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+  
+  .mascot-toggle-tooltip {
+    display: none; /* Hide tooltip on mobile */
+  }
+}
+
+/* Dark mode */
+[data-theme="dark"] .mascot-toggle-tooltip {
+  background: var(--bg-secondary);
+  border-color: var(--border-medium);
+}
+
+/* Animation for shake effect */
+@keyframes mascot-shake {
+  0%, 100% { transform: translate(var(--x, 0), var(--y, 0)) rotate(0deg); }
+  25% { transform: translate(var(--x, 0), var(--y, 0)) rotate(-10deg); }
+  50% { transform: translate(var(--x, 0), var(--y, 0)) rotate(10deg); }
+  75% { transform: translate(var(--x, 0), var(--y, 0)) rotate(-10deg); }
 }
