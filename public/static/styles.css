@@ -630,12 +630,14 @@ textarea:focus {
 
 .site-mascot {
   position: fixed;
+  left: 0;
+  top: 0;
   width: 80px;
   height: 80px;
   pointer-events: auto;
   z-index: 9999;
   cursor: pointer;
-  transition: transform 0.1s ease;
+  transition: none; /* Remove transition for smooth tracking */
   will-change: transform;
 }
 

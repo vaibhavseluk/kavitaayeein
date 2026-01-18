@@ -91,10 +91,9 @@
       // Set initial position (bottom right)
       this.currentX = window.innerWidth - 120;
       this.currentY = window.innerHeight - 120;
-      this.mascot.style.left = this.currentX + 'px';
-      this.mascot.style.top = this.currentY + 'px';
       this.mascot.style.display = 'block';
       this.mascot.style.opacity = '1';
+      this.updatePosition();
       console.log('Mascot: Positioned at', this.currentX, this.currentY);
 
       // Start tracking cursor
