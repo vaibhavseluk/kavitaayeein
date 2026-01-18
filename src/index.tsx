@@ -1044,6 +1044,7 @@ app.get('/', (c) => {
         <script src="/static/onboarding-tour.js"></script>
         <script src="/static/help-menu.js"></script>
         <script src="/static/user-menu.js"></script>
+        <script src="/static/scroll-to-top.js"></script>
 
         <!-- Footer -->
         <footer class="bg-gray-800 text-white py-8 mt-12">
