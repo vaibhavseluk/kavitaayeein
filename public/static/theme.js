@@ -116,6 +116,8 @@
       const currentTheme = document.documentElement.getAttribute('data-theme') || THEMES.LIGHT;
       const newTheme = currentTheme === THEMES.LIGHT ? THEMES.DARK : THEMES.LIGHT;
       
+      console.log('Toggling theme from', currentTheme, 'to', newTheme);
+      
       this.applyTheme(newTheme);
       this.saveTheme(newTheme);
       
@@ -124,6 +126,7 @@
         navigator.vibrate(10);
       }
       
+      console.log('Theme toggled successfully to', newTheme);
       return newTheme;
     },
 
@@ -131,57 +134,69 @@
      * Create theme toggle button and inject into navigation
      */
     createThemeToggle() {
-      // Wait for DOM to be ready
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => this.createThemeToggle());
-        return;
-      }
+      const initButton = () => {
+        // Check if button already exists in HTML
+        let themeToggle = document.getElementById('themeToggle');
+        
+        if (themeToggle) {
+          // Button exists in HTML, just update its content and attach handler
+          const currentTheme = document.documentElement.getAttribute('data-theme') || THEMES.LIGHT;
+          this.updateThemeToggleContent(themeToggle, currentTheme);
+          
+          // Remove any existing click handlers to prevent duplicates
+          const newButton = themeToggle.cloneNode(true);
+          themeToggle.parentNode.replaceChild(newButton, themeToggle);
+          
+          // Add click handler to new button
+          newButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Theme toggle clicked');
+            const newTheme = this.toggleTheme();
+            this.updateThemeToggleContent(newButton, newTheme);
+          });
+          
+          console.log('Theme toggle button found and initialized');
+          return;
+        }
 
-      // Check if button already exists in HTML
-      let themeToggle = document.getElementById('themeToggle');
-      
-      if (themeToggle) {
-        // Button exists in HTML, just update its content and attach handler
+        // Button doesn't exist, create it dynamically
+        const navContainer = document.querySelector('nav .flex.items-center.space-x-6');
+        if (!navContainer) {
+          console.warn('Navigation container not found, theme toggle not added to navigation');
+          return;
+        }
+
+        // Create theme toggle button
+        themeToggle = document.createElement('button');
+        themeToggle.id = 'themeToggle';
+        themeToggle.className = 'theme-toggle';
+        themeToggle.setAttribute('aria-label', 'Toggle theme');
+        themeToggle.setAttribute('title', 'Switch between light and dark mode');
+        
+        // Set initial icon
         const currentTheme = document.documentElement.getAttribute('data-theme') || THEMES.LIGHT;
         this.updateThemeToggleContent(themeToggle, currentTheme);
         
         // Add click handler
-        themeToggle.addEventListener('click', () => {
+        themeToggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          console.log('Theme toggle clicked');
           const newTheme = this.toggleTheme();
           this.updateThemeToggleContent(themeToggle, newTheme);
         });
         
-        console.log('Theme toggle button found and initialized');
-        return;
-      }
+        // Insert as first child of navigation container
+        navContainer.insertBefore(themeToggle, navContainer.firstChild);
+        console.log('Theme toggle button created and inserted');
+      };
 
-      // Button doesn't exist, create it dynamically
-      const navContainer = document.querySelector('nav .flex.items-center.space-x-6');
-      if (!navContainer) {
-        console.warn('Navigation container not found, theme toggle not added to navigation');
-        return;
+      // Wait for DOM to be ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initButton);
+      } else {
+        // DOM is already ready
+        initButton();
       }
-
-      // Create theme toggle button
-      themeToggle = document.createElement('button');
-      themeToggle.id = 'themeToggle';
-      themeToggle.className = 'theme-toggle';
-      themeToggle.setAttribute('aria-label', 'Toggle theme');
-      themeToggle.setAttribute('title', 'Switch between light and dark mode');
-      
-      // Set initial icon
-      const currentTheme = document.documentElement.getAttribute('data-theme') || THEMES.LIGHT;
-      this.updateThemeToggleContent(themeToggle, currentTheme);
-      
-      // Add click handler
-      themeToggle.addEventListener('click', () => {
-        const newTheme = this.toggleTheme();
-        this.updateThemeToggleContent(themeToggle, newTheme);
-      });
-      
-      // Insert as first child of navigation container
-      navContainer.insertBefore(themeToggle, navContainer.firstChild);
-      console.log('Theme toggle button created and inserted');
     },
 
     /**
