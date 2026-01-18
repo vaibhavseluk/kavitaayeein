@@ -30,6 +30,9 @@
       const app = document.getElementById('app');
       if (!app) return;
 
+      // Reset scroll position to top
+      window.scrollTo(0, 0);
+
       // Reset state
       this.currentPage = 0;
       this.hasMore = true;
