@@ -4,13 +4,18 @@
 
 ## 🌟 Live Demo
 
-**Development Server:** https://3000-i50h0iu6uof9fu9t33zaw-5c13a017.sandbox.novita.ai
+**🌐 Production Site:** https://www.shabdly.online  
+**📦 Cloudflare Pages:** https://poetry-platform.pages.dev  
+**🔧 Development Server:** https://3000-i50h0iu6uof9fu9t33zaw-5c13a017.sandbox.novita.ai
 
 **Test Credentials:**
 - **Admin:** `admin` / `admin123`
 - **Marathi Poet:** `marathi_poet` / `admin123`
 - **Hindi Poet:** `hindi_poet` / `admin123`
 - **English Poet:** `english_poet` / `admin123`
+
+**Deployment Status:** ✅ **LIVE on Production**  
+**Last Deployed:** January 18, 2026
 
 ## 📋 Project Overview
 
@@ -391,6 +396,16 @@ For questions or issues:
 
 ---
 
-**Last Updated**: January 10, 2026  
-**Version**: 1.0.0  
-**Status**: ✅ Development server active
+**Last Updated**: January 18, 2026  
+**Version**: 1.1.0  
+**Status**: ✅ **LIVE on Production** (www.shabdly.online)
+rs
+- UTF-8 support for Indic scripts
+- TailwindCSS for styling
+- Font Awesome for icons
+
+---
+
+**Last Updated**: January 18, 2026  
+**Version**: 1.1.0  
+**Status**: ✅ **LIVE on Production** (www.shabdly.online)
