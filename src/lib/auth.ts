@@ -1,141 +1,199 @@
-// JWT authentication utilities for Cloudflare Workers
-// Using Web Crypto API (no Node.js dependencies)
+import type { Context } from 'hono';
+import type { Env, User, JWTPayload } from './types';
 
-import type { JWTPayload } from './types';
-
-const JWT_SECRET = 'your-secret-key-change-in-production-via-wrangler-secret';
-const JWT_ALGORITHM = 'HS256';
-
-// Helper to encode base64url
-function base64urlEncode(data: string): string {
-  const base64 = btoa(data);
-  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-}
-
-// Helper to decode base64url
-function base64urlDecode(data: string): string {
-  let base64 = data.replace(/-/g, '+').replace(/_/g, '/');
-  while (base64.length % 4) {
-    base64 += '=';
-  }
-  return atob(base64);
-}
-
-// Generate JWT token
-export async function generateToken(payload: JWTPayload): Promise<string> {
-  const header = {
-    alg: JWT_ALGORITHM,
-    typ: 'JWT'
+// JWT utilities using Web Crypto API (Cloudflare Workers compatible)
+export async function generateToken(user: User, env: Env): Promise<string> {
+  const payload: JWTPayload = {
+    userId: user.id,
+    email: user.email,
+    role: user.role,
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60) // 7 days
   };
 
-  const now = Math.floor(Date.now() / 1000);
-  const jwtPayload = {
-    ...payload,
-    iat: now,
-    exp: now + (7 * 24 * 60 * 60) // 7 days expiry
-  };
-
-  const headerEncoded = base64urlEncode(JSON.stringify(header));
-  const payloadEncoded = base64urlEncode(JSON.stringify(jwtPayload));
-  const dataToSign = `${headerEncoded}.${payloadEncoded}`;
-
-  // Create signature using Web Crypto API
-  const encoder = new TextEncoder();
+  const header = { alg: 'HS256', typ: 'JWT' };
+  const encodedHeader = btoa(JSON.stringify(header));
+  const encodedPayload = btoa(JSON.stringify(payload));
+  
+  const message = `${encodedHeader}.${encodedPayload}`;
   const key = await crypto.subtle.importKey(
     'raw',
-    encoder.encode(JWT_SECRET),
+    new TextEncoder().encode(env.JWT_SECRET),
     { name: 'HMAC', hash: 'SHA-256' },
     false,
     ['sign']
   );
-
-  const signature = await crypto.subtle.sign(
-    'HMAC',
-    key,
-    encoder.encode(dataToSign)
-  );
-
-  const signatureArray = Array.from(new Uint8Array(signature));
-  const signatureBase64 = base64urlEncode(String.fromCharCode(...signatureArray));
-
-  return `${dataToSign}.${signatureBase64}`;
+  
+  const signature = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(message));
+  const encodedSignature = btoa(String.fromCharCode(...new Uint8Array(signature)));
+  
+  return `${message}.${encodedSignature}`;
 }
 
-// Verify and decode JWT token
-export async function verifyToken(token: string): Promise<JWTPayload | null> {
+export async function verifyToken(token: string, env: Env): Promise<JWTPayload | null> {
   try {
-    const parts = token.split('.');
-    if (parts.length !== 3) {
-      return null;
-    }
-
-    const [headerEncoded, payloadEncoded, signatureEncoded] = parts;
-    const dataToVerify = `${headerEncoded}.${payloadEncoded}`;
-
-    // Verify signature
-    const encoder = new TextEncoder();
+    const [encodedHeader, encodedPayload, encodedSignature] = token.split('.');
+    
+    const message = `${encodedHeader}.${encodedPayload}`;
     const key = await crypto.subtle.importKey(
       'raw',
-      encoder.encode(JWT_SECRET),
+      new TextEncoder().encode(env.JWT_SECRET),
       { name: 'HMAC', hash: 'SHA-256' },
       false,
       ['verify']
     );
-
-    const signatureData = base64urlDecode(signatureEncoded);
-    const signatureArray = new Uint8Array(signatureData.split('').map(c => c.charCodeAt(0)));
-
-    const isValid = await crypto.subtle.verify(
-      'HMAC',
-      key,
-      signatureArray,
-      encoder.encode(dataToVerify)
-    );
-
-    if (!isValid) {
+    
+    const signature = Uint8Array.from(atob(encodedSignature), c => c.charCodeAt(0));
+    const valid = await crypto.subtle.verify('HMAC', key, signature, new TextEncoder().encode(message));
+    
+    if (!valid) return null;
+    
+    const payload: JWTPayload = JSON.parse(atob(encodedPayload));
+    
+    // Check expiration
+    if (payload.exp < Math.floor(Date.now() / 1000)) {
       return null;
     }
-
-    // Decode payload
-    const payload = JSON.parse(base64urlDecode(payloadEncoded));
-
-    // Check expiry
-    const now = Math.floor(Date.now() / 1000);
-    if (payload.exp && payload.exp < now) {
-      return null;
-    }
-
-    return {
-      userId: payload.userId,
-      username: payload.username,
-      email: payload.email,
-      role: payload.role
-    };
+    
+    return payload;
   } catch (error) {
-    console.error('JWT verification error:', error);
     return null;
   }
 }
 
-// Hash password using Web Crypto API (simple implementation)
+// Password hashing using Web Crypto API
 export async function hashPassword(password: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
   const hash = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hash));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return btoa(String.fromCharCode(...new Uint8Array(hash)));
 }
 
-// Verify password
-export async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  const passwordHash = await hashPassword(password);
-  return passwordHash === hash;
+export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
+  const hash = await hashPassword(password);
+  return hash === hashedPassword;
 }
 
-// Extract token from Authorization header
-export function extractToken(authHeader: string | null): string | null {
+// Middleware to authenticate requests
+export async function authenticate(c: Context<{ Bindings: Env }>): Promise<User | null> {
+  const authHeader = c.req.header('Authorization');
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return null;
   }
-  return authHeader.substring(7);
+
+  const token = authHeader.substring(7);
+  const payload = await verifyToken(token, c.env);
+  
+  if (!payload) {
+    return null;
+  }
+
+  // Fetch user from database
+  const user = await c.env.DB.prepare(
+    'SELECT * FROM users WHERE id = ?'
+  ).bind(payload.userId).first<User>();
+
+  return user || null;
+}
+
+// Middleware to require authentication
+export async function requireAuth(c: Context<{ Bindings: Env }>, next: () => Promise<void>) {
+  const user = await authenticate(c);
+  
+  if (!user) {
+    return c.json({ error: 'Unauthorized. Please log in.' }, 401);
+  }
+
+  // Store user in context
+  c.set('user', user);
+  await next();
+}
+
+// Middleware to require admin role
+export async function requireAdmin(c: Context<{ Bindings: Env }>, next: () => Promise<void>) {
+  const user = await authenticate(c);
+  
+  if (!user || user.role !== 'admin') {
+    return c.json({ error: 'Forbidden. Admin access required.' }, 403);
+  }
+
+  c.set('user', user);
+  await next();
+}
+
+// Google OAuth helper functions
+export function getGoogleAuthUrl(env: Env): string {
+  const params = new URLSearchParams({
+    client_id: env.GOOGLE_CLIENT_ID,
+    redirect_uri: env.GOOGLE_REDIRECT_URI,
+    response_type: 'code',
+    scope: 'openid email profile',
+    access_type: 'offline',
+    prompt: 'consent'
+  });
+
+  return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+}
+
+export async function exchangeGoogleCode(code: string, env: Env): Promise<any> {
+  const response = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+      code,
+      client_id: env.GOOGLE_CLIENT_ID,
+      client_secret: env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: env.GOOGLE_REDIRECT_URI,
+      grant_type: 'authorization_code'
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to exchange Google code');
+  }
+
+  return await response.json();
+}
+
+export async function getGoogleUserInfo(accessToken: string): Promise<any> {
+  const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch Google user info');
+  }
+
+  return await response.json();
+}
+
+// Credit checking helper
+export async function checkUserCredits(userId: number, requiredCredits: number, db: D1Database): Promise<boolean> {
+  const user = await db.prepare(
+    'SELECT word_credits FROM users WHERE id = ?'
+  ).bind(userId).first<{ word_credits: number }>();
+
+  return user ? user.word_credits >= requiredCredits : false;
+}
+
+// Deduct credits from user
+export async function deductCredits(userId: number, credits: number, db: D1Database): Promise<boolean> {
+  const result = await db.prepare(
+    'UPDATE users SET word_credits = word_credits - ?, total_words_used = total_words_used + ? WHERE id = ? AND word_credits >= ?'
+  ).bind(credits, credits, userId, credits).run();
+
+  return result.success;
+}
+
+// Add credits to user
+export async function addCredits(userId: number, credits: number, db: D1Database): Promise<boolean> {
+  const result = await db.prepare(
+    'UPDATE users SET word_credits = word_credits + ? WHERE id = ?'
+  ).bind(credits, userId).run();
+
+  return result.success;
 }

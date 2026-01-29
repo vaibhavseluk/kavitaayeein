@@ -1,77 +1,220 @@
-// Type definitions for the poetry platform
+// Type definitions for the e-commerce translation platform
 
 export interface Env {
   DB: D1Database;
-  RAZORPAY_KEY_ID: string;
-  RAZORPAY_KEY_SECRET: string;
-  JWT_SECRET?: string;
-  APP_URL?: string;
+  
+  // Google OAuth
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_CLIENT_SECRET: string;
+  GOOGLE_REDIRECT_URI: string;
+  
+  // OpenAI
+  OPENAI_API_KEY: string;
+  OPENAI_MODEL: string;
+  
+  // Lemon Squeezy
+  LEMONSQUEEZY_API_KEY: string;
+  LEMONSQUEEZY_STORE_ID: string;
+  LEMONSQUEEZY_WEBHOOK_SECRET: string;
+  
+  // JWT
+  JWT_SECRET: string;
+  
+  // Admin
+  ADMIN_EMAIL: string;
+  ADMIN_NOTIFICATION_EMAIL: string;
+  
+  // Cost Monitoring
+  MONTHLY_API_COST_LIMIT: string;
+  DAILY_API_COST_LIMIT: string;
+  COST_ALERT_EMAIL: string;
+  
+  // Feature Flags
+  ENABLE_TRANSLATION_CACHE: string;
+  ENABLE_CHATBOT: string;
+  MAX_FILE_SIZE_MB: string;
+  MAX_ROWS_PER_FILE: string;
+  
+  // Environment
+  NODE_ENV: string;
 }
 
 export interface User {
   id: number;
   username: string;
   email: string;
-  role: 'admin' | 'poet';
-  status: 'active' | 'banned';
-  display_name?: string;
+  password?: string;
+  google_id?: string;
+  display_name: string;
   bio?: string;
-  profile_picture_url?: string;
-  language_preference: 'en' | 'hi' | 'mr';
-  is_featured: number;
-  featured_until?: string;
+  role: 'admin' | 'user';
+  subscription_plan: 'free' | 'starter' | 'growth' | 'scale';
+  word_credits: number;
+  total_words_used: number;
+  stripe_customer_id?: string;
+  company_name?: string;
+  phone?: string;
+  onboarding_completed: number;
   created_at: string;
 }
 
-export interface Poem {
-  id: number;
-  title: string;
-  content: string;
-  language: 'en' | 'hi' | 'mr';
-  author_id: number;
-  status: 'draft' | 'published' | 'flagged' | 'deleted';
-  view_count: number;
-  like_count: number;
-  rating_sum: number;
-  rating_count: number;
-  is_featured: number;
-  anthology_eligible: number;
-  created_at: string;
-  updated_at: string;
-  author_name?: string;
-  author_display_name?: string;
-  average_rating?: number;
-}
-
-export interface Report {
-  id: number;
-  poem_id: number;
-  reporter_id?: number;
-  reason: 'spam' | 'adult_content' | 'hate_speech' | 'copyright' | 'other';
-  details?: string;
-  status: 'pending' | 'reviewed' | 'dismissed' | 'action_taken';
-  reviewed_by?: number;
-  reviewed_at?: string;
-  created_at: string;
-}
-
-export interface Subscription {
+export interface TranslationJob {
   id: number;
   user_id: number;
-  plan_type: 'featured_poet' | 'sponsored_slot';
-  amount: number;
-  currency: string;
-  status: 'active' | 'cancelled' | 'expired' | 'pending';
-  payment_provider: 'stripe' | 'razorpay';
-  payment_id?: string;
-  start_date: string;
-  end_date?: string;
-  auto_renew: number;
+  original_filename: string;
+  file_url?: string;
+  status: 'processing' | 'completed' | 'failed' | 'partial';
+  source_language: string;
+  target_languages: string; // JSON array
+  tone_preset?: 'formal' | 'bargain' | 'youth';
+  total_words: number;
+  words_translated: number;
+  credits_used: number;
+  error_count: number;
+  error_log?: string;
+  result_file_url?: string;
+  created_at: string;
+  completed_at?: string;
+}
+
+export interface CreditPurchase {
+  id: number;
+  user_id: number;
+  amount_usd: number;
+  word_credits: number;
+  stripe_payment_id?: string;
+  status: 'pending' | 'completed' | 'failed' | 'refunded';
+  created_at: string;
+}
+
+export interface BrandGlossaryTerm {
+  id: number;
+  user_id: number;
+  term: string;
+  locked: number;
+  notes?: string;
+  created_at: string;
+}
+
+export interface TranslationCache {
+  id: number;
+  source_text: string;
+  source_language: string;
+  target_language: string;
+  translated_text: string;
+  word_count: number;
+  created_at: string;
+}
+
+export interface KnowledgeBase {
+  id: number;
+  title: string;
+  slug: string;
+  content: string;
+  category: 'getting-started' | 'billing' | 'troubleshooting' | 'api';
+  views: number;
+  helpful_votes: number;
+  published: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface JWTPayload {
   userId: number;
-  username: string;
   email: string;
-  role: 'admin' | 'poet';
+  role: string;
+  iat: number;
+  exp: number;
 }
+
+export interface TranslationRequest {
+  text: string;
+  sourceLanguage: string;
+  targetLanguage: string;
+  tonePreset?: 'formal' | 'bargain' | 'youth';
+  brandTerms?: string[];
+}
+
+export interface TranslationResponse {
+  translatedText: string;
+  wordCount: number;
+  cached: boolean;
+}
+
+export interface FileUploadRequest {
+  file: File;
+  targetLanguages: string[];
+  tonePreset?: string;
+}
+
+export interface SubscriptionPlan {
+  id: number;
+  plan_name: string;
+  price_usd: number;
+  word_credits: number;
+  features: string; // JSON array
+  stripe_price_id?: string;
+  active: number;
+}
+
+// Tone preset definitions with regional slang
+export interface TonePreset {
+  name: string;
+  description: string;
+  systemPrompt: string;
+  examples: {
+    language: string;
+    standard: string;
+    localized: string;
+  }[];
+}
+
+export const TONE_PRESETS: Record<string, TonePreset> = {
+  formal: {
+    name: 'Formal',
+    description: 'Professional tone for high-end products',
+    systemPrompt: 'Translate professionally, maintaining formal business language suitable for luxury and premium products.',
+    examples: []
+  },
+  bargain: {
+    name: 'Bargain/Street',
+    description: 'Casual, persuasive tone for deals and offers',
+    systemPrompt: 'Translate using enthusiastic, deal-focused language with local shopping slang. Make it sound exciting and persuasive.',
+    examples: [
+      { language: 'hi', standard: 'Best Quality', localized: 'Ek Number Quality' },
+      { language: 'hi', standard: 'Great Deal', localized: 'Dhamaka Deal' },
+      { language: 'ta', standard: 'Must Buy', localized: 'Kandippa Vaanganum' },
+      { language: 'te', standard: 'Super Offer', localized: 'Keka Offer' },
+      { language: 'bn', standard: 'Low Price', localized: 'Darun Offer' },
+      { language: 'kn', standard: 'Huge Discount', localized: 'Bari Offer' }
+    ]
+  },
+  youth: {
+    name: 'Youth/Slang',
+    description: 'Cool, trendy tone for gadgets and fashion',
+    systemPrompt: 'Translate using modern, trendy language with Hinglish mix where appropriate. Appeal to Gen Z/Millennial shoppers.',
+    examples: [
+      { language: 'ta', standard: 'Superb Product', localized: 'Vera Level Product' },
+      { language: 'te', standard: 'Beautiful', localized: 'Adirindi' },
+      { language: 'kn', standard: 'Strong/Durable', localized: 'Gatti Product' }
+    ]
+  }
+};
+
+// Supported languages for translation
+export const SUPPORTED_LANGUAGES = {
+  'hi': 'Hindi (हिंदी)',
+  'ta': 'Tamil (தமிழ்)',
+  'te': 'Telugu (తెలుగు)',
+  'kn': 'Kannada (ಕನ್ನಡ)',
+  'bn': 'Bengali (বাংলা)',
+  'mr': 'Marathi (मराठी)',
+  'gu': 'Gujarati (ગુજરાતી)',
+  'ml': 'Malayalam (മലയാളം)',
+  'pa': 'Punjabi (ਪੰਜਾਬੀ)',
+  'or': 'Odia (ଓଡ଼ିଆ)',
+  'as': 'Assamese (অসমীয়া)',
+  'ur': 'Urdu (اردو)'
+};
+
+export const TOP_5_LANGUAGES = ['hi', 'ta', 'te', 'kn', 'bn'];

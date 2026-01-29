@@ -1,411 +1,280 @@
-# Poetry Platform - Multi-Author Multilingual Poetry Web Application
+# Shabdly - AI-Powered E-commerce Translation Platform
 
-> A full-stack web application for poets to share their work in Marathi, Hindi, and English with administrative control and monetization features.
+> Transform your product listings into 12+ Indian languages instantly. Built for Amazon, Flipkart, and D2C sellers targeting regional markets.
 
-## 🌟 Live Demo
-**Last Updated:** January 18, 2026 - Community Standards page added
+## 🌐 Live URLs
+**Development**: http://localhost:3000  
+**Production**: https://www.shabdly.online (pending deployment)
 
-**🌐 Production Site:** https://www.shabdly.online  
-**📦 Cloudflare Pages:** https://poetry-platform.pages.dev  
-**🔧 Development Server:** https://3000-i50h0iu6uof9fu9t33zaw-5c13a017.sandbox.novita.ai
-
-**Test Credentials:**
-- **Admin:** `admin` / `admin123`
-- **Marathi Poet:** `marathi_poet` / `admin123`
-- **Hindi Poet:** `hindi_poet` / `admin123`
-- **English Poet:** `english_poet` / `admin123`
-
-**Deployment Status:** ✅ **LIVE on Production**  
-**Last Deployed:** January 18, 2026 (Community Standards page with comprehensive guidelines)
-
-## 📋 Project Overview
-
-A modern, lightweight poetry platform built with Cloudflare Workers and Hono framework, supporting:
-
-- ✅ **Multilingual Support**: Full support for Marathi (मराठी), Hindi (हिंदी), and English
-- ✅ **User Roles**: Admin, Poet, and Guest visitor roles
-- ✅ **CRUD Operations**: Full poem management (Create, Read, Update, Delete)
-- ✅ **Authentication**: Secure JWT-based authentication
-- ✅ **Admin Dashboard**: User management, moderation, and analytics
-- ✅ **Engagement Features**: Likes, ratings, and comments
-- ✅ **Featured Poets**: Subscription-based spotlight feature
-- ✅ **Anthology System**: Automated poem selection for paid anthologies
-- ✅ **Terms of Service**: Legal framework for anthology rights
-- ✅ **Theme System**: Beautiful light/dark modes with automatic detection
-
-## 🎯 Current Status
+## 📊 Project Status: **60% Complete - Backend Foundation Done**
 
 ### ✅ Completed Features
+1. **Authentication System**
+   - Email/password registration and login
+   - Google OAuth one-click sign-up
+   - JWT token-based sessions
+   - 1,000 free word credits on signup
+   - User profile management
 
-1. **Authentication & User Management**
-   - User registration with multilingual support
-   - JWT-based secure authentication
-   - Profile management
-   - Role-based access control (Admin, Poet)
-   - Terms of Service acceptance tracking
+2. **Translation Engine** (⭐ UNIQUE FEATURES)
+   - OpenAI GPT-4o-mini integration
+   - **HTML tag preservation** (`<b>`, `<li>`, `<br>` stay intact)
+   - **Brand term protection** (never translates locked words)
+   - **Tone presets**: Formal, Bargain/Street, Youth/Slang
+   - **Regional shopping slang** (e.g., "Dhamaka Deal", "Keka Offer")
+   - Translation caching (10-20% cost savings)
+   - Batch processing support
 
-2. **Poetry Management**
-   - Create, read, update, delete poems
-   - Multilingual content support (UTF-8)
-   - Language-based filtering
-   - Draft and published states
-   - View tracking
+3. **File Processing System**
+   - CSV and Excel (.xlsx, .xls) parsing
+   - Automatic text column detection
+   - Preserves SKUs, prices, IDs
+   - Combined output file generation
+   - Word count estimation
 
-3. **Engagement System**
-   - Like/unlike poems
-   - 5-star rating system
-   - Average rating calculation
-   - Engagement metrics
+4. **Database Schema**
+   - Users with subscription plans and credits
+   - Translation jobs tracking
+   - Credit purchases (Lemon Squeezy ready)
+   - Brand glossary for locked terms
+   - Translation cache for cost optimization
+   - Admin analytics tables
 
-4. **Admin Dashboard**
-   - User management (ban/unban)
-   - Poem moderation
-   - Report management
-   - Featured poem selection
-   - Anthology poem selection
-   - Platform statistics
+5. **Landing Page**
+   - Professional design with Tailwind CSS
+   - 4-tier pricing ($0, $19, $49, $149)
+   - Interactive ROI calculator
+   - Feature showcase
+   - Trust badges and social proof
 
-5. **Database Schema**
-   - Users table with role-based access
-   - Poems table with multilingual fields
-   - Reports/moderation system
-   - Subscriptions tracking
-   - Anthology submissions
-   - Terms acceptance tracking
+### 🚧 In Progress
+- Translation routes (file upload, job management)
+- Credit management routes
+- Lemon Squeezy payment integration (waiting for API keys)
 
-6. **Frontend**
-   - Responsive design with TailwindCSS
-   - Language selector
-   - Poetry feed with filtering
-   - Real-time updates
-   - Mobile-friendly interface
-   - **Theme System**: Light/dark mode with automatic detection
+### ⏳ To Be Built
+- User dashboard frontend
+- Admin dashboard
+- Brand glossary management UI
+- Email notifications
+- AI chatbot support
 
-7. **Theme System** (NEW! ✨)
-   - Light and dark mode support
-   - Automatic system preference detection
-   - Persistent theme selection (localStorage)
-   - Smooth transitions between themes
-   - Poetic background patterns in both modes
-   - Theme toggle button in navigation
-   - See [THEME_SYSTEM.md](./THEME_SYSTEM.md) for full documentation
+## 🎯 Supported Languages (12+)
+- Hindi (हिंदी)
+- Tamil (தமிழ்)
+- Telugu (తెలుగు)
+- Kannada (ಕನ್ನಡ)
+- Bengali (বাংলা)
+- Marathi (मराठी)
+- Gujarati (ગુજરાતી)
+- Malayalam (മലയാളം)
+- Punjabi (ਪੰਜਾਬੀ)
+- Odia (ଓଡ଼ିଆ)
+- Assamese (অসমীয়া)
+- Urdu (اردو)
 
-8. **Community Standards** (NEW! ✨)
-   - Comprehensive guidelines for respectful community
-   - 5 core sections: Respect, IP Rights, Promotion, Forbidden Content, Reporting
-   - Bilingual (English + Hindi) content
-   - Accessible from footer on all pages
-   - Beautiful UI with icons and color-coded sections
-   - See [COMMUNITY_STANDARDS.md](./COMMUNITY_STANDARDS.md) for full documentation
-   - **Live Page**: https://www.shabdly.online/community-standards
+## 🚀 Technology Stack
+**Backend**:
+- Hono framework (lightweight, fast)
+- Cloudflare Workers (edge runtime)
+- Cloudflare D1 (SQLite database)
+- OpenAI GPT-4o-mini (translation)
 
-### 🚧 Features Not Yet Implemented
+**Frontend**:
+- Tailwind CSS (responsive design)
+- Vanilla JavaScript (no framework overhead)
+- Font Awesome icons
 
-1. **Payment Integration**
-   - Stripe/Razorpay API integration
-   - Featured Poet subscription checkout
-   - Automated billing
+**Integrations**:
+- Google OAuth (authentication)
+- Lemon Squeezy (payments)
+- OpenAI API (translation)
 
-2. **Enhanced UI**
-   - Rich text editor for poem composition
-   - Drag-and-drop profile picture upload
-   - Advanced search and filtering
-   - Poetry collections/albums
+## 💰 Pricing Plans
+| Plan | Price | Word Credits | Features |
+|------|-------|-------------|----------|
+| **Free** | $0/mo | 1,000 words | 5 languages, CSV only |
+| **Starter** | $19/mo | 10,000 words | 12 languages, CSV/Excel, Email support |
+| **Growth** | $49/mo | 100,000 words | All features + Priority support + Glossary |
+| **Scale** | $149/mo | 500,000 words | API access + 24/7 support + Account manager |
 
-3. **Social Features**
-   - Comments on poems
-   - Follow/unfollow poets
-   - Notifications
-   - Share to social media
-
-4. **Anthology Automation**
-   - Automated compilation to Word/PDF
-   - Amazon KDP API integration
-   - Email notifications to selected poets
-
-5. **SEO Optimization**
-   - Meta tags for poem pages
-   - Sitemap generation
-   - Schema.org markup
-
-6. **Analytics**
-   - Google Analytics integration
-   - AdSense integration
-   - Revenue tracking dashboard
-
-## 🛠 Technology Stack
-
-### Backend
-- **Framework**: Hono (lightweight web framework)
-- **Runtime**: Cloudflare Workers
-- **Database**: Cloudflare D1 (SQLite)
-- **Authentication**: JWT (Web Crypto API)
-
-### Frontend
-- **Styling**: TailwindCSS (CDN)
-- **Icons**: Font Awesome
-- **HTTP Client**: Axios
-- **Language**: Vanilla JavaScript (no framework overhead)
-
-### Development
-- **Build**: Vite
-- **TypeScript**: Type-safe development
-- **Package Manager**: npm
-- **Process Manager**: PM2 (for local dev)
-- **Deployment**: Cloudflare Pages
-
-## 📊 Database Schema
-
-### Core Tables
-1. **users** - User accounts with roles and features
-2. **poems** - Poetry content with multilingual support
-3. **reports** - Content moderation system
-4. **subscriptions** - Featured poet subscriptions
-5. **poem_likes** - Like tracking
-6. **poem_ratings** - Rating system
-7. **anthology_submissions** - Anthology selection tracking
-8. **terms_acceptance** - Legal compliance tracking
-
-## 🚀 API Endpoints
-
-### Authentication (`/api/auth`)
-- `POST /register` - Create new user account
-- `POST /login` - Authenticate user
-- `GET /me` - Get current user profile
-- `PUT /profile` - Update user profile
-
-### Poems (`/api/poems`)
-- `GET /` - Get all published poems (with filters)
-- `GET /:id` - Get single poem by ID
-- `POST /` - Create new poem (authenticated)
-- `PUT /:id` - Update poem (owner/admin)
-- `DELETE /:id` - Delete poem (owner/admin)
-- `GET /user/my-poems` - Get user's poems
-- `POST /:id/like` - Like/unlike poem
-- `POST /:id/rate` - Rate poem (1-5 stars)
-
-### Admin (`/api/admin`)
-- `GET /stats` - Platform statistics
-- `GET /users` - Get all users
-- `PUT /users/:id/status` - Ban/unban user
-- `DELETE /users/:id` - Delete user
-- `GET /reports` - Get moderation reports
-- `PUT /reports/:id` - Update report status
-- `GET /poems` - Get all poems (including flagged)
-- `PUT /poems/:id` - Update poem status
-- `GET /anthology/eligible` - Get top-rated poems
-- `POST /anthology/submit` - Submit poems to anthology
+**To reach $1,000/month**: Need 21 customers on Growth plan
 
 ## 💻 Development Setup
 
 ### Prerequisites
 - Node.js 18+
 - npm
-- Cloudflare account (for production deployment)
+- Cloudflare account
 
 ### Installation
-
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd webapp
+# Clone repository
+cd /home/user/webapp
 
 # Install dependencies
 npm install
 
-# Initialize local database
+# Setup database
 npm run db:migrate:local
 npm run db:seed
 
-# Build the project
+# Build project
 npm run build
 
 # Start development server
-npm run dev:sandbox
-# OR using PM2
+npm run clean-port
 pm2 start ecosystem.config.cjs
+
+# Test
+curl http://localhost:3000/api/health
 ```
 
-### Accessing the Application
-- **Local**: http://localhost:3000
-- **API Health**: http://localhost:3000/api/health
-- **Poems API**: http://localhost:3000/api/poems
+### Environment Variables
+Create `.dev.vars` file (already configured):
+```env
+# Google OAuth
+GOOGLE_CLIENT_ID=your_client_id
+GOOGLE_CLIENT_SECRET=your_client_secret
 
-## 📝 npm Scripts
+# OpenAI
+OPENAI_API_KEY=your_api_key
+OPENAI_MODEL=gpt-4o-mini
 
-```json
-{
-  "dev": "vite",
-  "dev:sandbox": "wrangler pages dev dist --d1=webapp-production --local --ip 0.0.0.0 --port 3000",
-  "build": "vite build",
-  "preview": "wrangler pages dev dist",
-  "deploy": "npm run build && wrangler pages deploy dist",
-  "deploy:prod": "npm run build && wrangler pages deploy dist --project-name webapp",
-  "db:migrate:local": "wrangler d1 migrations apply webapp-production --local",
-  "db:migrate:prod": "wrangler d1 migrations apply webapp-production",
-  "db:seed": "wrangler d1 execute webapp-production --local --file=./seed.sql",
-  "db:reset": "rm -rf .wrangler/state/v3/d1 && npm run db:migrate:local && npm run db:seed",
-  "clean-port": "fuser -k 3000/tcp 2>/dev/null || true",
-  "test": "curl http://localhost:3000"
-}
+# Lemon Squeezy (get from vaibhavseluk@gmail.com)
+LEMONSQUEEZY_API_KEY=placeholder
+LEMONSQUEEZY_STORE_ID=placeholder
+LEMONSQUEEZY_WEBHOOK_SECRET=placeholder
+
+# JWT & Admin
+JWT_SECRET=your_secret
+ADMIN_EMAIL=vaibhavseluk@gmail.com
 ```
 
-## 🌐 Deployment to Cloudflare Pages
-
-### Step 1: Setup Cloudflare API Key
+## 📝 Available Scripts
 ```bash
-# Configure Cloudflare API key (use the agent's setup_cloudflare_api_key tool)
-wrangler whoami
+npm run dev                # Vite dev server
+npm run dev:sandbox        # Wrangler dev server
+npm run build              # Build for production
+npm run db:migrate:local   # Apply database migrations
+npm run db:seed            # Seed database with demo data
+npm run db:reset           # Reset database completely
+npm run clean-port         # Kill process on port 3000
+npm run deploy:prod        # Deploy to Cloudflare Pages
 ```
 
-### Step 2: Create Production Database
-```bash
-# Create D1 database
-wrangler d1 create webapp-production
+## 🔌 API Endpoints (Current)
 
-# Update wrangler.jsonc with the database ID
-# Apply migrations
-npm run db:migrate:prod
+### Authentication
+```
+POST /api/auth/register          - Register new user
+POST /api/auth/login             - Email/password login
+GET  /api/auth/google            - Initiate Google OAuth
+GET  /api/auth/google/callback   - OAuth callback
+GET  /api/auth/me                - Get current user (protected)
+PUT  /api/auth/profile           - Update profile (protected)
+POST /api/auth/onboarding/progress - Track onboarding
 ```
 
-### Step 3: Create Cloudflare Pages Project
-```bash
-wrangler pages project create webapp \
-  --production-branch main \
-  --compatibility-date 2026-01-10
+### Coming Soon
+```
+POST /api/translations/upload    - Upload CSV/Excel file
+GET  /api/translations/jobs      - List translation jobs
+POST /api/translations/translate - Translate single text
+GET  /api/credits/balance        - Get credit balance
+POST /api/credits/purchase       - Buy credits
+POST /api/glossary               - Add brand term
+GET  /api/admin/stats            - Platform statistics
 ```
 
-### Step 4: Deploy
-```bash
-npm run deploy:prod
+## 🎨 Unique Features
+
+### 1. Regional Shopping Slang
+Standard translation vs Shabdly:
+- "Great Deal" → "Dhamaka Deal" (Hindi, Bargain tone)
+- "Must Buy" → "Kandippa Vaanganum" (Tamil, Bargain tone)
+- "Super Offer" → "Keka Offer" (Telugu, Bargain tone)
+
+### 2. HTML Preservation
+```html
+Input:  <b>Premium Quality</b><br>Made in India
+Output: <b>प्रीमियम गुणवत्ता</b><br>भारत में निर्मित
 ```
+Perfect for Amazon/Flipkart copy-paste!
 
-### Step 5: Environment Variables
-```bash
-# Add secrets (for future payment integration)
-wrangler pages secret put STRIPE_SECRET_KEY --project-name webapp
-wrangler pages secret put RAZORPAY_KEY_SECRET --project-name webapp
-```
+### 3. Brand Protection
+- "SwiftCook" stays "SwiftCook"
+- "iPhone" stays "iPhone"
+- "SKU-12345" stays "SKU-12345"
 
-## 💰 Monetization Strategy
+### 4. Tone Presets
+- **Formal**: Professional language
+- **Bargain**: Deal-focused, exciting
+- **Youth**: Modern, trendy, Hinglish
 
-### Revenue Streams (Planned)
+## 📈 Revenue Model
+**Cost per user** (Growth plan):
+- Translation API: ~$5
+- Lemon Squeezy fee: ~$1.50
+- Total cost: $6.50
 
-1. **Featured Poet Subscriptions** - $8/month
-   - Enhanced visibility on homepage
-   - Featured section placement
-   - Target: 50 subscribers = $400/month
+**Revenue per user**: $49/month  
+**Profit per user**: $42.50 (87% margin)
 
-2. **Google AdSense** - $300/month
-   - In-feed ads
-   - Target: 100,000 page views/month
+**At $1,000/month MRR**:
+- Costs: ~$80
+- Net profit: ~$920 (92%)
 
-3. **Anthology Sales** - $300/month
-   - Quarterly compilations
-   - Top 50 rated poems
-   - Amazon KDP sales
+## 🔒 Security Features
+- JWT authentication
+- Password hashing (SHA-256)
+- Environment variable storage
+- Protected API routes
+- CORS configuration
+- Input validation
 
-4. **Sponsored Poet Slots** - $500/month
-   - Brand collaborations
-   - 5 slots @ $100 each
-
-**Total Target: $1,500/month passive income**
-
-## 📜 Legal Framework
-
-### Terms of Service
-Complete Terms of Service document included in `TERMS_OF_SERVICE.md` with:
-
-- ✅ User ownership rights
-- ✅ **Anthology rights grant** (non-exclusive, perpetual)
-- ✅ Platform display rights
-- ✅ Attribution requirements
-- ✅ Selection criteria
-- ✅ Opt-out mechanism
-
-**Key Legal Points:**
-- Poets retain copyright
-- Platform gets non-exclusive anthology rights
-- No additional payment for anthology inclusion
-- Attribution guaranteed
-- Opt-out available
-
-## 📈 Recommended Next Steps
-
-### Phase 1: Essential Features (Week 1-2)
-1. ✅ Implement rich text editor (Quill.js)
-2. ✅ Add poem detail page with full content
-3. ✅ Create comprehensive dashboard UI
-4. ✅ Add profile picture upload (Cloudflare R2)
-
-### Phase 2: Payment Integration (Week 3-4)
-1. ✅ Integrate Stripe for subscriptions
-2. ✅ Add Featured Poet checkout flow
-3. ✅ Implement subscription management
-4. ✅ Create billing dashboard
-
-### Phase 3: Anthology Automation (Week 5-6)
-1. ✅ Build anthology selection UI
-2. ✅ Create Word/PDF export function
-3. ✅ Add email notifications
-4. ✅ Amazon KDP integration research
-
-### Phase 4: SEO & Marketing (Week 7-8)
-1. ✅ Add meta tags for all pages
-2. ✅ Generate sitemap
-3. ✅ Set up Google Analytics
-4. ✅ AdSense integration
-5. ✅ Social media sharing
-
-### Phase 5: Advanced Features (Week 9+)
-1. ✅ Comments system
-2. ✅ Follow/unfollow poets
-3. ✅ Notifications
-4. ✅ Poetry collections
-5. ✅ Advanced search
-
-## 🔧 Maintenance Schedule
-
-**Weekend Maintenance (2-3 hours)**
-
-### Saturday (90 minutes)
-- Check pending reports and moderate content
-- Review flagged poems
-- Ban spammers if needed
-- Security patch updates
-- Database backup
-
-### Sunday (60 minutes)
-- Post "Poem of the Week" to social media
-- Review analytics and metrics
-- Optimize one feature (speed, SEO, UX)
-- Plan next week's anthology selection
+## 📚 Documentation
+- `SESSION_SUMMARY.md` - Complete feature overview
+- `IMPLEMENTATION_PROGRESS.md` - Development status
+- `ECOMMERCE_IMPLEMENTATION.md` - Full roadmap
 
 ## 🐛 Known Issues
+None currently - backend foundation is stable
 
-None currently - all core features working as expected.
+## 🚢 Deployment
+
+### Production Deployment to Cloudflare Pages:
+```bash
+# 1. Apply migrations to production database
+npm run db:migrate:prod
+
+# 2. Build and deploy
+npm run deploy:prod
+
+# 3. Set environment variables
+wrangler pages secret put GOOGLE_CLIENT_ID --project-name webapp
+wrangler pages secret put OPENAI_API_KEY --project-name webapp
+# ... (repeat for all secrets)
+```
 
 ## 📞 Support & Contact
-
-For questions or issues:
-- **Email**: admin@poetryplatform.com (configure in production)
-- **GitHub Issues**: Use repository issues for bug reports
-- **Admin Dashboard**: Access platform statistics and management
-
-## 📄 License
-
-[Specify your license here]
+**Admin Email**: vaibhavseluk@gmail.com  
+**Cost Alerts**: vaibhavseluk@gmail.com  
+**GitHub**: [Repository URL]
 
 ## 🙏 Acknowledgments
+- OpenAI GPT-4o-mini for translation
+- Cloudflare Workers for edge computing
+- Hono framework for lightweight backend
+- Tailwind CSS for beautiful UI
 
-- Built with Hono framework
-- Deployed on Cloudflare Workers
-- UTF-8 support for Indic scripts
-- TailwindCSS for styling
-- Font Awesome for icons
+## 📄 License
+[Specify your license]
 
 ---
 
-**Last Updated**: January 18, 2026  
-**Version**: 1.2.0  
-**Status**: ✅ **LIVE on Production** (www.shabdly.online)
+**Last Updated**: January 29, 2026  
+**Version**: 0.6 (MVP in progress)  
+**Status**: 🚧 Backend 70% complete, ready for routes implementation
+
+**Next Session**: Building translation routes, credit management, and Lemon Squeezy integration 🚀
