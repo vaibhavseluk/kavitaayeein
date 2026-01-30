@@ -58,9 +58,9 @@ function extractHTMLStructure(html: string): TextSegment[] {
 }
 
 // Replace brand terms in text (case-insensitive)
-function protectBrandTerms(text: string, brandTerms: string[]): { protected: string; placeholders: Map<string, string> } {
+function protectBrandTerms(text: string, brandTerms: string[]): { protectedText: string; placeholders: Map<string, string> } {
   const placeholders = new Map<string, string>();
-  let protected = text;
+  let protectedText = text;
 
   brandTerms.forEach((term, index) => {
     const placeholder = `__BRAND_${index}__`;
@@ -72,11 +72,11 @@ function protectBrandTerms(text: string, brandTerms: string[]): { protected: str
       matches.forEach(match => {
         placeholders.set(placeholder, match);
       });
-      protected = protected.replace(regex, placeholder);
+      protectedText = protectedText.replace(regex, placeholder);
     }
   });
 
-  return { protected, placeholders };
+  return { protectedText, placeholders };
 }
 
 // Restore brand terms
@@ -206,7 +206,7 @@ export async function translateText(
   const protectedTexts = textsToTranslate.map(t => protectBrandTerms(t, brandTerms));
 
   // Combine all text segments for translation
-  const combinedText = protectedTexts.map(p => p.protected).join('\n___SEGMENT___\n');
+  const combinedText = protectedTexts.map(p => p.protectedText).join('\n___SEGMENT___\n');
   
   // Build system prompt
   const languageName = getLanguageName(targetLanguage);
