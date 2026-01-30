@@ -3,15 +3,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:sandbox": "wrangler pages dev dist --d1=webapp-production --local --ip 0.0.0.0 --port 3000",
+    "dev:sandbox": "wrangler pages dev dist --d1=poetry-platform-production --local --ip 0.0.0.0 --port 3000",
     "build": "vite build",
     "preview": "wrangler pages dev dist",
     "deploy": "npm run build && wrangler pages deploy dist",
-    "deploy:prod": "npm run build && wrangler pages deploy dist --project-name webapp",
+    "deploy:prod": "npm run build && wrangler pages deploy dist --project-name poetry-platform",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
-    "db:migrate:local": "wrangler d1 migrations apply webapp-production --local",
-    "db:migrate:prod": "wrangler d1 migrations apply webapp-production",
-    "db:seed": "wrangler d1 execute webapp-production --local --file=./seed_ecommerce.sql",
+    "db:migrate:local": "wrangler d1 migrations apply poetry-platform-production --local",
+    "db:migrate:prod": "wrangler d1 migrations apply poetry-platform-production",
+    "db:seed": "wrangler d1 execute poetry-platform-production --local --file=./seed_ecommerce.sql",
     "db:reset": "rm -rf .wrangler/state/v3/d1 && npm run db:migrate:local && npm run db:seed",
     "clean-port": "fuser -k 3000/tcp 2>/dev/null || true",
     "test": "curl http://localhost:3000"
@@ -23,6 +23,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260109.0",
     "@hono/vite-build": "^1.2.0",
+    "@hono/vite-cloudflare-pages": "^0.4.3",
     "@hono/vite-dev-server": "^0.18.2",
     "typescript": "^5.9.3",
     "vite": "^6.3.5",

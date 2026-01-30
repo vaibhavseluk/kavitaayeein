@@ -41,21 +41,19 @@ export interface Env {
 
 export interface User {
   id: number;
-  username: string;
   email: string;
-  password?: string;
+  password_hash?: string;
+  name: string;
   google_id?: string;
-  display_name: string;
-  bio?: string;
-  role: 'admin' | 'user';
   subscription_plan: 'free' | 'starter' | 'growth' | 'scale';
   word_credits: number;
   total_words_used: number;
-  stripe_customer_id?: string;
   company_name?: string;
   phone?: string;
   onboarding_completed: number;
+  is_admin: number;
   created_at: string;
+  updated_at: string;
 }
 
 export interface TranslationJob {

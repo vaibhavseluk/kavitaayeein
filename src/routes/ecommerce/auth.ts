@@ -16,11 +16,11 @@ const auth = new Hono<{ Bindings: Env }>();
 // Register new user
 auth.post('/register', async (c) => {
   try {
-    const { email, password, display_name, company_name, phone } = await c.req.json();
+    const { email, password, name, company_name, phone } = await c.req.json();
 
     // Validation
-    if (!email || !password || !display_name) {
-      return c.json({ error: 'Email, password, and display name are required' }, 400);
+    if (!email || !password || !name) {
+      return c.json({ error: 'Email, password, and name are required' }, 400);
     }
 
     // Check if user already exists
@@ -37,13 +37,12 @@ auth.post('/register', async (c) => {
 
     // Create user with free tier credits (1000 words)
     const result = await c.env.DB.prepare(
-      `INSERT INTO users (username, email, password, display_name, role, subscription_plan, word_credits, company_name, phone, created_at)
-       VALUES (?, ?, ?, ?, 'user', 'free', 1000, ?, ?, datetime('now'))`
+      `INSERT INTO users (email, password_hash, name, subscription_plan, word_credits, company_name, phone, created_at)
+       VALUES (?, ?, ?, 'free', 1000, ?, ?, datetime('now'))`
     ).bind(
-      email.split('@')[0], // username from email
       email,
       hashedPassword,
-      display_name,
+      name,
       company_name || null,
       phone || null
     ).run();
@@ -54,7 +53,7 @@ auth.post('/register', async (c) => {
 
     // Fetch created user
     const user = await c.env.DB.prepare(
-      'SELECT id, username, email, display_name, role, subscription_plan, word_credits FROM users WHERE email = ?'
+      'SELECT id, email, name, is_admin, subscription_plan, word_credits FROM users WHERE email = ?'
     ).bind(email).first<User>();
 
     if (!user) {
@@ -75,8 +74,8 @@ auth.post('/register', async (c) => {
       user: {
         id: user.id,
         email: user.email,
-        display_name: user.display_name,
-        role: user.role,
+        name: user.name,
+        is_admin: user.is_admin,
         subscription_plan: user.subscription_plan,
         word_credits: user.word_credits
       }
@@ -102,12 +101,12 @@ auth.post('/login', async (c) => {
       'SELECT * FROM users WHERE email = ?'
     ).bind(email).first<User>();
 
-    if (!user || !user.password) {
+    if (!user || !user.password_hash) {
       return c.json({ error: 'Invalid credentials' }, 401);
     }
 
     // Verify password
-    const valid = await verifyPassword(password, user.password);
+    const valid = await verifyPassword(password, user.password_hash);
     if (!valid) {
       return c.json({ error: 'Invalid credentials' }, 401);
     }
@@ -121,8 +120,8 @@ auth.post('/login', async (c) => {
       user: {
         id: user.id,
         email: user.email,
-        display_name: user.display_name,
-        role: user.role,
+        name: user.name,
+        is_admin: user.is_admin,
         subscription_plan: user.subscription_plan,
         word_credits: user.word_credits,
         company_name: user.company_name
@@ -172,10 +171,9 @@ auth.get('/google/callback', async (c) => {
     } else {
       // Create new user
       const result = await c.env.DB.prepare(
-        `INSERT INTO users (username, email, google_id, display_name, role, subscription_plan, word_credits, created_at)
-         VALUES (?, ?, ?, ?, 'user', 'free', 1000, datetime('now'))`
+        `INSERT INTO users (email, google_id, name, subscription_plan, word_credits, created_at)
+         VALUES (?, ?, ?, 'free', 1000, datetime('now'))`
       ).bind(
-        googleUser.email.split('@')[0],
         googleUser.email,
         googleUser.id,
         googleUser.name || googleUser.email.split('@')[0]
@@ -221,8 +219,8 @@ auth.get('/me', requireAuth, async (c) => {
     user: {
       id: user.id,
       email: user.email,
-      display_name: user.display_name,
-      role: user.role,
+      name: user.name,
+      is_admin: user.is_admin,
       subscription_plan: user.subscription_plan,
       word_credits: user.word_credits,
       total_words_used: user.total_words_used,
@@ -238,14 +236,14 @@ auth.get('/me', requireAuth, async (c) => {
 auth.put('/profile', requireAuth, async (c) => {
   try {
     const user = c.get('user') as User;
-    const { display_name, company_name, phone, bio } = await c.req.json();
+    const { name, company_name, phone } = await c.req.json();
 
     const updates: string[] = [];
     const bindings: any[] = [];
 
-    if (display_name) {
-      updates.push('display_name = ?');
-      bindings.push(display_name);
+    if (name) {
+      updates.push('name = ?');
+      bindings.push(name);
     }
     if (company_name !== undefined) {
       updates.push('company_name = ?');
@@ -254,10 +252,6 @@ auth.put('/profile', requireAuth, async (c) => {
     if (phone !== undefined) {
       updates.push('phone = ?');
       bindings.push(phone);
-    }
-    if (bio !== undefined) {
-      updates.push('bio = ?');
-      bindings.push(bio);
     }
 
     if (updates.length === 0) {
@@ -272,7 +266,7 @@ auth.put('/profile', requireAuth, async (c) => {
 
     // Fetch updated user
     const updatedUser = await c.env.DB.prepare(
-      'SELECT id, username, email, display_name, role, subscription_plan, word_credits, company_name, phone, bio FROM users WHERE id = ?'
+      'SELECT id, email, name, is_admin, subscription_plan, word_credits, company_name, phone FROM users WHERE id = ?'
     ).bind(user.id).first<User>();
 
     return c.json({

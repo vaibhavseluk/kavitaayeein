@@ -1,28 +1,29 @@
--- E-commerce Translation Platform Schema
--- Migration to transform poetry platform into e-commerce SaaS
+-- Shabdly E-commerce Translation Platform Schema
+-- Complete database schema for translation SaaS
 
 -- ============================================
--- Drop old poetry tables (we'll keep users table structure but modify it)
+-- Users table
 -- ============================================
-DROP TABLE IF EXISTS poem_ratings;
-DROP TABLE IF EXISTS poem_likes;
-DROP TABLE IF EXISTS reports;
-DROP TABLE IF EXISTS anthology_submissions;
-DROP TABLE IF EXISTS subscriptions;
-DROP TABLE IF EXISTS terms_acceptance;
-DROP TABLE IF EXISTS poems;
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT,
+  name TEXT NOT NULL,
+  google_id TEXT UNIQUE,
+  subscription_plan TEXT DEFAULT 'free', -- free, starter, growth, scale
+  word_credits INTEGER DEFAULT 1000,
+  total_words_used INTEGER DEFAULT 0,
+  company_name TEXT,
+  phone TEXT,
+  onboarding_completed INTEGER DEFAULT 0,
+  is_admin INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
--- ============================================
--- Modify users table for e-commerce sellers
--- ============================================
-ALTER TABLE users ADD COLUMN google_id TEXT;
-ALTER TABLE users ADD COLUMN subscription_plan TEXT DEFAULT 'free'; -- free, starter, growth, scale
-ALTER TABLE users ADD COLUMN word_credits INTEGER DEFAULT 1000; -- Free tier: 1000 words
-ALTER TABLE users ADD COLUMN total_words_used INTEGER DEFAULT 0;
-ALTER TABLE users ADD COLUMN stripe_customer_id TEXT;
-ALTER TABLE users ADD COLUMN company_name TEXT;
-ALTER TABLE users ADD COLUMN phone TEXT;
-ALTER TABLE users ADD COLUMN onboarding_completed INTEGER DEFAULT 0;
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_google_id ON users(google_id);
+CREATE INDEX idx_users_subscription ON users(subscription_plan);
 
 -- ============================================
 -- Credit purchases and transactions
@@ -32,32 +33,36 @@ CREATE TABLE IF NOT EXISTS credit_purchases (
   user_id INTEGER NOT NULL,
   amount_usd REAL NOT NULL,
   word_credits INTEGER NOT NULL,
-  stripe_payment_id TEXT,
+  lemonsqueezy_order_id TEXT UNIQUE,
+  lemonsqueezy_customer_id TEXT,
   status TEXT DEFAULT 'pending', -- pending, completed, failed, refunded
+  metadata TEXT, -- JSON for additional details
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_credit_purchases_user ON credit_purchases(user_id);
 CREATE INDEX idx_credit_purchases_status ON credit_purchases(status);
+CREATE INDEX idx_credit_purchases_order_id ON credit_purchases(lemonsqueezy_order_id);
 
 -- ============================================
--- Translation jobs (file uploads and processing)
+-- Translation jobs
 -- ============================================
 CREATE TABLE IF NOT EXISTS translation_jobs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
   original_filename TEXT NOT NULL,
-  file_url TEXT, -- Cloudflare R2 URL
+  file_url TEXT,
   status TEXT DEFAULT 'processing', -- processing, completed, failed, partial
   source_language TEXT DEFAULT 'en',
-  target_languages TEXT NOT NULL, -- JSON array: ["hi", "ta", "te", "kn", "bn"]
+  target_languages TEXT NOT NULL, -- JSON array: ["hi", "ta", "te"]
+  tone TEXT DEFAULT 'formal', -- formal, bargain, youth
   total_words INTEGER DEFAULT 0,
   words_translated INTEGER DEFAULT 0,
   credits_used INTEGER DEFAULT 0,
   error_count INTEGER DEFAULT 0,
-  error_log TEXT, -- JSON array of error details
-  result_file_url TEXT, -- Translated file URL
+  error_log TEXT, -- JSON array of errors
+  result_file_url TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   completed_at DATETIME,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -68,13 +73,13 @@ CREATE INDEX idx_translation_jobs_status ON translation_jobs(status);
 CREATE INDEX idx_translation_jobs_created ON translation_jobs(created_at);
 
 -- ============================================
--- Brand glossary (lock words)
+-- Brand glossary (locked terms)
 -- ============================================
 CREATE TABLE IF NOT EXISTS brand_glossary (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
-  term TEXT NOT NULL, -- e.g., "SwiftCook", "iPhone", brand names
-  locked INTEGER DEFAULT 1, -- 1 = don't translate, 0 = allow translation
+  term TEXT NOT NULL,
+  locked INTEGER DEFAULT 1,
   notes TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -84,23 +89,45 @@ CREATE INDEX idx_glossary_user ON brand_glossary(user_id);
 CREATE UNIQUE INDEX idx_glossary_user_term ON brand_glossary(user_id, term);
 
 -- ============================================
--- Translation cache (to avoid duplicate API calls)
+-- Translation cache
 -- ============================================
 CREATE TABLE IF NOT EXISTS translation_cache (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   source_text TEXT NOT NULL,
   source_language TEXT NOT NULL,
   target_language TEXT NOT NULL,
+  tone TEXT DEFAULT 'formal',
   translated_text TEXT NOT NULL,
   word_count INTEGER DEFAULT 0,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE UNIQUE INDEX idx_cache_translation ON translation_cache(source_text, source_language, target_language);
+CREATE UNIQUE INDEX idx_cache_translation ON translation_cache(source_text, source_language, target_language, tone);
 CREATE INDEX idx_cache_created ON translation_cache(created_at);
 
 -- ============================================
--- Admin analytics (revenue tracking)
+-- Subscription plans
+-- ============================================
+CREATE TABLE IF NOT EXISTS subscription_plans (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  plan_name TEXT NOT NULL UNIQUE,
+  price_usd REAL NOT NULL,
+  word_credits INTEGER NOT NULL,
+  features TEXT NOT NULL, -- JSON array
+  lemonsqueezy_variant_id TEXT,
+  active INTEGER DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insert default plans
+INSERT INTO subscription_plans (plan_name, price_usd, word_credits, features, active) VALUES
+('free', 0, 1000, '["1,000 words/month", "5 languages", "CSV upload only"]', 1),
+('starter', 19, 10000, '["10,000 words/month", "12 languages", "CSV/Excel upload", "Email support"]', 1),
+('growth', 49, 100000, '["100,000 words/month", "12 languages", "CSV/Excel upload", "Priority support", "Brand glossary"]', 1),
+('scale', 149, 500000, '["500,000 words/month", "12 languages", "API access", "24/7 support", "Custom glossary", "Dedicated account manager"]', 1);
+
+-- ============================================
+-- Admin analytics
 -- ============================================
 CREATE TABLE IF NOT EXISTS admin_analytics (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -112,32 +139,14 @@ CREATE TABLE IF NOT EXISTS admin_analytics (
   credits_purchased INTEGER DEFAULT 0,
   jobs_completed INTEGER DEFAULT 0,
   jobs_failed INTEGER DEFAULT 0,
+  openai_cost REAL DEFAULT 0,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE UNIQUE INDEX idx_analytics_date ON admin_analytics(date);
 
 -- ============================================
--- Support tickets (for the 1% that need human help)
--- ============================================
-CREATE TABLE IF NOT EXISTS support_tickets (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL,
-  subject TEXT NOT NULL,
-  message TEXT NOT NULL,
-  status TEXT DEFAULT 'open', -- open, in_progress, resolved, closed
-  priority TEXT DEFAULT 'normal', -- low, normal, high, urgent
-  admin_notes TEXT,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  resolved_at DATETIME,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
-CREATE INDEX idx_tickets_user ON support_tickets(user_id);
-CREATE INDEX idx_tickets_status ON support_tickets(status);
-
--- ============================================
--- API usage logs (for debugging and rate limiting)
+-- API usage logs
 -- ============================================
 CREATE TABLE IF NOT EXISTS api_usage_logs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -155,16 +164,17 @@ CREATE INDEX idx_api_logs_user ON api_usage_logs(user_id);
 CREATE INDEX idx_api_logs_created ON api_usage_logs(created_at);
 
 -- ============================================
--- Knowledge base articles (self-service support)
+-- Knowledge base
 -- ============================================
 CREATE TABLE IF NOT EXISTS knowledge_base (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT NOT NULL,
   slug TEXT NOT NULL UNIQUE,
   content TEXT NOT NULL,
-  category TEXT NOT NULL, -- getting-started, billing, troubleshooting, api
+  category TEXT NOT NULL,
   views INTEGER DEFAULT 0,
   helpful_votes INTEGER DEFAULT 0,
+  not_helpful_votes INTEGER DEFAULT 0,
   published INTEGER DEFAULT 1,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -172,35 +182,34 @@ CREATE TABLE IF NOT EXISTS knowledge_base (
 
 CREATE INDEX idx_kb_category ON knowledge_base(category);
 CREATE INDEX idx_kb_published ON knowledge_base(published);
+CREATE INDEX idx_kb_slug ON knowledge_base(slug);
 
 -- ============================================
--- Subscription plans reference (for UI display)
+-- Support tickets
 -- ============================================
-CREATE TABLE IF NOT EXISTS subscription_plans (
+CREATE TABLE IF NOT EXISTS support_tickets (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  plan_name TEXT NOT NULL UNIQUE, -- free, starter, growth, scale
-  price_usd REAL NOT NULL,
-  word_credits INTEGER NOT NULL,
-  features TEXT NOT NULL, -- JSON array of features
-  stripe_price_id TEXT,
-  active INTEGER DEFAULT 1,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  user_id INTEGER NOT NULL,
+  subject TEXT NOT NULL,
+  message TEXT NOT NULL,
+  status TEXT DEFAULT 'open',
+  priority TEXT DEFAULT 'normal',
+  admin_notes TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  resolved_at DATETIME,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Insert default subscription plans
-INSERT INTO subscription_plans (plan_name, price_usd, word_credits, features, active) VALUES
-('free', 0, 1000, '["1,000 words/month", "5 languages", "CSV upload only"]', 1),
-('starter', 19, 10000, '["10,000 words/month", "12 languages", "CSV/Excel upload", "Email support"]', 1),
-('growth', 49, 100000, '["100,000 words/month", "12 languages", "CSV/Excel upload", "Priority support", "Brand glossary"]', 1),
-('scale', 149, 500000, '["500,000 words/month", "12 languages", "API access", "24/7 support", "Custom glossary", "Dedicated account manager"]', 1);
+CREATE INDEX idx_tickets_user ON support_tickets(user_id);
+CREATE INDEX idx_tickets_status ON support_tickets(status);
 
 -- ============================================
--- User onboarding progress (for guided tours)
+-- Onboarding progress
 -- ============================================
 CREATE TABLE IF NOT EXISTS onboarding_progress (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL UNIQUE,
-  step_completed TEXT DEFAULT 'signup', -- signup, upload, translate, payment, done
+  step_completed TEXT DEFAULT 'signup',
   first_job_id INTEGER,
   first_payment_id INTEGER,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,

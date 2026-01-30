@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { requireAuth } from '../../lib/auth';
 import { translateText, translateBatch } from '../../lib/translator';
-import { processFile, generateOutputFile } from '../../lib/file-processor';
+import { parseCSV, parseExcel, translateFileData, generateCombinedFile, validateFile, estimateWordCount } from '../../lib/file-processor';
 import type { Env, TranslationJob, User } from '../../lib/types';
 
 const translations = new Hono<{ Bindings: Env }>();
@@ -131,19 +131,21 @@ translations.post('/upload', requireAuth, async (c) => {
 
     // Process file to extract data
     const fileBuffer = await file.arrayBuffer();
-    const processedData = await processFile(fileBuffer, file.name);
+    let fileData;
     
-    if (!processedData.textColumns || processedData.textColumns.length === 0) {
+    if (file.name.endsWith('.csv')) {
+      const text = new TextDecoder().decode(fileBuffer);
+      fileData = parseCSV(text);
+    } else {
+      fileData = parseExcel(fileBuffer);
+    }
+    
+    if (!fileData.textColumns || fileData.textColumns.length === 0) {
       return c.json({ error: 'No text columns found in file' }, 400);
     }
 
     // Estimate total words
-    const estimatedWords = processedData.rows.reduce((total, row) => {
-      return total + processedData.textColumns.reduce((rowTotal, col) => {
-        const text = row[col] || '';
-        return rowTotal + text.toString().split(/\s+/).filter(Boolean).length;
-      }, 0);
-    }, 0);
+    const estimatedWords = await estimateWordCount(fileData);
 
     const totalWords = estimatedWords * targetLanguages.length;
 
@@ -182,67 +184,39 @@ translations.post('/upload', requireAuth, async (c) => {
     
     const brandTerms = glossaryResult.results?.map(r => r.term) || [];
 
-    // Process translations in background (for MVP, we'll do it synchronously)
-    // In production, this should be moved to a queue/worker
+    // Process translations using the file-processor
     try {
-      const translatedRows: any[] = [];
-      let wordsTranslated = 0;
-      let errorCount = 0;
-      const errors: string[] = [];
-
-      // Process each row
-      for (let i = 0; i < processedData.rows.length; i++) {
-        const row = processedData.rows[i];
-        const translatedRow: any = { ...row };
-
-        // Translate each target language
-        for (const targetLang of targetLanguages) {
-          // Translate each text column
-          for (const col of processedData.textColumns) {
-            const text = row[col];
-            if (!text || text.toString().trim() === '') continue;
-
-            try {
-              const result = await translateText(
-                {
-                  text: text.toString(),
-                  sourceLanguage: 'en',
-                  targetLanguage: targetLang,
-                  tonePreset: tonePreset as 'formal' | 'bargain' | 'youth',
-                  brandTerms
-                },
-                c.env,
-                c.env.DB
-              );
-
-              // Create new column name: "Title_Hindi", "Description_Tamil", etc
-              const langName = {
-                'hi': 'Hindi', 'ta': 'Tamil', 'te': 'Telugu', 'kn': 'Kannada',
-                'bn': 'Bengali', 'mr': 'Marathi', 'gu': 'Gujarati', 'ml': 'Malayalam',
-                'pa': 'Punjabi', 'or': 'Odia', 'as': 'Assamese', 'ur': 'Urdu'
-              }[targetLang] || targetLang;
-              
-              const newColName = `${col}_${langName}`;
-              translatedRow[newColName] = result.translatedText;
-              wordsTranslated += result.wordCount;
-
-            } catch (error) {
-              errorCount++;
-              errors.push(`Row ${i + 1}, Column ${col}, Language ${targetLang}: ${error.message}`);
-              translatedRow[`${col}_${targetLang}_error`] = 'Translation failed';
-            }
-          }
+      const translationResult = await translateFileData(
+        fileData,
+        targetLanguages,
+        'en',
+        tonePreset,
+        brandTerms,
+        c.env,
+        c.env.DB,
+        async (progress, status) => {
+          // Update job progress in database
+          await c.env.DB.prepare(`
+            UPDATE translation_jobs 
+            SET progress_percentage = ?, progress_status = ?
+            WHERE id = ?
+          `).bind(progress, status, jobId).run();
         }
+      );
 
-        translatedRows.push(translatedRow);
-      }
+      const wordsTranslated = translationResult.totalWords;
+      const errorCount = translationResult.errors.length;
+      const errors = translationResult.errors;
 
-      // Generate output file (CSV format for now)
-      const outputFile = await generateOutputFile(translatedRows, processedData.textColumns, targetLanguages);
+      // Generate combined output file (Excel format)
+      const outputFile = generateCombinedFile(fileData, translationResult.translatedData, 'excel');
 
-      // For MVP, we'll store the file content in the database
+      // For MVP, we'll store the file content in the database as base64
       // In production, upload to R2 storage
-      const resultFileUrl = `data:text/csv;base64,${btoa(outputFile)}`;
+      const base64File = typeof outputFile === 'string' 
+        ? btoa(outputFile) 
+        : btoa(String.fromCharCode(...new Uint8Array(outputFile as ArrayBuffer)));
+      const resultFileUrl = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64File}`;
 
       // Update job status
       await c.env.DB.prepare(`

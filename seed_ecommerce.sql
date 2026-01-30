@@ -1,14 +1,38 @@
--- Seed data for E-commerce Translation Platform
+-- Seed data for Shabdly E-commerce Translation Platform
 
--- Create admin user
-INSERT OR IGNORE INTO users (username, email, password, display_name, role, subscription_plan, word_credits, google_id) 
-VALUES ('admin', 'admin@shabdly.online', 'admin123', 'Platform Admin', 'admin', 'scale', 999999999, NULL);
+-- Create admin user (password: admin123 - hashed with SHA-256)
+INSERT OR IGNORE INTO users (email, password_hash, name, is_admin, subscription_plan, word_credits) 
+VALUES (
+  'admin@shabdly.online', 
+  'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 
+  'Platform Admin', 
+  1, 
+  'scale', 
+  999999999
+);
 
 -- Create test e-commerce seller accounts
-INSERT OR IGNORE INTO users (username, email, password, display_name, role, subscription_plan, word_credits, company_name, phone) 
+-- Password for all test users: demo123
+INSERT OR IGNORE INTO users (email, password_hash, name, subscription_plan, word_credits, company_name, phone) 
 VALUES 
-('seller_demo', 'seller@demo.com', 'demo123', 'Demo Seller', 'user', 'free', 1000, 'Demo E-commerce Store', '+91-9876543210'),
-('premium_seller', 'premium@example.com', 'premium123', 'Premium Seller', 'user', 'growth', 100000, 'Premium Products India', '+91-9876543211');
+(
+  'seller@demo.com', 
+  '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244',
+  'Demo Seller', 
+  'free', 
+  1000, 
+  'Demo E-commerce Store', 
+  '+91-9876543210'
+),
+(
+  'premium@example.com', 
+  '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244',
+  'Premium Seller', 
+  'growth', 
+  100000, 
+  'Premium Products India', 
+  '+91-9876543211'
+);
 
 -- Insert knowledge base articles
 INSERT INTO knowledge_base (title, slug, content, category, published) VALUES
@@ -144,15 +168,15 @@ Product Name | Description | Bullet Point 1 | Bullet Point 2 | Keywords
   1
 );
 
--- Insert sample translation job for demo
-INSERT INTO translation_jobs (user_id, original_filename, status, source_language, target_languages, total_words, words_translated, credits_used, created_at, completed_at)
+-- Insert sample translation job for demo user
+INSERT INTO translation_jobs (user_id, original_filename, status, source_language, target_languages, tone, total_words, words_translated, credits_used, created_at, completed_at)
 VALUES 
-(2, 'sample_products.csv', 'completed', 'en', '["hi", "ta", "te", "kn", "bn"]', 500, 2500, 2500, datetime('now', '-2 days'), datetime('now', '-2 days'));
+(2, 'sample_products.csv', 'completed', 'en', '["hi", "ta", "te", "kn", "bn"]', 'formal', 500, 2500, 2500, datetime('now', '-2 days'), datetime('now', '-2 days'));
 
 -- Insert sample credit purchase
-INSERT INTO credit_purchases (user_id, amount_usd, word_credits, stripe_payment_id, status, created_at)
+INSERT INTO credit_purchases (user_id, amount_usd, word_credits, lemonsqueezy_order_id, status, created_at)
 VALUES 
-(3, 49.00, 100000, 'pi_test_1234567890', 'completed', datetime('now', '-1 day'));
+(3, 49.00, 100000, 'order_test_1234567890', 'completed', datetime('now', '-1 day'));
 
 -- Insert sample brand glossary entries
 INSERT INTO brand_glossary (user_id, term, locked, notes)
@@ -162,6 +186,6 @@ VALUES
 (2, 'SKU', 1, 'Keep product codes in English');
 
 -- Initialize admin analytics for current month
-INSERT INTO admin_analytics (date, total_revenue, new_users, active_users, words_translated, credits_purchased, jobs_completed, jobs_failed)
+INSERT INTO admin_analytics (date, total_revenue, new_users, active_users, words_translated, credits_purchased, jobs_completed, jobs_failed, openai_cost)
 VALUES 
-(date('now'), 0, 0, 0, 0, 0, 0, 0);
+(date('now'), 0, 0, 0, 0, 0, 0, 0, 0);
