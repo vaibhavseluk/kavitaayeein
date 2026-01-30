@@ -4,9 +4,18 @@
 
 ## 🌐 Live URLs
 **Development**: http://localhost:3000  
-**Production**: https://www.shabdly.online (pending deployment)
+**Development (Public)**: https://3000-i50h0iu6uof9fu9t33zaw-5c13a017.sandbox.novita.ai  
+**Production**: https://0922aad5.poetry-platform.pages.dev ✅ DEPLOYED  
+**Cloudflare Project**: poetry-platform
 
-## 📊 Project Status: **85% Complete - All Backend Routes Complete!**
+## 📊 Project Status: **90% Complete - Deployed to Production!**
+
+**✅ Latest Update (Jan 30, 2026):**
+- Database schema fixed and migrated
+- Authentication routes working (signup/login)
+- Deployed to Cloudflare Pages
+- Local testing successful
+- **Next**: Set production environment variables and test live deployment
 
 ### ✅ Completed Features (Updated: Jan 30, 2026)
 
