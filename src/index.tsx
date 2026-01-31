@@ -10,6 +10,8 @@ import credits from './routes/ecommerce/credits';
 import glossary from './routes/ecommerce/glossary';
 import ecommerceAdmin from './routes/ecommerce/admin';
 import knowledge from './routes/ecommerce/knowledge';
+import refunds from './routes/ecommerce/refunds';
+import pages from './routes/ecommerce/pages';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -26,6 +28,10 @@ app.route('/api/credits', credits);
 app.route('/api/glossary', glossary);
 app.route('/api/admin', ecommerceAdmin);
 app.route('/api/knowledge', knowledge);
+app.route('/api/refunds', refunds);
+
+// Mount pages routes
+app.route('/', pages);
 
 // Health check
 app.get('/api/health', (c) => {
@@ -474,6 +480,623 @@ app.get('/', (c) => {
                 window.location.href = 'mailto:vaibhavseluk@gmail.com?subject=Enterprise Pricing Inquiry';
             }
         </script>
+    </body>
+    </html>
+  `);
+});
+
+// ============================================
+// STATIC PAGES
+// ============================================
+
+// About Page
+app.get('/about', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>About - Shabdly</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-gray-50">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-language text-blue-600 text-2xl"></i>
+                        <span class="text-2xl font-bold text-gray-900">Shabdly</span>
+                    </div>
+                    <a href="/" class="text-blue-600 hover:text-blue-700">
+                        <i class="fas fa-home mr-2"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content -->
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-8">About Shabdly</h1>
+            
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                <div class="prose prose-lg max-w-none">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
+                    <p class="text-gray-700 mb-6">
+                        <strong>Shabdly.online</strong> is on a mission to break the language barrier in Indian e-commerce. 
+                        We empower D2C brands and marketplace sellers to "speak Bharat" by instantly localizing product 
+                        listings into high-conversion regional languages.
+                    </p>
+                    
+                    <p class="text-gray-700 mb-6">
+                        By combining advanced AI models with deep cultural context, we help you turn "English-only" 
+                        listings into "Paisa-Vasool" regional success stories, driving trust and conversion in 
+                        Tier 2 and Tier 3 cities across India.
+                    </p>
+                    
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 mt-8">The Problem We Solve</h2>
+                    <p class="text-gray-700 mb-4">
+                        <strong>60% of Indians don't shop in English.</strong> Millions of potential customers in regional 
+                        markets struggle to understand product listings, leading to:
+                    </p>
+                    <ul class="list-disc pl-6 text-gray-700 mb-6">
+                        <li>Lower conversion rates in Tier 2 and Tier 3 cities</li>
+                        <li>Missed sales opportunities from non-English speaking customers</li>
+                        <li>Higher return rates due to product misunderstandings</li>
+                        <li>Negative reviews from confused customers</li>
+                    </ul>
+                    
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 mt-8">Our Solution</h2>
+                    <p class="text-gray-700 mb-4">
+                        Shabdly provides AI-powered translation that's specifically tuned for Indian e-commerce:
+                    </p>
+                    <ul class="list-disc pl-6 text-gray-700 mb-6">
+                        <li><strong>12+ Indian Languages:</strong> Hindi, Tamil, Telugu, Kannada, Bengali, Malayalam, Marathi, and more</li>
+                        <li><strong>E-commerce Optimized:</strong> Not just word-for-word translation, but context-aware conversions</li>
+                        <li><strong>Regional Slang:</strong> "Dhamaka Offer", "Paisa Vasool", "Keka Deal" - speak like locals do</li>
+                        <li><strong>HTML Preservation:</strong> Your formatting stays intact for Amazon/Flipkart upload</li>
+                        <li><strong>Brand Protection:</strong> Lock brand names and SKUs from translation</li>
+                    </ul>
+                    
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 mt-8">Why Choose Shabdly?</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-gray-900 mb-2">⚡ Lightning Fast</h3>
+                            <p class="text-sm text-gray-700">Translate 500 products in 2 minutes. No more waiting weeks for manual translations.</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-gray-900 mb-2">💰 Cost Effective</h3>
+                            <p class="text-sm text-gray-700">10x cheaper than hiring translators. Start free with 1,000 words.</p>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-gray-900 mb-2">🎯 Marketplace Ready</h3>
+                            <p class="text-sm text-gray-700">Copy-paste directly to Amazon, Flipkart, Meesho. HTML preserved perfectly.</p>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-gray-900 mb-2">📈 Proven Results</h3>
+                            <p class="text-sm text-gray-700">Customers see 30-60% increase in regional sales within 30 days.</p>
+                        </div>
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 mt-8">Our Values</h2>
+                    <ul class="list-disc pl-6 text-gray-700 mb-6">
+                        <li><strong>Quality First:</strong> We continuously improve our AI models for better translations</li>
+                        <li><strong>Customer Success:</strong> Your growth is our success metric</li>
+                        <li><strong>Transparency:</strong> Clear pricing, no hidden fees, honest limitations</li>
+                        <li><strong>Self-Service:</strong> Low-touch platform to keep your costs down</li>
+                    </ul>
+                    
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 mt-8">Join the Regional Revolution</h2>
+                    <p class="text-gray-700 mb-6">
+                        Hundreds of sellers are already reaching millions of Indian customers in their native languages. 
+                        Whether you're a solo seller on Amazon, a D2C brand, or a marketplace agency, Shabdly helps you 
+                        unlock the true potential of Bharat.
+                    </p>
+                    
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg text-center">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Ready to 3X Your Sales?</h3>
+                        <p class="text-gray-700 mb-4">Start free with 1,000 words. No credit card required.</p>
+                        <a href="/dashboard" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                            Get Started Free
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-8 mt-12">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <p class="text-gray-400">© 2026 Shabdly.online. All rights reserved.</p>
+                <div class="mt-4 space-x-6">
+                    <a href="/terms" class="text-gray-400 hover:text-white">Terms</a>
+                    <a href="/privacy" class="text-gray-400 hover:text-white">Privacy</a>
+                    <a href="/contact" class="text-gray-400 hover:text-white">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </body>
+    </html>
+  `);
+});
+
+// FAQ Page
+app.get('/faq', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FAQ - Shabdly</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-gray-50">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-language text-blue-600 text-2xl"></i>
+                        <span class="text-2xl font-bold text-gray-900">Shabdly</span>
+                    </div>
+                    <a href="/" class="text-blue-600 hover:text-blue-700">
+                        <i class="fas fa-home mr-2"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content -->
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h1>
+            <p class="text-gray-600 mb-8">Find answers to common questions about Shabdly</p>
+            
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="w-full text-left p-6 hover:bg-gray-50 transition" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <i class="fas fa-globe text-blue-600 mr-2"></i>
+                                What languages do you support?
+                            </h3>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </button>
+                    <div class="hidden px-6 pb-6">
+                        <p class="text-gray-700">
+                            We support 12+ Indian languages including <strong>Hindi, Tamil, Telugu, Kannada, Bengali, Malayalam, 
+                            Marathi, Gujarati, Punjabi, Odia, Assamese,</strong> and <strong>Urdu</strong>. We continuously add 
+                            more languages based on customer demand.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="w-full text-left p-6 hover:bg-gray-50 transition" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <i class="fas fa-brain text-purple-600 mr-2"></i>
+                                Does the AI understand e-commerce slang?
+                            </h3>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </button>
+                    <div class="hidden px-6 pb-6">
+                        <p class="text-gray-700 mb-2">
+                            Yes! Our AI models are specifically tuned for shopping context, not just literal translation. 
+                            We understand and use regional e-commerce phrases like:
+                        </p>
+                        <ul class="list-disc pl-6 text-gray-700">
+                            <li><strong>Hindi:</strong> "धमाका ऑफर" (Dhamaka Offer), "पैसा वसूल" (Paisa Vasool)</li>
+                            <li><strong>Tamil:</strong> "கெகா offer" (Keka Offer), "சூப்பர் quality"</li>
+                            <li><strong>Telugu:</strong> "బాగా offer", "మంచి product"</li>
+                        </ul>
+                        <p class="text-gray-700 mt-2">
+                            This makes your listings sound native and trustworthy to regional customers.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="w-full text-left p-6 hover:bg-gray-50 transition" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <i class="fas fa-file-csv text-green-600 mr-2"></i>
+                                Can I translate my entire Amazon/Flipkart catalog?
+                            </h3>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </button>
+                    <div class="hidden px-6 pb-6">
+                        <p class="text-gray-700 mb-2">
+                            <strong>Absolutely!</strong> We support bulk CSV/Excel upload for massive catalogs:
+                        </p>
+                        <ul class="list-disc pl-6 text-gray-700 mb-2">
+                            <li><strong>Free Plan:</strong> Up to 100 products per upload</li>
+                            <li><strong>Starter Plan:</strong> Up to 500 products per upload</li>
+                            <li><strong>Growth Plan:</strong> Up to 2,000 products per upload</li>
+                            <li><strong>Scale Plan:</strong> Up to 10,000 products per upload + API access</li>
+                        </ul>
+                        <p class="text-gray-700">
+                            Simply export your product listings from Amazon Seller Central or Flipkart, upload to Shabdly, 
+                            and get translated files ready to re-upload in minutes!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="w-full text-left p-6 hover:bg-gray-50 transition" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <i class="fas fa-credit-card text-orange-600 mr-2"></i>
+                                How do I pay?
+                            </h3>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </button>
+                    <div class="hidden px-6 pb-6">
+                        <p class="text-gray-700 mb-2">
+                            We accept multiple payment methods through secure processors:
+                        </p>
+                        <ul class="list-disc pl-6 text-gray-700 mb-2">
+                            <li><strong>Credit/Debit Cards:</strong> Visa, Mastercard, American Express, RuPay</li>
+                            <li><strong>UPI:</strong> Google Pay, PhonePe, Paytm, BHIM</li>
+                            <li><strong>Net Banking:</strong> All major Indian banks</li>
+                            <li><strong>International Cards:</strong> Supported via Stripe</li>
+                        </ul>
+                        <p class="text-gray-700">
+                            Payments are processed securely by <strong>Stripe</strong> and <strong>Razorpay</strong>. 
+                            We never store your card details on our servers.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="w-full text-left p-6 hover:bg-gray-50 transition" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <i class="fas fa-shield-alt text-red-600 mr-2"></i>
+                                Will my brand name get translated?
+                            </h3>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </button>
+                    <div class="hidden px-6 pb-6">
+                        <p class="text-gray-700 mb-2">
+                            <strong>No!</strong> Use our <strong>Brand Glossary</strong> feature to lock terms from translation:
+                        </p>
+                        <ul class="list-disc pl-6 text-gray-700 mb-2">
+                            <li>Brand names (e.g., "SwiftCook" stays "SwiftCook")</li>
+                            <li>Model numbers (e.g., "X-500" stays "X-500")</li>
+                            <li>SKUs and product codes</li>
+                            <li>Technical certifications (e.g., "BIS Certified")</li>
+                        </ul>
+                        <p class="text-gray-700">
+                            Simply add terms to your glossary before translation, and they'll remain unchanged across all languages.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 6 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="w-full text-left p-6 hover:bg-gray-50 transition" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <i class="fas fa-code text-indigo-600 mr-2"></i>
+                                What about HTML tags in my product descriptions?
+                            </h3>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </button>
+                    <div class="hidden px-6 pb-6">
+                        <p class="text-gray-700 mb-2">
+                            <strong>HTML tags are preserved perfectly!</strong> We support:
+                        </p>
+                        <ul class="list-disc pl-6 text-gray-700 mb-2">
+                            <li><code>&lt;b&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;i&gt;</code>, <code>&lt;em&gt;</code> - Text formatting</li>
+                            <li><code>&lt;br&gt;</code>, <code>&lt;p&gt;</code> - Line breaks and paragraphs</li>
+                            <li><code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;li&gt;</code> - Lists</li>
+                            <li><code>&lt;div&gt;</code>, <code>&lt;span&gt;</code> - Containers</li>
+                        </ul>
+                        <p class="text-gray-700">
+                            Your translations will be <strong>copy-paste ready</strong> for Amazon and Flipkart bulk upload!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 7 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="w-full text-left p-6 hover:bg-gray-50 transition" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <i class="fas fa-clock text-teal-600 mr-2"></i>
+                                How long does translation take?
+                            </h3>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </button>
+                    <div class="hidden px-6 pb-6">
+                        <p class="text-gray-700 mb-2">
+                            Translation is lightning fast:
+                        </p>
+                        <ul class="list-disc pl-6 text-gray-700 mb-2">
+                            <li><strong>100 products:</strong> ~30 seconds</li>
+                            <li><strong>500 products:</strong> ~2 minutes</li>
+                            <li><strong>1,000 products:</strong> ~5 minutes</li>
+                            <li><strong>5,000 products:</strong> ~30 minutes</li>
+                        </ul>
+                        <p class="text-gray-700">
+                            Progress updates every 30 seconds, and you can download results immediately after completion.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 8 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="w-full text-left p-6 hover:bg-gray-50 transition" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <i class="fas fa-undo text-yellow-600 mr-2"></i>
+                                What if translations are incorrect?
+                            </h3>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </button>
+                    <div class="hidden px-6 pb-6">
+                        <p class="text-gray-700 mb-2">
+                            <strong>Technical errors only:</strong> If a system error results in garbled, corrupted, or failed 
+                            translations, we'll credit the affected words back to your account within 48 hours.
+                        </p>
+                        <p class="text-gray-700 mb-2">
+                            <strong>Translation quality:</strong> Our AI provides high-quality translations, but we recommend:
+                        </p>
+                        <ul class="list-disc pl-6 text-gray-700 mb-2">
+                            <li>Having a native speaker review translations for critical products</li>
+                            <li>Starting with a small batch (100 products) to test quality</li>
+                            <li>Using the "Formal" tone for luxury products</li>
+                            <li>Using the "Bargain" tone for deals and discounts</li>
+                        </ul>
+                        <p class="text-gray-700">
+                            See our <a href="/refund-policy" class="text-blue-600 hover:underline">Refund Policy</a> for details.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 9 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="w-full text-left p-6 hover:bg-gray-50 transition" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <i class="fas fa-ban text-red-600 mr-2"></i>
+                                Can I cancel my subscription?
+                            </h3>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </button>
+                    <div class="hidden px-6 pb-6">
+                        <p class="text-gray-700 mb-2">
+                            <strong>Yes, anytime!</strong> Cancel your subscription from your dashboard settings:
+                        </p>
+                        <ul class="list-disc pl-6 text-gray-700 mb-2">
+                            <li>No cancellation fees or penalties</li>
+                            <li>Access continues until end of billing cycle</li>
+                            <li>Remaining word credits expire at cycle end</li>
+                            <li>No refunds for partial months</li>
+                        </ul>
+                        <p class="text-gray-700">
+                            You can reactivate your subscription anytime and start right where you left off!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 10 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="w-full text-left p-6 hover:bg-gray-50 transition" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <i class="fas fa-chart-line text-green-600 mr-2"></i>
+                                Will this really increase my sales?
+                            </h3>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </button>
+                    <div class="hidden px-6 pb-6">
+                        <p class="text-gray-700 mb-2">
+                            <strong>Our customers see 30-60% increase in regional sales within 30 days.</strong> Here's why:
+                        </p>
+                        <ul class="list-disc pl-6 text-gray-700 mb-2">
+                            <li>60% of Indian shoppers prefer regional languages over English</li>
+                            <li>Regional listings get 3x higher click-through rates</li>
+                            <li>Lower return rates due to better product understanding</li>
+                            <li>Higher customer trust and positive reviews</li>
+                        </ul>
+                        <p class="text-gray-700">
+                            Start with Hindi (largest market) for your top 50 products and track the results. 
+                            Most sellers see ROI within 2-3 weeks!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Still have questions? -->
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-8 mt-12 text-center">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Still have questions?</h2>
+                <p class="text-gray-700 mb-6">
+                    Check our comprehensive <a href="/help" class="text-blue-600 hover:underline font-semibold">Help Center</a> 
+                    or <a href="/contact" class="text-blue-600 hover:underline font-semibold">contact us</a> directly.
+                </p>
+                <a href="/dashboard" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                    Start Free Trial - 1,000 Words
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-8 mt-12">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <p class="text-gray-400">© 2026 Shabdly.online. All rights reserved.</p>
+                <div class="mt-4 space-x-6">
+                    <a href="/terms" class="text-gray-400 hover:text-white">Terms</a>
+                    <a href="/privacy" class="text-gray-400 hover:text-white">Privacy</a>
+                    <a href="/contact" class="text-gray-400 hover:text-white">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </body>
+    </html>
+  `);
+});
+
+// Contact Page
+app.get('/contact', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Contact - Shabdly</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-gray-50">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-language text-blue-600 text-2xl"></i>
+                        <span class="text-2xl font-bold text-gray-900">Shabdly</span>
+                    </div>
+                    <a href="/" class="text-blue-600 hover:text-blue-700">
+                        <i class="fas fa-home mr-2"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content -->
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-8">Contact Us</h1>
+            
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                <div class="prose prose-lg max-w-none">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8">
+                        <p class="text-gray-800 font-semibold">
+                            We value your time and operate a self-service model to keep your costs low.
+                        </p>
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-envelope text-blue-600 text-2xl mr-3"></i>
+                                <h3 class="text-lg font-bold text-gray-900">General Inquiries</h3>
+                            </div>
+                            <a href="mailto:heyshabdly@gmail.com" class="text-blue-600 hover:text-blue-700 font-semibold">
+                                heyshabdly@gmail.com
+                            </a>
+                            <p class="text-sm text-gray-600 mt-2">For questions about our service, features, or pricing</p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-handshake text-purple-600 text-2xl mr-3"></i>
+                                <h3 class="text-lg font-bold text-gray-900">Partnerships</h3>
+                            </div>
+                            <a href="mailto:heyshabdly@gmail.com" class="text-purple-600 hover:text-purple-700 font-semibold">
+                                heyshabdly@gmail.com
+                            </a>
+                            <p class="text-sm text-gray-600 mt-2">For agencies, resellers, and business partnerships</p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-headset text-green-600 text-2xl mr-3"></i>
+                                <h3 class="text-lg font-bold text-gray-900">Technical Support</h3>
+                            </div>
+                            <a href="mailto:heyshabdly@gmail.com" class="text-green-600 hover:text-green-700 font-semibold">
+                                heyshabdly@gmail.com
+                            </a>
+                            <p class="text-sm text-gray-600 mt-2">For account issues or technical bugs (2-3 business day response)</p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-lg">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-map-marker-alt text-orange-600 text-2xl mr-3"></i>
+                                <h3 class="text-lg font-bold text-gray-900">Registered Office</h3>
+                            </div>
+                            <p class="text-gray-800 font-semibold">Nagpur, India</p>
+                            <p class="text-sm text-gray-600 mt-2">Maharashtra, India</p>
+                        </div>
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 mt-12">Response Times</h2>
+                    <ul class="list-disc pl-6 text-gray-700 mb-6">
+                        <li><strong>General Inquiries:</strong> 1-2 business days</li>
+                        <li><strong>Technical Support:</strong> 2-3 business days</li>
+                        <li><strong>Partnership Inquiries:</strong> 3-5 business days</li>
+                        <li><strong>Refund Requests:</strong> 48 hours (processed via dashboard)</li>
+                    </ul>
+                    
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 mt-12">Before You Contact</h2>
+                    <p class="text-gray-700 mb-4">
+                        To get faster answers, please check these resources first:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <a href="/help" class="block bg-white border-2 border-gray-200 p-4 rounded-lg hover:border-blue-500 transition">
+                            <i class="fas fa-book text-blue-600 text-2xl mb-2"></i>
+                            <h3 class="font-bold text-gray-900 mb-1">Help Center</h3>
+                            <p class="text-sm text-gray-600">Guides and tutorials</p>
+                        </a>
+                        <a href="/faq" class="block bg-white border-2 border-gray-200 p-4 rounded-lg hover:border-blue-500 transition">
+                            <i class="fas fa-question-circle text-green-600 text-2xl mb-2"></i>
+                            <h3 class="font-bold text-gray-900 mb-1">FAQ</h3>
+                            <p class="text-sm text-gray-600">Common questions</p>
+                        </a>
+                        <a href="/dashboard" class="block bg-white border-2 border-gray-200 p-4 rounded-lg hover:border-blue-500 transition">
+                            <i class="fas fa-ticket-alt text-purple-600 text-2xl mb-2"></i>
+                            <h3 class="font-bold text-gray-900 mb-1">Support Tickets</h3>
+                            <p class="text-sm text-gray-600">Track your requests</p>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 mt-8">
+                        <h3 class="font-bold text-gray-900 mb-2">
+                            <i class="fas fa-info-circle text-yellow-600 mr-2"></i>
+                            Self-Service Platform
+                        </h3>
+                        <p class="text-gray-700 text-sm">
+                            Shabdly is designed to be fully self-service. Most features can be accessed directly through your 
+                            dashboard without needing to contact support. This keeps our costs low and prices affordable for you!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-8 mt-12">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <p class="text-gray-400">© 2026 Shabdly.online. All rights reserved.</p>
+                <div class="mt-4 space-x-6">
+                    <a href="/terms" class="text-gray-400 hover:text-white">Terms</a>
+                    <a href="/privacy" class="text-gray-400 hover:text-white">Privacy</a>
+                    <a href="/about" class="text-gray-400 hover:text-white">About</a>
+                </div>
+            </div>
+        </footer>
     </body>
     </html>
   `);
