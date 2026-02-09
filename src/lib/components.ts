@@ -161,12 +161,11 @@ export const goToTopButton = `
 </script>
 `;
 
-export function getLogo(showText = true): string {
+export function getLogo(showText = false): string {
     return `
-    <div class="logo-container">
-        <img src="/static/logo.png" alt="Shabdly Logo" class="logo-image" onerror="this.style.display='none'">
-        ${showText ? '<span class="logo-text">Shabdly</span>' : ''}
-    </div>
+    <a href="/" class="logo-container" title="Go to Home">
+        <img src="/static/shabdly-logo.png" alt="Shabdly.online Logo" class="logo-image-full">
+    </a>
     `;
 }
 
@@ -183,9 +182,7 @@ export function getNavigation(currentPage?: string): string {
     <nav class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="/" class="flex items-center">
-                    ${getLogo(true)}
-                </a>
+                ${getLogo()}
                 <div class="hidden md:flex items-center space-x-6">
                     ${navItems.map(item => `
                         <a href="${item.href}" class="text-gray-600 hover:text-blue-600 transition ${currentPage === item.href ? 'text-blue-600 font-semibold' : ''}">
@@ -280,10 +277,9 @@ export function getFooter(): string {
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 <!-- Brand -->
                 <div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <img src="/static/logo.png" alt="Shabdly Logo" class="h-8 w-auto" onerror="this.style.display='none'">
-                        <span class="text-xl font-bold">Shabdly</span>
-                    </div>
+                    <a href="/" class="flex items-center space-x-2 mb-4 hover:opacity-80 transition">
+                        <img src="/static/shabdly-logo.png" alt="Shabdly Logo" class="h-10 w-auto" style="filter: brightness(0) invert(1);">
+                    </a>
                     <p class="text-gray-400 text-sm">
                         AI-powered translation for Indian e-commerce sellers
                     </p>
