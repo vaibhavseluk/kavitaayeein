@@ -78,6 +78,32 @@ async function register(email, password, display_name, company_name = '', phone 
     }
 }
 
+async function requestPasswordReset(email) {
+    try {
+        const data = await apiCall('/api/auth/forgot-password', {
+            method: 'POST',
+            body: JSON.stringify({ email }),
+            skipAuth: true
+        });
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function resetPassword(token, newPassword) {
+    try {
+        const data = await apiCall('/api/auth/reset-password', {
+            method: 'POST',
+            body: JSON.stringify({ token, newPassword }),
+            skipAuth: true
+        });
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function getCurrentUser() {
     if (!authToken) return null;
 
@@ -155,6 +181,266 @@ async function purchaseCredits(planName) {
 
 async function getCreditHistory() {
     return await apiCall('/api/credits/history');
+}
+
+// =============================================
+// KNOWLEDGE BASE FUNCTIONS
+// =============================================
+
+async function getKnowledgeBaseArticles(category = null) {
+    const url = category ? `/api/knowledge?category=${category}` : '/api/knowledge';
+    return await apiCall(url, { skipAuth: true });
+}
+
+async function getKnowledgeBaseArticle(slug) {
+    return await apiCall(`/api/knowledge/${slug}`, { skipAuth: true });
+}
+
+async function searchKnowledgeBase(query) {
+    return await apiCall(`/api/knowledge/search?q=${encodeURIComponent(query)}`, { skipAuth: true });
+}
+
+window.showKnowledgeBase = function() {
+    const content = `
+        <div class="space-y-6">
+            <!-- Search Bar -->
+            <div class="relative">
+                <input type="text" id="kb-search" placeholder="Search for help articles..."
+                    class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <i class="fas fa-search absolute left-4 top-4 text-gray-400"></i>
+            </div>
+            
+            <!-- Categories -->
+            <div class="flex flex-wrap gap-2">
+                <button onclick="loadKnowledgeBase()" 
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
+                    All Articles
+                </button>
+                <button onclick="loadKnowledgeBase('Getting Started')" 
+                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition text-sm">
+                    Getting Started
+                </button>
+                <button onclick="loadKnowledgeBase('Translation Management')" 
+                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition text-sm">
+                    Translation Management
+                </button>
+                <button onclick="loadKnowledgeBase('Optimization & Quality')" 
+                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition text-sm">
+                    Optimization & Quality
+                </button>
+            </div>
+            
+            <!-- Articles Container -->
+            <div id="kb-articles-container">
+                <div class="text-center py-8">
+                    <i class="fas fa-spinner fa-spin text-4xl text-blue-600"></i>
+                    <p class="mt-4 text-gray-600">Loading articles...</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+    showModal('Help Center - Knowledge Base', content);
+    
+    // Load articles
+    loadKnowledgeBase();
+    
+    // Setup search
+    let searchTimeout;
+    document.getElementById('kb-search').addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        const query = e.target.value.trim();
+        
+        if (query.length > 2) {
+            searchTimeout = setTimeout(async () => {
+                try {
+                    const data = await searchKnowledgeBase(query);
+                    renderKnowledgeBaseArticles(data.articles || []);
+                } catch (error) {
+                    console.error('Search error:', error);
+                }
+            }, 300);
+        } else if (query.length === 0) {
+            loadKnowledgeBase();
+        }
+    });
+};
+
+async function loadKnowledgeBase(category = null) {
+    const container = document.getElementById('kb-articles-container');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div class="text-center py-8">
+            <i class="fas fa-spinner fa-spin text-4xl text-blue-600"></i>
+            <p class="mt-4 text-gray-600">Loading articles...</p>
+        </div>
+    `;
+    
+    try {
+        const data = await getKnowledgeBaseArticles(category);
+        renderKnowledgeBaseArticles(data.articles || []);
+    } catch (error) {
+        container.innerHTML = `
+            <div class="text-center py-8 text-red-600">
+                <i class="fas fa-exclamation-circle text-4xl mb-4"></i>
+                <p>Failed to load articles. Please try again.</p>
+            </div>
+        `;
+    }
+}
+
+function renderKnowledgeBaseArticles(articles) {
+    const container = document.getElementById('kb-articles-container');
+    if (!container) return;
+    
+    if (!articles || articles.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-12 text-gray-500">
+                <i class="fas fa-inbox text-6xl mb-4"></i>
+                <p>No articles found</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            ${articles.map(article => `
+                <div class="border border-gray-200 rounded-lg p-6 hover:border-blue-500 hover:shadow-lg transition cursor-pointer"
+                     onclick="showKnowledgeBaseArticle('${article.slug}')">
+                    <div class="flex items-start justify-between mb-3">
+                        <h3 class="text-lg font-semibold text-gray-900">${article.title}</h3>
+                        <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded ml-2">
+                            ${article.category}
+                        </span>
+                    </div>
+                    ${article.excerpt ? `
+                        <p class="text-sm text-gray-600 mb-3">${article.excerpt}</p>
+                    ` : ''}
+                    <div class="flex items-center text-xs text-gray-500">
+                        <i class="fas fa-eye mr-1"></i>
+                        <span>${article.views || 0} views</span>
+                        ${article.helpful_count ? `
+                            <span class="ml-4">
+                                <i class="fas fa-thumbs-up mr-1 text-green-600"></i>
+                                ${article.helpful_count}
+                            </span>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+window.showKnowledgeBaseArticle = async function(slug) {
+    const content = `
+        <div id="article-content">
+            <div class="text-center py-8">
+                <i class="fas fa-spinner fa-spin text-4xl text-blue-600"></i>
+                <p class="mt-4 text-gray-600">Loading article...</p>
+            </div>
+        </div>
+    `;
+    
+    showModal('Loading...', content);
+    
+    try {
+        const data = await getKnowledgeBaseArticle(slug);
+        const article = data.article;
+        
+        // Update modal title
+        const modal = document.querySelector('.fixed');
+        if (modal) {
+            modal.querySelector('h2').textContent = article.title;
+        }
+        
+        // Render article
+        const container = document.getElementById('article-content');
+        container.innerHTML = `
+            <div class="prose prose-lg max-w-none">
+                <div class="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6">
+                    <div class="flex items-center text-sm text-blue-800">
+                        <span class="font-semibold">${article.category}</span>
+                        <span class="mx-2">•</span>
+                        <span>${article.views || 0} views</span>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    ${article.content}
+                </div>
+                
+                <!-- Feedback -->
+                <div class="border-t pt-6">
+                    <p class="text-sm text-gray-700 mb-4">Was this article helpful?</p>
+                    <div class="flex space-x-4">
+                        <button onclick="submitArticleFeedback(${article.id}, true)" 
+                            class="px-6 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition">
+                            <i class="fas fa-thumbs-up mr-2"></i>Yes
+                            ${article.helpful_count ? `(${article.helpful_count})` : ''}
+                        </button>
+                        <button onclick="submitArticleFeedback(${article.id}, false)" 
+                            class="px-6 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition">
+                            <i class="fas fa-thumbs-down mr-2"></i>No
+                            ${article.not_helpful_count ? `(${article.not_helpful_count})` : ''}
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Related Articles -->
+                ${data.relatedArticles && data.relatedArticles.length > 0 ? `
+                    <div class="border-t pt-6 mt-6">
+                        <h3 class="text-lg font-semibold mb-4">Related Articles</h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            ${data.relatedArticles.map(related => `
+                                <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-500 transition cursor-pointer"
+                                     onclick="showKnowledgeBaseArticle('${related.slug}')">
+                                    <div class="font-medium text-gray-900">${related.title}</div>
+                                    ${related.excerpt ? `
+                                        <div class="text-sm text-gray-600 mt-1">${related.excerpt}</div>
+                                    ` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+                
+                <div class="text-center mt-8">
+                    <button onclick="showKnowledgeBase()" 
+                        class="text-blue-600 hover:text-blue-800 font-semibold">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to all articles
+                    </button>
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        const container = document.getElementById('article-content');
+        container.innerHTML = `
+            <div class="text-center py-8 text-red-600">
+                <i class="fas fa-exclamation-circle text-4xl mb-4"></i>
+                <p>Failed to load article. Please try again.</p>
+                <button onclick="showKnowledgeBase()" 
+                    class="mt-4 text-blue-600 hover:text-blue-800 font-semibold">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to all articles
+                </button>
+            </div>
+        `;
+    }
+};
+
+async function submitArticleFeedback(articleId, helpful) {
+    try {
+        await apiCall(`/api/knowledge/${articleId}/helpful`, {
+            method: 'POST',
+            body: JSON.stringify({ helpful }),
+            skipAuth: true
+        });
+        showSuccess('Thank you for your feedback!');
+    } catch (error) {
+        console.error('Feedback error:', error);
+    }
 }
 
 // =============================================
@@ -237,24 +523,38 @@ window.showLogin = function() {
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                 <input type="email" name="email" required 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="your@email.com">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
                 <input type="password" name="password" required 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter your password">
+            </div>
+            <div class="flex justify-between items-center">
+                <label class="flex items-center">
+                    <input type="checkbox" class="mr-2">
+                    <span class="text-sm text-gray-600">Remember me</span>
+                </label>
+                <a href="#" onclick="showForgotPassword(); return false;" class="text-sm text-blue-600 hover:underline">
+                    Forgot password?
+                </a>
             </div>
             <button type="submit" 
                 class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-                Login
+                <i class="fas fa-sign-in-alt mr-2"></i>Sign In
             </button>
-            <p class="text-center text-gray-600 text-sm">
-                Don't have an account? <a href="#" onclick="showSignup()" class="text-blue-600 hover:underline">Sign up</a>
-            </p>
+            <div class="text-center text-sm text-gray-600">
+                Don't have an account? 
+                <a href="#" onclick="showSignup(); return false;" class="text-blue-600 hover:underline font-semibold">
+                    Create one now - Get 1,000 free words
+                </a>
+            </div>
         </form>
     `;
 
-    showModal('Login to Shabdly', content);
+    showModal('Sign In to Shabdly', content);
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -262,13 +562,19 @@ window.showLogin = function() {
         const email = formData.get('email');
         const password = formData.get('password');
 
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Signing in...';
+
         try {
             await login(email, password);
-            showSuccess('Login successful!');
+            showSuccess('Login successful! Welcome back!');
             document.querySelectorAll('.fixed').forEach(el => el.remove());
             setTimeout(() => window.location.href = '/dashboard', 1000);
         } catch (error) {
             showError(error.message);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Sign In';
         }
     });
 };
@@ -276,42 +582,88 @@ window.showLogin = function() {
 window.showSignup = function() {
     const content = `
         <form id="signupForm" class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Display Name *</label>
-                <input type="text" name="display_name" required 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div class="flex items-start">
+                    <i class="fas fa-gift text-blue-600 text-2xl mr-3"></i>
+                    <div>
+                        <div class="font-semibold text-blue-900">Welcome Bonus!</div>
+                        <div class="text-sm text-blue-700">Get 1,000 free word credits when you create your account</div>
+                    </div>
+                </div>
             </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Display Name <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="display_name" required 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="John Doe">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Company Name
+                    </label>
+                    <input type="text" name="company_name" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Your Company (optional)">
+                </div>
+            </div>
+            
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Email Address <span class="text-red-500">*</span>
+                </label>
                 <input type="email" name="email" required 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="your@email.com">
             </div>
+            
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Password *</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Password <span class="text-red-500">*</span>
+                </label>
                 <input type="password" name="password" required minlength="6"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Min. 6 characters">
+                <div class="text-xs text-gray-500 mt-1">
+                    <i class="fas fa-info-circle mr-1"></i>Must be at least 6 characters long
+                </div>
             </div>
+            
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Company Name (optional)</label>
-                <input type="text" name="company_name" 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Phone (optional)</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Phone Number
+                </label>
                 <input type="tel" name="phone" 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="+91 1234567890 (optional)">
             </div>
+            
+            <div class="flex items-start">
+                <input type="checkbox" id="terms-checkbox" required class="mt-1 mr-2">
+                <label for="terms-checkbox" class="text-sm text-gray-600">
+                    I agree to the <a href="/terms" target="_blank" class="text-blue-600 hover:underline">Terms of Service</a> 
+                    and <a href="/privacy" target="_blank" class="text-blue-600 hover:underline">Privacy Policy</a>
+                </label>
+            </div>
+            
             <button type="submit" 
-                class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-                Create Account & Get 1,000 Free Words
+                class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-bold hover:from-blue-700 hover:to-indigo-700 transition">
+                <i class="fas fa-rocket mr-2"></i>Create Account & Get 1,000 Free Words
             </button>
-            <p class="text-center text-gray-600 text-sm">
-                Already have an account? <a href="#" onclick="showLogin()" class="text-blue-600 hover:underline">Login</a>
-            </p>
+            
+            <div class="text-center text-sm text-gray-600">
+                Already have an account? 
+                <a href="#" onclick="showLogin(); return false;" class="text-blue-600 hover:underline font-semibold">
+                    Sign in here
+                </a>
+            </div>
         </form>
     `;
 
-    showModal('Sign Up for Shabdly', content);
+    showModal('Create Your Shabdly Account', content);
 
     document.getElementById('signupForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -322,16 +674,158 @@ window.showSignup = function() {
         const company_name = formData.get('company_name');
         const phone = formData.get('phone');
 
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating your account...';
+
         try {
             await register(email, password, display_name, company_name, phone);
-            showSuccess('Account created! Welcome to Shabdly!');
+            showSuccess('Account created successfully! Welcome to Shabdly! 🎉');
             document.querySelectorAll('.fixed').forEach(el => el.remove());
-            setTimeout(() => window.location.href = '/dashboard', 1000);
+            setTimeout(() => window.location.href = '/dashboard', 1500);
         } catch (error) {
             showError(error.message);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-rocket mr-2"></i>Create Account & Get 1,000 Free Words';
         }
     });
 };
+
+// =============================================
+// FORGOT PASSWORD & RESET PASSWORD UI
+// =============================================
+
+window.showForgotPassword = function() {
+    const content = `
+        <form id="forgotPasswordForm" class="space-y-4">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div class="flex items-start">
+                    <i class="fas fa-info-circle text-blue-600 text-xl mr-3"></i>
+                    <div class="text-sm text-blue-700">
+                        Enter your email address and we'll send you a link to reset your password.
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <input type="email" name="email" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="your@email.com">
+            </div>
+            
+            <button type="submit" 
+                class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                <i class="fas fa-paper-plane mr-2"></i>Send Reset Link
+            </button>
+            
+            <div class="text-center text-sm text-gray-600">
+                Remember your password? 
+                <a href="#" onclick="showLogin(); return false;" class="text-blue-600 hover:underline">
+                    Back to sign in
+                </a>
+            </div>
+        </form>
+    `;
+
+    showModal('Reset Your Password', content);
+
+    document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const email = formData.get('email');
+
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+
+        try {
+            await requestPasswordReset(email);
+            showSuccess('Password reset link sent! Check your email.');
+            document.querySelectorAll('.fixed').forEach(el => el.remove());
+        } catch (error) {
+            showError(error.message || 'Failed to send reset link. Please try again.');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Send Reset Link';
+        }
+    });
+};
+
+window.showResetPassword = function(token) {
+    const content = `
+        <form id="resetPasswordForm" class="space-y-4">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div class="flex items-start">
+                    <i class="fas fa-lock text-blue-600 text-xl mr-3"></i>
+                    <div class="text-sm text-blue-700">
+                        Enter your new password below. Make sure it's at least 6 characters long.
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    New Password <span class="text-red-500">*</span>
+                </label>
+                <input type="password" name="password" required minlength="6"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Min. 6 characters">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Confirm Password <span class="text-red-500">*</span>
+                </label>
+                <input type="password" name="confirmPassword" required minlength="6"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Re-enter your password">
+            </div>
+            
+            <button type="submit" 
+                class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                <i class="fas fa-check mr-2"></i>Reset Password
+            </button>
+        </form>
+    `;
+
+    showModal('Set New Password', content);
+
+    document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const password = formData.get('password');
+        const confirmPassword = formData.get('confirmPassword');
+
+        if (password !== confirmPassword) {
+            showError('Passwords do not match!');
+            return;
+        }
+
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Resetting...';
+
+        try {
+            await resetPassword(token, password);
+            showSuccess('Password reset successfully! You can now sign in.');
+            document.querySelectorAll('.fixed').forEach(el => el.remove());
+            setTimeout(() => showLogin(), 1500);
+        } catch (error) {
+            showError(error.message || 'Failed to reset password. Please try again.');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Reset Password';
+        }
+    });
+};
+
+// Check for reset token in URL
+if (window.location.pathname === '/reset-password') {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    if (token) {
+        showResetPassword(token);
+    }
+}
 
 // =============================================
 // DASHBOARD UI COMPONENTS
