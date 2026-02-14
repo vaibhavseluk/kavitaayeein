@@ -78,6 +78,7 @@ app.get('/', (c) => {
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/dashboard.js" defer></script>
         
         <style>
             @keyframes fadeInUp {
@@ -105,14 +106,14 @@ app.get('/', (c) => {
         <nav class="bg-white shadow-sm sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
-                    <div class="flex items-center space-x-3">
-                        <i class="fas fa-language text-blue-600 text-2xl"></i>
-                        <span class="text-2xl font-bold gradient-text">Shabdly</span>
-                    </div>
+                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition" title="Go to Home">
+                        <img src="/static/shabdly-logo.png" alt="Shabdly.online Logo" class="h-12 w-auto" style="max-width: 180px;" onerror="this.style.display='none'">
+                    </a>
                     <div class="flex items-center space-x-6">
                         <a href="#features" class="text-gray-600 hover:text-blue-600 transition">Features</a>
                         <a href="#pricing" class="text-gray-600 hover:text-blue-600 transition">Pricing</a>
-                        <a href="#" onclick="showKnowledgeBase()" class="text-gray-600 hover:text-blue-600 transition">Help</a>
+                        <a href="/help" class="text-gray-600 hover:text-blue-600 transition">Help</a>
+                        <a href="/documentation" class="text-gray-600 hover:text-blue-600 transition">Documentation</a>
                         <button onclick="showLogin()" class="text-gray-600 hover:text-blue-600 transition">Login</button>
                         <button onclick="showSignup()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
                             Get Started Free
@@ -139,7 +140,7 @@ app.get('/', (c) => {
                             <i class="fas fa-rocket mr-2"></i> Start Free Trial - 1,000 Words
                         </button>
                         <button onclick="scrollToDemo()" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold border-2 border-blue-600 hover:bg-blue-50 transition">
-                            <i class="fas fa-play mr-2"></i> See Demo
+                            <i class="fas fa-play mr-2"></i> Watch Demo
                         </button>
                     </div>
                     <p class="text-sm text-gray-500 mt-4">
@@ -425,22 +426,22 @@ app.get('/', (c) => {
                         <ul class="space-y-2 text-sm text-gray-400">
                             <li><a href="#features" class="hover:text-white transition">Features</a></li>
                             <li><a href="#pricing" class="hover:text-white transition">Pricing</a></li>
-                            <li><a href="#" onclick="showKnowledgeBase()">Documentation</a></li>
+                            <li><a href="/documentation" class="hover:text-white transition">Documentation</a></li>
                         </ul>
                     </div>
                     <div>
                         <h4 class="font-semibold mb-4">Company</h4>
                         <ul class="space-y-2 text-sm text-gray-400">
-                            <li><a href="#" class="hover:text-white transition">About</a></li>
-                            <li><a href="#" class="hover:text-white transition">Contact</a></li>
-                            <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                            <li><a href="/about" class="hover:text-white transition">About</a></li>
+                            <li><a href="/contact" class="hover:text-white transition">Contact</a></li>
+                            <li><a href="/privacy" class="hover:text-white transition">Privacy Policy</a></li>
                         </ul>
                     </div>
                     <div>
                         <h4 class="font-semibold mb-4">Support</h4>
                         <ul class="space-y-2 text-sm text-gray-400">
-                            <li><a href="#" onclick="showKnowledgeBase()" class="hover:text-white transition">Help Center</a></li>
-                            <li><a href="mailto:vaibhavseluk@gmail.com" class="hover:text-white transition">Email Support</a></li>
+                            <li><a href="/help" class="hover:text-white transition">Help Center</a></li>
+                            <li><a href="mailto:heyshabdly@gmail.com" class="hover:text-white transition">Email Support</a></li>
                         </ul>
                     </div>
                 </div>
@@ -449,35 +450,16 @@ app.get('/', (c) => {
                 </div>
             </div>
         </footer>
-
-        <!-- Login Modal (placeholder - will be built in dashboard.js) -->
-        <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-            <div class="bg-white rounded-lg p-8 max-w-md w-full">
-                <h2 class="text-2xl font-bold mb-4">Login</h2>
-                <p class="text-gray-600">Login functionality coming soon...</p>
-                <button onclick="document.getElementById('loginModal').classList.add('hidden')" class="mt-4 bg-gray-200 px-4 py-2 rounded">Close</button>
-            </div>
-        </div>
-
+        
         <script>
-            function showLogin() {
-                document.getElementById('loginModal').classList.remove('hidden');
-            }
-            
-            function showSignup() {
-                alert('Signup functionality will be implemented in dashboard.js');
-            }
-            
-            function showKnowledgeBase() {
-                alert('Knowledge base will be implemented');
-            }
-            
+            // Scroll to demo section
             function scrollToDemo() {
                 document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
             }
             
+            // Contact sales via email
             function contactSales() {
-                window.location.href = 'mailto:vaibhavseluk@gmail.com?subject=Enterprise Pricing Inquiry';
+                window.location.href = 'mailto:heyshabdly@gmail.com?subject=Enterprise Pricing Inquiry';
             }
         </script>
     </body>
