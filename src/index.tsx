@@ -323,7 +323,9 @@ app.get('/', (c) => {
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div>
-                        <img src="/static/shabdly-logo.png" alt="Shabdly Logo" style="height: 40px; filter: brightness(0) invert(1);" class="mb-4">
+                        <div class="mb-4">
+                            <img src="/static/shabdly-logo.png" alt="Shabdly Logo" style="height: 40px; width: auto; max-width: 200px; filter: brightness(0) invert(1); opacity: 0.9;">
+                        </div>
                         <p class="text-gray-400 text-sm">
                             Powered by "Shabd" - Where your voice finds growth
                         </p>
