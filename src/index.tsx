@@ -63,8 +63,269 @@ app.get('/dashboard', (c) => {
   `);
 });
 
-// Homepage - Shabdly E-commerce Translation Platform
+// Homepage - Shabdly Platform Hub (presents both platforms)
 app.get('/', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Shabdly - AI-Powered Solutions for Growth & Translation</title>
+        <meta name="description" content="Shabdly offers two powerful platforms: E-commerce translation for 12+ Indian languages and HeyShabdly for career guidance and peer support. Choose your path to growth.">
+        <meta name="keywords" content="shabdly, ecommerce translation, career guidance, heyshabdly, indian languages, peer support">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://shabdly.online/">
+        <meta property="og:title" content="Shabdly - AI-Powered Solutions for Growth & Translation">
+        <meta property="og:description" content="Choose your platform: E-commerce Translation for sellers or HeyShabdly for career guidance and support.">
+        <meta property="og:image" content="https://shabdly.online/static/shabdly-logo.png">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta property="og:site_name" content="Shabdly">
+        
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Shabdly - AI-Powered Solutions for Growth">
+        <meta name="twitter:description" content="E-commerce Translation or Career Guidance - Choose your platform">
+        <meta name="twitter:image" content="https://shabdly.online/static/shabdly-logo.png">
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        
+        <style>
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(30px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fadeInUp { animation: fadeInUp 0.6s ease-out; }
+            .gradient-bg {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            }
+        </style>
+    </head>
+    <body class="bg-gray-50">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <a href="/" class="flex items-center hover:opacity-80 transition">
+                        <img src="/static/shabdly-logo.png" alt="Shabdly.online Logo" style="height: 40px; width: auto; max-width: 200px;">
+                    </a>
+                    <div class="flex items-center space-x-6">
+                        <a href="#platforms" class="text-gray-600 hover:text-blue-600 transition">Platforms</a>
+                        <a href="#about" class="text-gray-600 hover:text-blue-600 transition">About</a>
+                        <a href="/contact" class="text-gray-600 hover:text-blue-600 transition">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="gradient-bg py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white animate-fadeInUp">
+                <h1 class="text-5xl font-extrabold mb-6">
+                    Welcome to Shabdly
+                </h1>
+                <p class="text-2xl mb-4 opacity-90">
+                    Powered by "Shabd" (Word) - We help you grow through language
+                </p>
+                <p class="text-xl opacity-80 max-w-3xl mx-auto">
+                    Choose your platform below to start your journey
+                </p>
+            </div>
+        </section>
+
+        <!-- Platforms Section -->
+        <section id="platforms" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Our Platforms</h2>
+                    <p class="text-xl text-gray-600">Two powerful solutions for different needs</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <!-- E-commerce Translation Platform -->
+                    <div class="card-hover bg-white rounded-2xl shadow-xl overflow-hidden border-2 border-gray-100">
+                        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-white">
+                            <div class="flex items-center mb-4">
+                                <i class="fas fa-language text-4xl mr-4"></i>
+                                <h3 class="text-3xl font-bold">Shabdly Translate</h3>
+                            </div>
+                            <p class="text-lg opacity-90">For E-commerce Sellers</p>
+                        </div>
+                        
+                        <div class="p-8">
+                            <p class="text-gray-700 mb-6 text-lg">
+                                Translate your Amazon, Flipkart & D2C product listings into 12+ Indian languages instantly.
+                            </p>
+                            
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                    <span>Reach 60% more Indian customers</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                    <span>Preserve HTML & protect brand names</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                    <span>Regional shopping slang included</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                    <span>Start free with 1,000 words</span>
+                                </li>
+                            </ul>
+                            
+                            <div class="space-y-3">
+                                <a href="/translate" class="block w-full bg-blue-600 text-white text-center py-4 rounded-lg font-semibold hover:bg-blue-700 transition shadow-lg">
+                                    <i class="fas fa-rocket mr-2"></i> Start Translation
+                                </a>
+                                <a href="/translate#features" class="block w-full border-2 border-blue-600 text-blue-600 text-center py-4 rounded-lg font-semibold hover:bg-blue-50 transition">
+                                    Learn More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HeyShabdly Career Guidance Platform -->
+                    <div class="card-hover bg-white rounded-2xl shadow-xl overflow-hidden border-2 border-gray-100">
+                        <div class="bg-gradient-to-r from-orange-500 to-red-500 p-8 text-white">
+                            <div class="flex items-center mb-4">
+                                <i class="fas fa-users text-4xl mr-4"></i>
+                                <h3 class="text-3xl font-bold">HeyShabdly</h3>
+                            </div>
+                            <p class="text-lg opacity-90">For Career Growth & Support</p>
+                        </div>
+                        
+                        <div class="p-8">
+                            <p class="text-gray-700 mb-6 text-lg">
+                                Community-driven platform for peer-to-peer career guidance and emotional support.
+                            </p>
+                            
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                    <span>Connect with career mentors</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                    <span>Get guidance without formality</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                    <span>Emotional support network</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-3 mt-1"></i>
+                                    <span>Free peer-to-peer help</span>
+                                </li>
+                            </ul>
+                            
+                            <div class="space-y-3">
+                                <a href="https://hey.shabdly.online" class="block w-full bg-orange-500 text-white text-center py-4 rounded-lg font-semibold hover:bg-orange-600 transition shadow-lg">
+                                    <i class="fas fa-comments mr-2"></i> Join Community
+                                </a>
+                                <button onclick="alert('HeyShabdly launching soon! Stay tuned.')" class="w-full border-2 border-orange-500 text-orange-500 text-center py-4 rounded-lg font-semibold hover:bg-orange-50 transition">
+                                    Learn More
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 bg-gray-50">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h2 class="text-4xl font-extrabold text-gray-900 mb-6">About Shabdly</h2>
+                <p class="text-xl text-gray-700 mb-8">
+                    Derived from <strong>"Shabd"</strong> (Sanskrit for "Word"), Shabdly is where your voice finds growth. 
+                    We believe in the power of language - whether it's translating products to reach new markets 
+                    or connecting people for career guidance and support.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">
+                            <i class="fas fa-bullseye text-blue-600 mr-2"></i>
+                            Our Mission
+                        </h3>
+                        <p class="text-gray-700">
+                            To break language barriers in business and personal growth, making opportunities 
+                            accessible to everyone through the power of "Shabd" (Word).
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">
+                            <i class="fas fa-heart text-red-500 mr-2"></i>
+                            Our Values
+                        </h3>
+                        <p class="text-gray-700">
+                            Accessibility, community-driven growth, and empowering individuals to reach their 
+                            full potential through better communication.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <img src="/static/shabdly-logo.png" alt="Shabdly Logo" style="height: 40px; filter: brightness(0) invert(1);" class="mb-4">
+                        <p class="text-gray-400 text-sm">
+                            Powered by "Shabd" - Where your voice finds growth
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Platforms</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="/translate" class="hover:text-white transition">Shabdly Translate</a></li>
+                            <li><a href="https://hey.shabdly.online" class="hover:text-white transition">HeyShabdly</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Company</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="/about" class="hover:text-white transition">About</a></li>
+                            <li><a href="/contact" class="hover:text-white transition">Contact</a></li>
+                            <li><a href="/privacy" class="hover:text-white transition">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Support</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="/help" class="hover:text-white transition">Help Center</a></li>
+                            <li><a href="/documentation" class="hover:text-white transition">Documentation</a></li>
+                            <li><a href="mailto:heyshabdly@gmail.com" class="hover:text-white transition">Email Support</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+                    <p>&copy; 2026 Shabdly.online. All rights reserved. | Nagpur, Maharashtra, India</p>
+                </div>
+            </div>
+        </footer>
+    </body>
+    </html>
+  `);
+});
+
+// E-commerce Translation Platform Page
+app.get('/translate', (c) => {
   return c.html(`
     <!DOCTYPE html>
     <html lang="en">
@@ -74,6 +335,29 @@ app.get('/', (c) => {
         <title>Shabdly - AI-Powered E-commerce Translation for Indian Languages</title>
         <meta name="description" content="Translate your Amazon/Flipkart product listings into 12+ Indian languages instantly. Reach 60% more customers with AI-powered translation that preserves HTML and protects brand names.">
         <meta name="keywords" content="ecommerce translation, amazon india, flipkart seller, hindi translation, regional language, product listing, indian languages">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://shabdly.online/">
+        <meta property="og:title" content="Shabdly - AI-Powered E-commerce Translation for Indian Languages">
+        <meta property="og:description" content="Translate your Amazon/Flipkart product listings into 12+ Indian languages. Reach 60% more customers with AI-powered translation. Start free with 1,000 words.">
+        <meta property="og:image" content="https://shabdly.online/static/shabdly-logo.png">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta property="og:site_name" content="Shabdly">
+        <meta property="og:locale" content="en_US">
+        
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:url" content="https://shabdly.online/">
+        <meta name="twitter:title" content="Shabdly - AI-Powered E-commerce Translation for Indian Languages">
+        <meta name="twitter:description" content="Translate your Amazon/Flipkart product listings into 12+ Indian languages. Reach 60% more customers with AI. Start free with 1,000 words.">
+        <meta name="twitter:image" content="https://shabdly.online/static/shabdly-logo.png">
+        
+        <!-- Additional SEO -->
+        <meta name="author" content="Shabdly">
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="https://shabdly.online/">
         
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
@@ -418,15 +702,16 @@ app.get('/', (c) => {
                     <div>
                         <h3 class="text-lg font-bold mb-4">Shabdly</h3>
                         <p class="text-gray-400 text-sm">
-                            AI-powered translation for Indian e-commerce sellers
+                            Powered by "Shabd" - AI solutions for growth & translation
                         </p>
                     </div>
                     <div>
-                        <h4 class="font-semibold mb-4">Product</h4>
+                        <h4 class="font-semibold mb-4">Platforms</h4>
                         <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="/translate" class="hover:text-white transition">Shabdly Translate</a></li>
+                            <li><a href="https://hey.shabdly.online" class="hover:text-white transition">HeyShabdly <span class="text-xs bg-orange-500 px-2 py-1 rounded">New</span></a></li>
                             <li><a href="#features" class="hover:text-white transition">Features</a></li>
                             <li><a href="#pricing" class="hover:text-white transition">Pricing</a></li>
-                            <li><a href="/documentation" class="hover:text-white transition">Documentation</a></li>
                         </ul>
                     </div>
                     <div>
@@ -435,18 +720,20 @@ app.get('/', (c) => {
                             <li><a href="/about" class="hover:text-white transition">About</a></li>
                             <li><a href="/contact" class="hover:text-white transition">Contact</a></li>
                             <li><a href="/privacy" class="hover:text-white transition">Privacy Policy</a></li>
+                            <li><a href="/documentation" class="hover:text-white transition">Documentation</a></li>
                         </ul>
                     </div>
                     <div>
                         <h4 class="font-semibold mb-4">Support</h4>
                         <ul class="space-y-2 text-sm text-gray-400">
                             <li><a href="/help" class="hover:text-white transition">Help Center</a></li>
+                            <li><a href="/faq" class="hover:text-white transition">FAQ</a></li>
                             <li><a href="mailto:heyshabdly@gmail.com" class="hover:text-white transition">Email Support</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-                    <p>&copy; 2026 Shabdly. All rights reserved.</p>
+                    <p>&copy; 2026 Shabdly.online. All rights reserved. | Nagpur, Maharashtra, India</p>
                 </div>
             </div>
         </footer>
