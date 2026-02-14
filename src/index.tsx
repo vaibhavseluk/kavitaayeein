@@ -236,9 +236,9 @@ app.get('/', (c) => {
                                 <a href="https://hey.shabdly.online" class="block w-full bg-orange-500 text-white text-center py-4 rounded-lg font-semibold hover:bg-orange-600 transition shadow-lg">
                                     <i class="fas fa-comments mr-2"></i> Join Community
                                 </a>
-                                <button onclick="alert('HeyShabdly launching soon! Stay tuned.')" class="w-full border-2 border-orange-500 text-orange-500 text-center py-4 rounded-lg font-semibold hover:bg-orange-50 transition">
+                                <a href="https://hey.shabdly.online" class="block w-full border-2 border-orange-500 text-orange-500 text-center py-4 rounded-lg font-semibold hover:bg-orange-50 transition">
                                     Learn More
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
