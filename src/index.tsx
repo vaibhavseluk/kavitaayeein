@@ -113,18 +113,56 @@ app.get('/', (c) => {
         </style>
     </head>
     <body class="bg-gray-50">
+        <!-- Platform Switcher Banner -->
+        <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-2 px-4">
+            <div class="max-w-7xl mx-auto flex items-center justify-center md:justify-between text-sm flex-wrap gap-2">
+                <div class="hidden md:flex items-center space-x-2">
+                    <i class="fas fa-layer-group"></i>
+                    <span class="font-medium">Shabdly Ecosystem</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <a href="/" class="hover:underline flex items-center font-medium px-2 py-1 rounded hover:bg-white/10 transition">
+                        <i class="fas fa-home mr-1"></i>
+                        <span class="hidden sm:inline">Home</span>
+                    </a>
+                    <span class="text-orange-200">|</span>
+                    <a href="/translate" class="hover:underline flex items-center font-medium px-2 py-1 rounded hover:bg-white/10 transition">
+                        <i class="fas fa-language mr-1"></i>
+                        <span class="hidden sm:inline">E-commerce Translation</span>
+                    </a>
+                    <span class="text-orange-200">|</span>
+                    <a href="https://hey.shabdly.online" class="hover:underline flex items-center font-medium bg-white/20 px-3 py-1 rounded hover:bg-white/30 transition">
+                        <i class="fas fa-comments mr-1"></i>
+                        <span class="hidden sm:inline">HeyShabdly Career Platform</span>
+                        <span class="sm:hidden">HeyShabdly</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
         <!-- Navigation -->
-        <nav class="bg-white shadow-sm">
+        <nav class="bg-white shadow-sm sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <a href="/" class="flex items-center hover:opacity-80 transition">
                         <img src="/static/shabdly-logo.png" alt="Shabdly.online Logo" style="height: 40px; width: auto; max-width: 200px;">
                     </a>
-                    <div class="flex items-center space-x-6">
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-gray-600 hover:text-blue-600 transition">Home</a>
+                        <a href="/translate" class="text-gray-600 hover:text-blue-600 transition">
+                            <i class="fas fa-language mr-1"></i>Translate
+                        </a>
+                        <a href="https://hey.shabdly.online" class="text-orange-600 hover:text-orange-700 transition font-semibold">
+                            <i class="fas fa-comments mr-1"></i>HeyShabdly
+                        </a>
                         <a href="#platforms" class="text-gray-600 hover:text-blue-600 transition">Platforms</a>
-                        <a href="#about" class="text-gray-600 hover:text-blue-600 transition">About</a>
+                        <a href="/help" class="text-gray-600 hover:text-blue-600 transition">Help</a>
                         <a href="/contact" class="text-gray-600 hover:text-blue-600 transition">Contact</a>
                     </div>
+                    <!-- Mobile menu button -->
+                    <button class="md:hidden text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
                 </div>
             </div>
         </nav>
@@ -291,10 +329,26 @@ app.get('/', (c) => {
                         </p>
                     </div>
                     <div>
-                        <h4 class="font-semibold mb-4">Platforms</h4>
-                        <ul class="space-y-2 text-sm text-gray-400">
-                            <li><a href="/translate" class="hover:text-white transition">Shabdly Translate</a></li>
-                            <li><a href="https://hey.shabdly.online" class="hover:text-white transition">HeyShabdly</a></li>
+                        <h4 class="font-semibold mb-4">Our Platforms</h4>
+                        <ul class="space-y-3 text-sm text-gray-400">
+                            <li>
+                                <a href="/translate" class="hover:text-white transition flex items-start group">
+                                    <i class="fas fa-language text-blue-500 mr-2 mt-1 group-hover:text-blue-400"></i>
+                                    <div>
+                                        <div class="text-white font-medium">Shabdly Translate</div>
+                                        <div class="text-xs text-gray-500">E-commerce translation</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://hey.shabdly.online" class="hover:text-white transition flex items-start group">
+                                    <i class="fas fa-comments text-orange-500 mr-2 mt-1 group-hover:text-orange-400"></i>
+                                    <div>
+                                        <div class="text-white font-medium">HeyShabdly</div>
+                                        <div class="text-xs text-gray-500">Career guidance platform</div>
+                                    </div>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     <div>
