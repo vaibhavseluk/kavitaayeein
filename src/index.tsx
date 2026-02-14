@@ -106,8 +106,8 @@ app.get('/', (c) => {
         <nav class="bg-white shadow-sm sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
-                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition" title="Go to Home">
-                        <img src="/static/shabdly-logo.png" alt="Shabdly.online Logo" class="h-12 w-auto" style="max-width: 180px;" onerror="this.style.display='none'">
+                    <a href="/" class="flex items-center hover:opacity-80 transition" title="Go to Home">
+                        <img src="/static/shabdly-logo.png" alt="Shabdly.online Logo" style="height: 40px; width: auto; max-width: 200px;" onerror="this.style.display='none'">
                     </a>
                     <div class="flex items-center space-x-6">
                         <a href="#features" class="text-gray-600 hover:text-blue-600 transition">Features</a>

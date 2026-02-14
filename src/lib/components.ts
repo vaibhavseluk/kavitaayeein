@@ -55,6 +55,12 @@ export const sharedStyles = `
         width: auto;
     }
 
+    .logo-image-full {
+        height: 40px;
+        width: auto;
+        max-width: 200px;
+    }
+
     .logo-text {
         font-size: 1.5rem;
         font-weight: 700;
