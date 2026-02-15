@@ -788,7 +788,7 @@ app.get('/translate', (c) => {
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div>
                         <div class="mb-4">
-                            <img src="/static/shabdly-logo.png" alt="Shabdly Logo" style="height: 40px; width: auto; max-width: 200px; filter: brightness(0) invert(1); opacity: 0.9;">
+                            <img src="/static/shabdly-logo-footer.png" alt="Shabdly Logo" style="height: 50px; width: auto; max-width: 220px;">
                         </div>
                         <p class="text-gray-400 text-sm">
                             Powered by "Shabd" - AI solutions for growth & translation
