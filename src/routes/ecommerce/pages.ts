@@ -584,11 +584,10 @@ pages.get('/privacy', (c) => {
         <nav class="bg-white shadow-sm">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
-                    <div class="flex items-center space-x-3">
-                        <i class="fas fa-language text-blue-600 text-2xl"></i>
-                        <span class="text-2xl font-bold text-gray-900">Shabdly</span>
-                    </div>
-                    <a href="/" class="text-blue-600 hover:text-blue-700">
+                    <a href="/" class="flex items-center" title="Go to Home">
+                        <img src="/static/shabdly-logo.png" alt="Shabdly.online Logo" style="height: 35px; width: auto; max-width: 180px; object-fit: contain;">
+                    </a>
+                    <a href="/" class="text-blue-600 hover:text-blue-700 flex items-center">
                         <i class="fas fa-home mr-2"></i>Back to Home
                     </a>
                 </div>

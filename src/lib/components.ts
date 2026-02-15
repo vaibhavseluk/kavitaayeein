@@ -56,9 +56,10 @@ export const sharedStyles = `
     }
 
     .logo-image-full {
-        height: 40px;
+        height: 35px;
         width: auto;
-        max-width: 200px;
+        max-width: 180px;
+        object-fit: contain;
     }
 
     .logo-text {
@@ -284,7 +285,7 @@ export function getFooter(): string {
                 <!-- Brand -->
                 <div>
                     <a href="/" class="flex items-center space-x-2 mb-4 hover:opacity-80 transition">
-                        <img src="/static/shabdly-logo.png" alt="Shabdly Logo" class="h-10 w-auto" style="filter: brightness(0) invert(1);">
+                        <img src="/static/shabdly-logo-footer.png" alt="Shabdly Logo" style="height: 50px; width: auto; max-width: 220px;">
                     </a>
                     <p class="text-gray-400 text-sm">
                         AI-powered translation for Indian e-commerce sellers
