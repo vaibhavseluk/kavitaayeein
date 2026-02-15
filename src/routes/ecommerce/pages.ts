@@ -1448,4 +1448,328 @@ Response: { "status": "completed", "downloadUrl": "..." }
   `);
 });
 
+// Regional Amazon SEO Checklist Page
+pages.get('/seo-checklist', (c) => {
+  const breadcrumbs = [
+    { label: 'Home', href: '/' },
+    { label: 'Regional SEO Checklist', href: '/seo-checklist' }
+  ];
+
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Regional Amazon SEO Checklist - Shabdly</title>
+        <meta name="description" content="5-step checklist to optimize your translated product listings for Amazon search in Tier 2 and Tier 3 Indian cities">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/global.css" rel="stylesheet">
+        <style>
+            .checklist-item {
+                transition: all 0.3s ease;
+            }
+            .checklist-item:hover {
+                transform: translateX(5px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+            .highlight-box {
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                color: white;
+                padding: 20px;
+                border-radius: 12px;
+                margin: 30px 0;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-50">
+        ${getNavigation()}
+        ${getBreadcrumbs(breadcrumbs)}
+
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-green-600 to-emerald-600 py-12">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h1 class="text-4xl font-bold text-white mb-4">
+                    <i class="fas fa-check-circle mr-3"></i>
+                    Regional Amazon SEO Checklist
+                </h1>
+                <p class="text-xl text-green-100">
+                    5 Essential Steps to Rank Higher in Tier 2 & Tier 3 Cities
+                </p>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <!-- Introduction -->
+            <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+                <p class="text-lg text-gray-700 mb-4">
+                    You've translated your listings with Shabdly. Now it's time to <strong>dominate regional search results!</strong>
+                </p>
+                <p class="text-gray-700 mb-4">
+                    Most sellers just translate descriptions. To really win, you need to strategically place your keywords throughout your listing. 
+                    Follow these 5 steps to outrank your competition in Hindi, Tamil, Telugu, and other Indian languages.
+                </p>
+            </div>
+
+            <!-- Checklist Items -->
+            
+            <!-- Step 1 -->
+            <div class="checklist-item bg-white rounded-lg shadow-md p-8 mb-6 border-l-4 border-green-500">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
+                            1
+                        </div>
+                    </div>
+                    <div class="ml-6 flex-grow">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-3">
+                            Backend Search Terms
+                        </h2>
+                        <p class="text-gray-700 mb-4">
+                            Paste the top 5 translated keywords into the "Hidden Keywords" section of your Seller Central backend.
+                        </p>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <h3 class="font-semibold text-gray-900 mb-2">
+                                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                                Why This Works:
+                            </h3>
+                            <p class="text-gray-700 text-sm">
+                                Amazon's search algorithm crawls these hidden keywords. When customers search in Hindi/Tamil/Telugu, 
+                                your listing shows up even if the keyword isn't visible on the product page.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                            <h3 class="font-semibold text-blue-900 mb-2">Example:</h3>
+                            <p class="text-sm text-blue-800">
+                                For "Premium Kitchen Knife":<br>
+                                <span class="font-mono">किचन नाइफ | रसोई चाकू | கிச்சன் நைஃப் | వంటగది కత్తి | প্রিমিয়াম ছুরি</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="checklist-item bg-white rounded-lg shadow-md p-8 mb-6 border-l-4 border-blue-500">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
+                            2
+                        </div>
+                    </div>
+                    <div class="ml-6 flex-grow">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-3">
+                            Title Optimization
+                        </h2>
+                        <p class="text-gray-700 mb-4">
+                            Put the translated product name at the <strong>very beginning</strong> of your title.
+                        </p>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <h3 class="font-semibold text-gray-900 mb-2">
+                                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                                Why This Works:
+                            </h3>
+                            <p class="text-gray-700 text-sm">
+                                Amazon gives more weight to keywords at the start of titles. Regional customers also prefer seeing 
+                                their language first—it builds trust and improves click-through rates.
+                            </p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                                <h3 class="font-semibold text-red-900 mb-2">❌ Bad:</h3>
+                                <p class="text-sm text-red-800">
+                                    Premium Kitchen Knife | किचन नाइफ
+                                </p>
+                            </div>
+                            <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                                <h3 class="font-semibold text-green-900 mb-2">✅ Good:</h3>
+                                <p class="text-sm text-green-800">
+                                    किचन नाइफ | Premium Kitchen Knife
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="checklist-item bg-white rounded-lg shadow-md p-8 mb-6 border-l-4 border-purple-500">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-purple-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
+                            3
+                        </div>
+                    </div>
+                    <div class="ml-6 flex-grow">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-3">
+                            Bullet Point #1
+                        </h2>
+                        <p class="text-gray-700 mb-4">
+                            Ensure the first bullet point uses local "Shopping Slang" from Shabdly's translation.
+                        </p>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <h3 class="font-semibold text-gray-900 mb-2">
+                                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                                Why This Works:
+                            </h3>
+                            <p class="text-gray-700 text-sm">
+                                Phrases like "Ek Number Quality" (Hindi), "Paisa Vasool" (Tamil), or "Keka Offer" (Telugu) 
+                                resonate emotionally with Tier 2/3 buyers. They trust local slang more than formal translations.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-orange-50 border-l-4 border-orange-500 p-4 rounded">
+                            <h3 class="font-semibold text-orange-900 mb-2">Example Shopping Slang:</h3>
+                            <ul class="text-sm text-orange-800 space-y-1">
+                                <li>• Hindi: "Dhamaka Deal", "Ek Number Quality"</li>
+                                <li>• Tamil: "Vera Level", "Kandippa Vaanganum"</li>
+                                <li>• Telugu: "Keka Offer", "Adirindi Quality"</li>
+                                <li>• Kannada: "Gatti Product", "Bari Offer"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="checklist-item bg-white rounded-lg shadow-md p-8 mb-6 border-l-4 border-orange-500">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-orange-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
+                            4
+                        </div>
+                    </div>
+                    <div class="ml-6 flex-grow">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-3">
+                            Image Alt-Text
+                        </h2>
+                        <p class="text-gray-700 mb-4">
+                            Use translated keywords in your image descriptions for Google Image Search.
+                        </p>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <h3 class="font-semibold text-gray-900 mb-2">
+                                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                                Why This Works:
+                            </h3>
+                            <p class="text-gray-700 text-sm">
+                                When regional customers search on Google Images in Hindi/Tamil, your product photos can appear. 
+                                This drives external traffic to your Amazon listing—completely free!
+                            </p>
+                        </div>
+                        
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded">
+                            <h3 class="font-semibold text-indigo-900 mb-2">How to Add:</h3>
+                            <ol class="text-sm text-indigo-800 space-y-1">
+                                <li>1. In Seller Central, go to "Manage Inventory"</li>
+                                <li>2. Click "Edit" on your product listing</li>
+                                <li>3. Under "Images", add alt-text: <span class="font-mono">किचन नाइफ प्रीमियम</span></li>
+                                <li>4. Repeat for all 6-8 product images</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="checklist-item bg-white rounded-lg shadow-md p-8 mb-6 border-l-4 border-pink-500">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-pink-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
+                            5
+                        </div>
+                    </div>
+                    <div class="ml-6 flex-grow">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-3">
+                            Review Replies
+                        </h2>
+                        <p class="text-gray-700 mb-4">
+                            Reply to customer reviews in their own language to build "Social Proof."
+                        </p>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <h3 class="font-semibold text-gray-900 mb-2">
+                                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                                Why This Works:
+                            </h3>
+                            <p class="text-gray-700 text-sm">
+                                When shoppers see you replying in Hindi/Tamil, they think: "This brand cares about us!" 
+                                It humanizes your brand and converts browsers into buyers.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-teal-50 border-l-4 border-teal-500 p-4 rounded">
+                            <h3 class="font-semibold text-teal-900 mb-2">Quick Tip:</h3>
+                            <p class="text-sm text-teal-800">
+                                Use Shabdly's single-text translation feature to quickly translate your review responses. 
+                                <a href="/dashboard" class="underline font-semibold">Try it now →</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bonus Tips -->
+            <div class="highlight-box">
+                <h2 class="text-2xl font-bold mb-4">
+                    <i class="fas fa-gift mr-2"></i>
+                    Bonus Tips for Maximum Impact
+                </h2>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle mr-3 mt-1 flex-shrink-0"></i>
+                        <span><strong>A+ Content:</strong> If you have Brand Registry, add regional language text to your A+ Content sections.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle mr-3 mt-1 flex-shrink-0"></i>
+                        <span><strong>Sponsored Ads:</strong> Run ads targeting regional keywords (e.g., "किचन नाइफ"). Lower competition = cheaper clicks!</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle mr-3 mt-1 flex-shrink-0"></i>
+                        <span><strong>Monitor Rankings:</strong> Check your search rank weekly for your main translated keywords. Adjust if needed.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg p-8 text-center text-white mt-12">
+                <h2 class="text-3xl font-bold mb-4">Ready to Dominate Regional Search?</h2>
+                <p class="text-xl mb-6 opacity-90">
+                    Translate your entire catalog in minutes with Shabdly's bulk upload tool.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/dashboard" class="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                        <i class="fas fa-rocket mr-2"></i>
+                        Start Translating Now
+                    </a>
+                    <a href="/help" class="inline-block bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition border-2 border-white">
+                        <i class="fas fa-question-circle mr-2"></i>
+                        Get More Help
+                    </a>
+                </div>
+            </div>
+
+            <!-- Print/Download Button -->
+            <div class="text-center mt-8">
+                <button onclick="window.print()" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
+                    <i class="fas fa-print mr-2"></i>
+                    Print This Checklist
+                </button>
+            </div>
+        </div>
+
+        ${getFooter()}
+        ${goToTopButton}
+    </body>
+    </html>
+  `);
+});
+
 export default pages;

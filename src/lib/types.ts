@@ -24,6 +24,10 @@ export interface Env {
   ADMIN_EMAIL: string;
   ADMIN_NOTIFICATION_EMAIL: string;
   
+  // SendGrid Email
+  SENDGRID_API_KEY: string;
+  FROM_EMAIL: string;
+  
   // Cost Monitoring
   MONTHLY_API_COST_LIMIT: string;
   DAILY_API_COST_LIMIT: string;

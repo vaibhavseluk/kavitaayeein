@@ -10,6 +10,7 @@ import {
   exchangeGoogleCode,
   getGoogleUserInfo
 } from '../../lib/auth';
+import { sendWelcomeEmail } from '../../lib/email';
 
 const auth = new Hono<{ Bindings: Env }>();
 
@@ -67,6 +68,24 @@ auth.post('/register', async (c) => {
     await c.env.DB.prepare(
       'INSERT INTO onboarding_progress (user_id, step_completed, created_at, updated_at) VALUES (?, ?, datetime("now"), datetime("now"))'
     ).bind(user.id, 'signup').run();
+
+    // Send welcome email (non-blocking, don't wait for result)
+    if (c.env.SENDGRID_API_KEY && c.env.FROM_EMAIL) {
+      sendWelcomeEmail(
+        {
+          email: user.email,
+          name: user.name,
+          userId: user.id.toString(),
+        },
+        c.env.SENDGRID_API_KEY,
+        c.env.FROM_EMAIL
+      ).catch(error => {
+        console.error('Failed to send welcome email:', error);
+        // Don't fail registration if email fails
+      });
+    } else {
+      console.warn('⚠️ SendGrid not configured. Set SENDGRID_API_KEY and FROM_EMAIL environment variables.');
+    }
 
     return c.json({
       message: 'Registration successful',
@@ -192,6 +211,21 @@ auth.get('/google/callback', async (c) => {
         await c.env.DB.prepare(
           'INSERT INTO onboarding_progress (user_id, step_completed, created_at, updated_at) VALUES (?, ?, datetime("now"), datetime("now"))'
         ).bind(user.id, 'signup').run();
+
+        // Send welcome email for new Google OAuth users (non-blocking)
+        if (c.env.SENDGRID_API_KEY && c.env.FROM_EMAIL) {
+          sendWelcomeEmail(
+            {
+              email: user.email,
+              name: user.name,
+              userId: user.id.toString(),
+            },
+            c.env.SENDGRID_API_KEY,
+            c.env.FROM_EMAIL
+          ).catch(error => {
+            console.error('Failed to send welcome email:', error);
+          });
+        }
       }
     }
 
