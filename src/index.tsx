@@ -160,12 +160,74 @@ app.get('/', (c) => {
                         <a href="/contact" class="text-gray-600 hover:text-blue-600 transition">Contact</a>
                     </div>
                     <!-- Mobile menu button -->
-                    <button class="md:hidden text-gray-600 hover:text-gray-900">
-                        <i class="fas fa-bars text-2xl"></i>
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none">
+                        <i id="menuIcon" class="fas fa-bars text-2xl"></i>
                     </button>
+                </div>
+                
+                <!-- Mobile menu -->
+                <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-200">
+                    <div class="px-4 pt-2 pb-4 space-y-2">
+                        <a href="/" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-blue-600 rounded transition">
+                            <i class="fas fa-home mr-2"></i>Home
+                        </a>
+                        <a href="/translate" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-blue-600 rounded transition">
+                            <i class="fas fa-language mr-2"></i>Translate
+                        </a>
+                        <a href="https://hey.shabdly.online" class="block px-4 py-2 text-orange-600 hover:bg-orange-50 rounded transition font-semibold">
+                            <i class="fas fa-comments mr-2"></i>HeyShabdly
+                        </a>
+                        <a href="#platforms" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-blue-600 rounded transition">
+                            <i class="fas fa-layer-group mr-2"></i>Platforms
+                        </a>
+                        <a href="/help" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-blue-600 rounded transition">
+                            <i class="fas fa-question-circle mr-2"></i>Help
+                        </a>
+                        <a href="/contact" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-blue-600 rounded transition">
+                            <i class="fas fa-envelope mr-2"></i>Contact
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>
+        
+        <script>
+            function toggleMobileMenu() {
+                const menu = document.getElementById('mobileMenu');
+                const icon = document.getElementById('menuIcon');
+                
+                if (menu.classList.contains('hidden')) {
+                    menu.classList.remove('hidden');
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    menu.classList.add('hidden');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            }
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const menu = document.getElementById('mobileMenu');
+                const button = event.target.closest('button');
+                
+                if (!button && !menu.contains(event.target) && !menu.classList.contains('hidden')) {
+                    menu.classList.add('hidden');
+                    document.getElementById('menuIcon').classList.remove('fa-times');
+                    document.getElementById('menuIcon').classList.add('fa-bars');
+                }
+            });
+            
+            // Close menu on link click
+            document.querySelectorAll('#mobileMenu a').forEach(link => {
+                link.addEventListener('click', function() {
+                    document.getElementById('mobileMenu').classList.add('hidden');
+                    document.getElementById('menuIcon').classList.remove('fa-times');
+                    document.getElementById('menuIcon').classList.add('fa-bars');
+                });
+            });
+        </script>
 
         <!-- Hero Section -->
         <section class="gradient-bg py-20">
