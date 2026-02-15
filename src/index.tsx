@@ -442,6 +442,37 @@ app.get('/translate', (c) => {
         </style>
     </head>
     <body class="bg-white">
+        <!-- Shabdly Ecosystem Navigation -->
+        <div style="background: linear-gradient(135deg, #4A225D 0%, #6B3380 100%); color: white; padding: 8px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <div style="max-width: 1200px; margin: 0 auto; padding: 0 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <svg style="width: 20px; height: 20px; fill: #F9A03F;" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+              </svg>
+              <span style="font-size: 14px; font-weight: 600; opacity: 0.9;">Shabdly Ecosystem</span>
+            </div>
+            
+            <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+              <!-- Shabdly Translate (CURRENT) -->
+              <a href="https://shabdly.online/translate" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; background: rgba(249, 160, 63, 0.2); transition: all 0.2s;">
+                <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+                  <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"></path>
+                </svg>
+                <span style="font-size: 13px; font-weight: 500;">Shabdly Translate</span>
+                <span style="background: #F9A03F; color: #4A225D; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600;">CURRENT</span>
+              </a>
+              
+              <!-- HeyShabdly -->
+              <a href="https://hey.shabdly.online" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; background: rgba(255, 255, 255, 0.1); transition: all 0.2s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'">
+                <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                </svg>
+                <span style="font-size: 13px; font-weight: 500;">HeyShabdly</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        
         <!-- Navigation -->
         <nav class="bg-white shadow-sm sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
