@@ -819,6 +819,29 @@ app.get('/translate', (c) => {
                         </ul>
                     </div>
                 </div>
+                
+                <!-- Shabdly Ecosystem -->
+                <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                  <h4 style="font-size: 14px; font-weight: 600; color: #F9A03F; margin-bottom: 12px;">
+                    Shabdly Ecosystem
+                  </h4>
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <a href="https://shabdly.online/translate" style="color: #E5E7EB; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#E5E7EB'">
+                      <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+                        <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"></path>
+                      </svg>
+                      <span>Shabdly Translate - E-commerce translation</span>
+                    </a>
+                    
+                    <a href="https://hey.shabdly.online" target="_blank" style="color: #E5E7EB; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#E5E7EB'">
+                      <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                      </svg>
+                      <span>HeyShabdly - Career guidance platform</span>
+                    </a>
+                  </div>
+                </div>
+                
                 <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
                     <p>&copy; 2026 Shabdly.online. All rights reserved. | Nagpur, Maharashtra, India</p>
                 </div>
@@ -964,12 +987,37 @@ app.get('/about', (c) => {
 
         <!-- Footer -->
         <footer class="bg-gray-900 text-white py-8 mt-12">
-            <div class="max-w-7xl mx-auto px-4 text-center">
-                <p class="text-gray-400">© 2026 Shabdly.online. All rights reserved.</p>
-                <div class="mt-4 space-x-6">
-                    <a href="/terms" class="text-gray-400 hover:text-white">Terms</a>
-                    <a href="/privacy" class="text-gray-400 hover:text-white">Privacy</a>
-                    <a href="/contact" class="text-gray-400 hover:text-white">Contact</a>
+            <div class="max-w-7xl mx-auto px-4">
+                <!-- Shabdly Ecosystem -->
+                <div style="margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                  <h4 style="font-size: 14px; font-weight: 600; color: #F9A03F; margin-bottom: 12px;">
+                    Shabdly Ecosystem
+                  </h4>
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <a href="https://shabdly.online/translate" style="color: #E5E7EB; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#E5E7EB'">
+                      <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+                        <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"></path>
+                      </svg>
+                      <span>Shabdly Translate - E-commerce translation</span>
+                    </a>
+                    
+                    <a href="https://hey.shabdly.online" target="_blank" style="color: #E5E7EB; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#E5E7EB'">
+                      <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                      </svg>
+                      <span>HeyShabdly - Career guidance platform</span>
+                    </a>
+                  </div>
+                </div>
+                
+                <!-- Copyright and Links -->
+                <div class="text-center">
+                    <p class="text-gray-400">© 2026 Shabdly.online. All rights reserved.</p>
+                    <div class="mt-4 space-x-6">
+                        <a href="/terms" class="text-gray-400 hover:text-white">Terms</a>
+                        <a href="/privacy" class="text-gray-400 hover:text-white">Privacy</a>
+                        <a href="/contact" class="text-gray-400 hover:text-white">Contact</a>
+                    </div>
                 </div>
             </div>
         </footer>
