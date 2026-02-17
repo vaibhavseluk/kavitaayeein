@@ -435,7 +435,7 @@ await fetch('https://api.sendgrid.com/v3/mail/send', {
 
 **Local Development** (`.dev.vars`):
 ```
-SENDGRID_API_KEY=SG.YOUR_SENDGRID_API_KEY_HERE.SvkDzOOsOtCbXvg1VP2Bp69Qz1TcLvHTXL6JP9Q4kAQ
+SENDGRID_API_KEY=SG.YOUR_SENDGRID_API_KEY_HERE
 FROM_EMAIL=heyshabdly@gmail.com
 ```
 

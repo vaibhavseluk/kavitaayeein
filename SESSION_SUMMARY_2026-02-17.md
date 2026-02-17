@@ -133,7 +133,7 @@ Completed comprehensive updates across both Shabdly platforms:
 **Environment Variables**:
 - Local: `.dev.vars` file created
   ```
-  SENDGRID_API_KEY=SG.YOUR_SENDGRID_API_KEY_HERE.SvkDzOOsOtCbXvg1VP2Bp69Qz1TcLvHTXL6JP9Q4kAQ
+  SENDGRID_API_KEY=SG.YOUR_SENDGRID_API_KEY_HERE
   FROM_EMAIL=heyshabdly@gmail.com
   ```
 - Production: Cloudflare Pages secrets set
