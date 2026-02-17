@@ -1,8 +1,33 @@
-// Shabdly Settings Management
+// Shabdly / HeyShabdly Settings Management
 // Comprehensive settings page with tabs for Personal, Professional, Skills, etc.
+// Supports both platforms with dynamic branding
 
 const API_BASE = window.location.origin + '/api';
 let currentTab = 'personal';
+
+// Detect platform based on domain or window.PLATFORM
+const PLATFORM = window.PLATFORM || (window.location.hostname.includes('hey.shabdly') ? 'heyshabdly' : 'shabdly');
+const IS_HEYSHABDLY = PLATFORM === 'heyshabdly';
+
+// Platform-specific branding
+const BRANDING = {
+  shabdly: {
+    name: 'Shabdly',
+    logo: '/static/shabdly-logo.png',
+    logoAlt: 'Shabdly',
+    primaryColor: 'blue',
+    homeUrl: '/'
+  },
+  heyshabdly: {
+    name: 'HeyShabdly',
+    logo: '/static/heyshabdly-logo.png',
+    logoAlt: 'HeyShabdly',
+    primaryColor: 'heyshabdly-orange',
+    homeUrl: '/'
+  }
+};
+
+const brand = BRANDING[PLATFORM];
 
 // Check authentication on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -27,8 +52,8 @@ function renderSettingsPage() {
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
             <div class="flex items-center">
-              <a href="/" class="flex items-center">
-                <img src="/static/shabdly-logo.png" alt="Shabdly" style="height:35px; width:auto; max-width:180px; object-fit:contain;">
+              <a href="${brand.homeUrl}" class="flex items-center">
+                <img src="${brand.logo}" alt="${brand.logoAlt}" style="height:35px; width:auto; max-width:180px; object-fit:contain;">
               </a>
             </div>
             <div class="flex items-center space-x-4">

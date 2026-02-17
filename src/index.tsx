@@ -32,10 +32,7 @@ app.route('/api/knowledge', knowledge);
 app.route('/api/refunds', refunds);
 app.route('/api/settings', settings);
 
-// Mount pages routes
-app.route('/', pages);
-
-// Health check
+// Health check (define before pages router)
 app.get('/api/health', (c) => {
   return c.json({ 
     status: 'ok', 
@@ -44,7 +41,7 @@ app.get('/api/health', (c) => {
   });
 });
 
-// Dashboard page (protected, requires auth)
+// Dashboard page (protected, requires auth) - MUST be before pages router
 app.get('/dashboard', (c) => {
   return c.html(`
     <!DOCTYPE html>
@@ -65,20 +62,47 @@ app.get('/dashboard', (c) => {
   `);
 });
 
-// Settings page (protected, requires auth)
+// Settings page (protected, requires auth) - MUST be before pages router
+// Supports both Shabdly.online and HeyShabdly.online with dynamic branding
 app.get('/settings', (c) => {
+  const host = c.req.header('host') || '';
+  const isHeyShabdly = host.includes('hey.shabdly');
+  
+  // Dynamic branding based on domain
+  const title = isHeyShabdly ? 'Settings - HeyShabdly' : 'Settings - Shabdly';
+  const tailwindConfig = isHeyShabdly ? `
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'heyshabdly-orange': '#F9A03F',
+              'heyshabdly-plum': '#4A225D',
+              'heyshabdly-cream': '#FFF8E7',
+            }
+          }
+        }
+      }
+    </script>
+  ` : '';
+  
   return c.html(`
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Settings - Shabdly</title>
+        <title>${title}</title>
         <script src="https://cdn.tailwindcss.com"></script>
+        ${tailwindConfig}
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/global.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/settings.js" defer></script>
+        <script>
+          // Set platform branding for JavaScript
+          window.PLATFORM = '${isHeyShabdly ? 'heyshabdly' : 'shabdly'}';
+        </script>
     </head>
     <body class="bg-gray-50">
         <div id="settings-root"></div>
@@ -86,6 +110,9 @@ app.get('/settings', (c) => {
     </html>
   `);
 });
+
+// Mount pages routes (catch-all, must be AFTER specific routes)
+app.route('/', pages);
 
 // Homepage - Shabdly Platform Hub (presents both platforms)
 app.get('/', (c) => {
