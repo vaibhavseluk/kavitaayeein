@@ -175,18 +175,56 @@ auth.put('/profile', async (c) => {
       return c.json({ error: 'Invalid token' }, 401);
     }
 
-    const { display_name, bio, language_preference } = await c.req.json();
+    const { 
+      display_name, 
+      bio, 
+      language_preference, 
+      role, 
+      calcom_username, 
+      interest_tags 
+    } = await c.req.json();
 
-    await c.env.DB.prepare(
-      `UPDATE users 
-       SET display_name = COALESCE(?, display_name),
-           bio = COALESCE(?, bio),
-           language_preference = COALESCE(?, language_preference),
-           updated_at = CURRENT_TIMESTAMP
-       WHERE id = ?`
-    ).bind(display_name, bio, language_preference, payload.userId).run();
+    try {
+      await c.env.DB.prepare(
+        `UPDATE users 
+         SET display_name = COALESCE(?, display_name),
+             bio = COALESCE(?, bio),
+             language_preference = COALESCE(?, language_preference),
+             role = COALESCE(?, role),
+             calcom_username = COALESCE(?, calcom_username),
+             interest_tags = COALESCE(?, interest_tags),
+             updated_at = CURRENT_TIMESTAMP
+         WHERE id = ?`
+      ).bind(
+        display_name, 
+        bio, 
+        language_preference, 
+        role, 
+        calcom_username,
+        interest_tags ? JSON.stringify(interest_tags) : null,
+        payload.userId
+      ).run();
 
-    return c.json({ message: 'Profile updated successfully' });
+      return c.json({ message: 'Profile updated successfully' });
+    } catch (dbError) {
+      console.error('Database error during profile update:', dbError);
+      // If columns don't exist, try without them
+      try {
+        await c.env.DB.prepare(
+          `UPDATE users 
+           SET display_name = COALESCE(?, display_name),
+               bio = COALESCE(?, bio),
+               language_preference = COALESCE(?, language_preference),
+               updated_at = CURRENT_TIMESTAMP
+           WHERE id = ?`
+        ).bind(display_name, bio, language_preference, payload.userId).run();
+        
+        return c.json({ message: 'Profile updated successfully (partial)' });
+      } catch (fallbackError) {
+        console.error('Fallback update also failed:', fallbackError);
+        throw fallbackError;
+      }
+    }
   } catch (error) {
     console.error('Update profile error:', error);
     return c.json({ error: 'Failed to update profile' }, 500);
