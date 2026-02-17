@@ -12,6 +12,7 @@ import ecommerceAdmin from './routes/ecommerce/admin';
 import knowledge from './routes/ecommerce/knowledge';
 import refunds from './routes/ecommerce/refunds';
 import pages from './routes/ecommerce/pages';
+import settings from './routes/settings';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -29,6 +30,7 @@ app.route('/api/glossary', glossary);
 app.route('/api/admin', ecommerceAdmin);
 app.route('/api/knowledge', knowledge);
 app.route('/api/refunds', refunds);
+app.route('/api/settings', settings);
 
 // Mount pages routes
 app.route('/', pages);
@@ -58,6 +60,28 @@ app.get('/dashboard', (c) => {
     </head>
     <body class="bg-gray-50">
         <div id="dashboard-root"></div>
+    </body>
+    </html>
+  `);
+});
+
+// Settings page (protected, requires auth)
+app.get('/settings', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Settings - Shabdly</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/global.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/settings.js" defer></script>
+    </head>
+    <body class="bg-gray-50">
+        <div id="settings-root"></div>
     </body>
     </html>
   `);
