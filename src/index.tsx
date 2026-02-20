@@ -230,33 +230,6 @@ app.get('/', (c) => {
         </style>
     </head>
     <body class="bg-gray-50">
-        <!-- Platform Switcher Banner -->
-        <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-2 px-4">
-            <div class="max-w-7xl mx-auto flex items-center justify-center md:justify-between text-sm flex-wrap gap-2">
-                <div class="hidden md:flex items-center space-x-2">
-                    <i class="fas fa-layer-group"></i>
-                    <span class="font-medium">Shabdly Ecosystem</span>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <a href="/" class="hover:underline flex items-center font-medium px-2 py-1 rounded hover:bg-white/10 transition">
-                        <i class="fas fa-home mr-1"></i>
-                        <span class="hidden sm:inline">Home</span>
-                    </a>
-                    <span class="text-orange-200">|</span>
-                    <a href="/translate" class="hover:underline flex items-center font-medium px-2 py-1 rounded hover:bg-white/10 transition">
-                        <i class="fas fa-language mr-1"></i>
-                        <span class="hidden sm:inline">E-commerce Translation</span>
-                    </a>
-                    <span class="text-orange-200">|</span>
-                    <a href="https://hey.shabdly.online" class="hover:underline flex items-center font-medium bg-white/20 px-3 py-1 rounded hover:bg-white/30 transition">
-                        <i class="fas fa-comments mr-1"></i>
-                        <span class="hidden sm:inline">HeyShabdly Career Platform</span>
-                        <span class="sm:hidden">HeyShabdly</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        
         <!-- Navigation -->
         <nav class="bg-white shadow-sm sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1685,6 +1658,77 @@ app.get('/contact', (c) => {
     </body>
     </html>
   `);
+});
+
+// Catch-all route for HeyShabdly SPA (client-side routing)
+// This handles all unmatched routes on hey.shabdly.online and serves the SPA
+// The SPA's JavaScript (app.js) will handle the actual routing
+app.get('*', (c) => {
+  const host = c.req.header('host') || '';
+  const isHeyShabdly = host.includes('hey.shabdly');
+  
+  // Only serve SPA for hey.shabdly.online, let other domains 404
+  if (isHeyShabdly) {
+    return c.html(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>HeyShabdly - Help Me Grow</title>
+          <meta name="description" content="Peer-to-peer mentorship and support platform. Seek guidance, lend a hand, grow together.">
+          
+          <!-- PWA Meta Tags -->
+          <meta name="theme-color" content="#F9A03F">
+          <link rel="manifest" href="/static/manifest.json">
+          <link rel="apple-touch-icon" href="/static/icon-192.png">
+          
+          <!-- Favicon -->
+          <link rel="icon" type="image/png" href="/static/favicon.png">
+          
+          <!-- Tailwind CSS -->
+          <script src="https://cdn.tailwindcss.com"></script>
+          <script>
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    'heyshabdly-orange': '#F9A03F',
+                    'heyshabdly-plum': '#4A225D',
+                    'heyshabdly-cream': '#FFF8E7',
+                  }
+                }
+              }
+            }
+          </script>
+          
+          <!-- Font Awesome -->
+          <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+          
+          <!-- Custom Styles -->
+          <link href="/static/styles.css" rel="stylesheet">
+      </head>
+      <body class="bg-heyshabdly-cream">
+          <div id="app">
+              <!-- HeyShabdly SPA loads here via JavaScript -->
+              <div class="flex items-center justify-center min-h-screen">
+                  <div class="text-center">
+                      <i class="fas fa-spinner fa-spin text-4xl text-heyshabdly-orange mb-4"></i>
+                      <p class="text-heyshabdly-plum font-medium">Loading HeyShabdly...</p>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- Scripts -->
+          <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+          <script src="/static/app.js"></script>
+      </body>
+      </html>
+    `);
+  }
+  
+  // For other domains, return 404
+  return c.notFound();
 });
 
 export default app;
