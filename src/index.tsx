@@ -1664,11 +1664,16 @@ app.get('/contact', (c) => {
 // This handles all unmatched routes on hey.shabdly.online and serves the SPA
 // The SPA's JavaScript (app.js) will handle the actual routing
 app.get('*', (c) => {
+  const path = c.req.path;
   const host = c.req.header('host') || '';
   const isHeyShabdly = host.includes('hey.shabdly');
   
-  // Only serve SPA for hey.shabdly.online, let other domains 404
-  if (isHeyShabdly) {
+  // Exclude specific routes that have their own handlers
+  const excludedPaths = ['/settings', '/dashboard', '/api', '/static'];
+  const isExcludedPath = excludedPaths.some(excluded => path.startsWith(excluded));
+  
+  // Only serve SPA for hey.shabdly.online on non-excluded paths
+  if (isHeyShabdly && !isExcludedPath) {
     return c.html(`
       <!DOCTYPE html>
       <html lang="en">
