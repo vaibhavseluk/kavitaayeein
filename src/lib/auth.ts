@@ -1,6 +1,20 @@
 import type { Context } from 'hono';
 import type { Env, User, JWTPayload } from './types';
 
+// Extract JWT token from Authorization header
+export function extractToken(authHeader: string | undefined): string | null {
+  if (!authHeader) return null;
+  
+  // Support both "Bearer <token>" and just "<token>"
+  const parts = authHeader.split(' ');
+  if (parts.length === 2 && parts[0] === 'Bearer') {
+    return parts[1];
+  }
+  
+  // If no Bearer prefix, assume the whole header is the token
+  return authHeader;
+}
+
 // JWT utilities using Web Crypto API (Cloudflare Workers compatible)
 export async function generateToken(user: User, env: Env): Promise<string> {
   const payload: JWTPayload = {

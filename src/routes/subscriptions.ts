@@ -124,7 +124,7 @@ subscriptions.post('/create-checkout', async (c) => {
       return c.json({ error: 'Not authenticated' }, 401);
     }
 
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);
     }
@@ -211,7 +211,7 @@ subscriptions.post('/verify-payment', async (c) => {
       return c.json({ error: 'Not authenticated' }, 401);
     }
 
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);
     }
@@ -330,7 +330,7 @@ subscriptions.get('/status', async (c) => {
       return c.json({ error: 'Not authenticated' }, 401);
     }
 
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);
     }
@@ -377,7 +377,7 @@ subscriptions.post('/cancel', async (c) => {
       return c.json({ error: 'Not authenticated' }, 401);
     }
 
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);
     }

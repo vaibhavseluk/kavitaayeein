@@ -12,7 +12,7 @@ const adminOnly = async (c: any, next: any) => {
     return c.json({ error: 'Not authenticated' }, 401);
   }
 
-  const payload = await verifyToken(token);
+  const payload = await verifyToken(token, c.env);
   if (!payload || payload.role !== 'admin') {
     return c.json({ error: 'Admin access required' }, 403);
   }

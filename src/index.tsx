@@ -14,6 +14,16 @@ import refunds from './routes/ecommerce/refunds';
 import pages from './routes/ecommerce/pages';
 import settings from './routes/settings';
 
+// Import HeyShabdly (Poetry Platform) routes
+import poetryAuth from './routes/auth';
+import poems from './routes/poems';
+import poetryAdmin from './routes/admin';
+import anthology from './routes/anthology';
+import editor from './routes/editor';
+import reports from './routes/reports';
+import sponsors from './routes/sponsors';
+import subscriptions from './routes/subscriptions';
+
 const app = new Hono<{ Bindings: Env }>();
 
 // Enable CORS for API routes
@@ -22,12 +32,37 @@ app.use('/api/*', cors());
 // Serve static files from public directory
 app.use('/static/*', serveStatic({ root: './public' }));
 
-// Mount e-commerce API routes
-app.route('/api/auth', ecommerceAuth);
+// HeyShabdly (Poetry Platform) API routes - these take precedence for hey.shabdly.online
+// Using a wrapper to check domain and route accordingly
+const createDomainRouter = (heyShabdlyRoute: any, ecommerceRoute: any) => {
+  return new Hono<{ Bindings: Env }>().all('*', async (c) => {
+    const host = c.req.header('host') || '';
+    const isHeyShabdly = host.includes('hey.shabdly');
+    
+    if (isHeyShabdly && heyShabdlyRoute) {
+      return heyShabdlyRoute.fetch(c.req.raw, c.env, c.executionCtx);
+    } else if (ecommerceRoute) {
+      return ecommerceRoute.fetch(c.req.raw, c.env, c.executionCtx);
+    }
+    
+    return c.json({ error: 'Not found' }, 404);
+  });
+};
+
+// Mount domain-aware routes
+app.route('/api/auth', createDomainRouter(poetryAuth, ecommerceAuth));
+app.route('/api/poems', poems);
+app.route('/api/admin', createDomainRouter(poetryAdmin, ecommerceAdmin));
+app.route('/api/anthology', anthology);
+app.route('/api/editor', editor);
+app.route('/api/reports', reports);
+app.route('/api/sponsors', sponsors);
+app.route('/api/subscriptions', subscriptions);
+
+// E-commerce only routes
 app.route('/api/translations', translations);
 app.route('/api/credits', credits);
 app.route('/api/glossary', glossary);
-app.route('/api/admin', ecommerceAdmin);
 app.route('/api/knowledge', knowledge);
 app.route('/api/refunds', refunds);
 app.route('/api/settings', settings);

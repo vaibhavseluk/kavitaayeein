@@ -135,7 +135,7 @@ auth.get('/me', async (c) => {
 
     const token = authHeader.replace('Bearer ', '');
     const { verifyToken } = await import('../lib/auth');
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
 
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);
@@ -169,7 +169,7 @@ auth.put('/profile', async (c) => {
 
     const token = authHeader.replace('Bearer ', '');
     const { verifyToken } = await import('../lib/auth');
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
 
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);

@@ -104,7 +104,7 @@ poems.post('/', async (c) => {
       return c.json({ error: 'Not authenticated' }, 401);
     }
 
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);
     }
@@ -205,7 +205,7 @@ poems.put('/:id', async (c) => {
       return c.json({ error: 'Not authenticated' }, 401);
     }
 
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);
     }
@@ -252,7 +252,7 @@ poems.delete('/:id', async (c) => {
       return c.json({ error: 'Not authenticated' }, 401);
     }
 
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);
     }
@@ -293,7 +293,7 @@ poems.get('/user/my-poems', async (c) => {
       return c.json({ error: 'Not authenticated' }, 401);
     }
 
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);
     }
@@ -322,7 +322,7 @@ poems.get('/user/subscription-status', async (c) => {
       return c.json({ error: 'Not authenticated' }, 401);
     }
 
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);
     }
@@ -392,7 +392,7 @@ poems.post('/:id/like', async (c) => {
       return c.json({ error: 'Not authenticated' }, 401);
     }
 
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);
     }
@@ -442,7 +442,7 @@ poems.post('/:id/rate', async (c) => {
       return c.json({ error: 'Not authenticated' }, 401);
     }
 
-    const payload = await verifyToken(token);
+    const payload = await verifyToken(token, c.env);
     if (!payload) {
       return c.json({ error: 'Invalid token' }, 401);
     }
