@@ -5,8 +5,7 @@
 ## 🌐 Live URLs
 **Development**: http://localhost:3000  
 **Development (Public)**: https://3000-i50h0iu6uof9fu9t33zaw-5c13a017.sandbox.novita.ai  
-**Production**: https://42d8e5df.poetry-platform.pages.dev ✅ DEPLOYED  
-**Latest Deployment**: https://f2811d2c.shabdly-online.pages.dev ✅ DEPLOYED (March 12, 2026)  
+**Production**: https://5f709eb7.poetry-platform.pages.dev ✅ DEPLOYED (Header Removed)  
 **Main Domain**: https://shabdly.online ✅ ACTIVE  
 **WWW Domain**: https://www.shabdly.online ✅ ACTIVE  
 **HeyShabdly**: https://hey.shabdly.online ✅ ACTIVE  
