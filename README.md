@@ -5,7 +5,7 @@
 ## 🌐 Live URLs
 **Development**: http://localhost:3000  
 **Development (Public)**: https://3000-i50h0iu6uof9fu9t33zaw-5c13a017.sandbox.novita.ai  
-**Production**: https://ac81876e.poetry-platform.pages.dev ✅ DEPLOYED (Logo Fixed)  
+**Production**: https://08d900cf.poetry-platform.pages.dev ✅ DEPLOYED (HeyShabdly SPA Fixed)  
 **Main Domain**: https://shabdly.online ✅ ACTIVE  
 **WWW Domain**: https://www.shabdly.online ✅ ACTIVE  
 **HeyShabdly**: https://hey.shabdly.online ✅ ACTIVE  
@@ -15,10 +15,13 @@
 ## 📊 Project Status: **95% Complete - Deployed & Active!**
 
 **✅ Latest Update (March 12, 2026):**
+- ✅ Fixed HeyShabdly (hey.shabdly.online) - restored full SPA functionality
+- ✅ HeyShabdly now loads /static/app.js with all features and pages
+- ✅ Removed simple landing page redirect, restored proper application
+- ✅ Deployed latest build to Cloudflare Pages (deployment: 08d900cf)
 - ✅ Fixed logo size on /refund-policy, /terms, and /help/* pages
 - ✅ Logo now displays at correct size (40px height) matching main pages
 - ✅ Updated getLogo component with inline styles for consistency
-- ✅ Deployed latest build to Cloudflare Pages (deployment: ac81876e)
 - ✅ Removed Shabdly Ecosystem header from /translate page
 - ✅ Footer links to HeyShabdly remain intact for cross-platform navigation
 - ✅ Fixed Error 522 on hey.shabdly.online domain
