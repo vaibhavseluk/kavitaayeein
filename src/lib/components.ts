@@ -56,9 +56,9 @@ export const sharedStyles = `
     }
 
     .logo-image-full {
-        height: 35px;
+        height: 40px;
         width: auto;
-        max-width: 180px;
+        max-width: 200px;
         object-fit: contain;
     }
 
@@ -171,7 +171,7 @@ export const goToTopButton = `
 export function getLogo(showText = false): string {
     return `
     <a href="/" class="logo-container" title="Go to Home">
-        <img src="/static/shabdly-logo.png" alt="Shabdly.online Logo" class="logo-image-full">
+        <img src="/static/shabdly-logo.png" alt="Shabdly.online Logo" class="logo-image-full" style="height: 40px; width: auto; max-width: 200px; object-fit: contain;">
     </a>
     `;
 }
