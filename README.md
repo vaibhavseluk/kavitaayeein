@@ -5,17 +5,22 @@
 ## 🌐 Live URLs
 **Development**: http://localhost:3000  
 **Development (Public)**: https://3000-i50h0iu6uof9fu9t33zaw-5c13a017.sandbox.novita.ai  
-**Production**: https://0922aad5.poetry-platform.pages.dev ✅ DEPLOYED  
-**Cloudflare Project**: poetry-platform
+**Production**: https://42d8e5df.poetry-platform.pages.dev ✅ DEPLOYED  
+**Main Domain**: https://shabdly.online ✅ ACTIVE  
+**WWW Domain**: https://www.shabdly.online ✅ ACTIVE  
+**HeyShabdly**: https://hey.shabdly.online ✅ ACTIVE  
+**Cloudflare Project**: poetry-platform  
+**Latest Deployment**: March 12, 2026
 
-## 📊 Project Status: **90% Complete - Deployed to Production!**
+## 📊 Project Status: **95% Complete - Deployed & Active!**
 
-**✅ Latest Update (Jan 30, 2026):**
-- Database schema fixed and migrated
-- Authentication routes working (signup/login)
-- Deployed to Cloudflare Pages
-- Local testing successful
-- **Next**: Set production environment variables and test live deployment
+**✅ Latest Update (March 12, 2026):**
+- ✅ Fixed Error 522 on hey.shabdly.online domain
+- ✅ Added hey.shabdly.online as custom domain to poetry-platform
+- ✅ Deployed latest build to Cloudflare Pages
+- ✅ All domains verified and working (shabdly.online, www.shabdly.online, hey.shabdly.online)
+- ✅ DNS properly configured with Cloudflare
+- ✅ SSL certificates active on all domains
 
 ### ✅ Completed Features (Updated: Jan 30, 2026)
 
@@ -365,8 +370,15 @@ wrangler pages secret put OPENAI_API_KEY --project-name webapp
 
 ---
 
-**Last Updated**: January 29, 2026  
-**Version**: 0.6 (MVP in progress)  
-**Status**: 🚧 Backend 70% complete, ready for routes implementation
+**Last Updated**: March 12, 2026  
+**Version**: 0.95 (MVP Deployed & Active)  
+**Status**: ✅ Production deployment successful - All domains active
 
-**Next Session**: Building translation routes, credit management, and Lemon Squeezy integration 🚀
+**Deployment Details**:
+- Latest deployment ID: 42d8e5df-2fbc-4b54-a829-a87596f6e1b6
+- Project: poetry-platform
+- All custom domains verified and active
+- SSL certificates provisioned
+- DNS properly configured
+
+**Next Steps**: Monitor production performance and user feedback 🚀
