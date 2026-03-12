@@ -151,12 +151,12 @@ app.route('/', pages);
 
 // Homepage - Domain-based routing
 // - shabdly.online -> Platform Hub (both platforms)
-// - hey.shabdly.online -> HeyShabdly SPA
+// - hey.shabdly.online -> Simple landing page
 app.get('/', (c) => {
   const host = c.req.header('host') || '';
   const isHeyShabdly = host.includes('hey.shabdly');
   
-  // Serve HeyShabdly SPA for hey.shabdly.online
+  // Serve simple HeyShabdly landing page
   if (isHeyShabdly) {
     return c.html(`
       <!DOCTYPE html>
@@ -166,16 +166,6 @@ app.get('/', (c) => {
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>HeyShabdly - Help Me Grow</title>
           <meta name="description" content="Peer-to-peer mentorship and support platform. Seek guidance, lend a hand, grow together.">
-          
-          <!-- PWA Meta Tags -->
-          <meta name="theme-color" content="#F9A03F">
-          <link rel="manifest" href="/static/manifest.json">
-          <link rel="apple-touch-icon" href="/static/icon-192.png">
-          
-          <!-- Favicon -->
-          <link rel="icon" type="image/png" href="/static/favicon.png">
-          
-          <!-- Tailwind CSS -->
           <script src="https://cdn.tailwindcss.com"></script>
           <script>
             tailwind.config = {
@@ -190,27 +180,24 @@ app.get('/', (c) => {
               }
             }
           </script>
-          
-          <!-- Font Awesome -->
           <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-          
-          <!-- Custom Styles -->
-          <link href="/static/styles.css" rel="stylesheet">
       </head>
-      <body class="bg-heyshabdly-cream">
-          <div id="app">
-              <!-- HeyShabdly SPA loads here via JavaScript -->
-              <div class="flex items-center justify-center min-h-screen">
-                  <div class="text-center">
-                      <i class="fas fa-spinner fa-spin text-4xl text-heyshabdly-orange mb-4"></i>
-                      <p class="text-heyshabdly-plum font-medium">Loading HeyShabdly...</p>
-                  </div>
+      <body class="bg-heyshabdly-cream min-h-screen flex items-center justify-center">
+          <div class="text-center max-w-2xl mx-auto p-8">
+              <h1 class="text-6xl font-bold text-heyshabdly-plum mb-6">
+                  <i class="fas fa-hands-helping text-heyshabdly-orange"></i>
+                  HeyShabdly
+              </h1>
+              <p class="text-2xl text-heyshabdly-plum mb-8">Help Me Grow</p>
+              <p class="text-lg text-gray-700 mb-12">
+                  Peer-to-peer mentorship and support platform. Seek guidance, lend a hand, grow together.
+              </p>
+              <div class="space-x-4">
+                  <a href="/dashboard" class="inline-block px-8 py-3 bg-heyshabdly-orange text-white rounded-lg font-semibold hover:bg-opacity-90 transition">
+                      <i class="fas fa-sign-in-alt mr-2"></i>Get Started
+                  </a>
               </div>
           </div>
-          
-          <!-- Scripts -->
-          <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
-          <script src="/static/app.js"></script>
       </body>
       </html>
     `);
@@ -1761,7 +1748,12 @@ app.get('*', (c) => {
           
           <!-- Scripts -->
           <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
-          <script src="/static/app.js"></script>
+          <script>
+            // Redirect to dashboard for hey.shabdly.online homepage
+            if (window.location.pathname === '/') {
+              window.location.href = '/dashboard';
+            }
+          </script>
       </body>
       </html>
     `);
