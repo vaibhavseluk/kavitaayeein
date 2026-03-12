@@ -6,6 +6,7 @@
 **Development**: http://localhost:3000  
 **Development (Public)**: https://3000-i50h0iu6uof9fu9t33zaw-5c13a017.sandbox.novita.ai  
 **Production**: https://42d8e5df.poetry-platform.pages.dev ✅ DEPLOYED  
+**Latest Deployment**: https://f2811d2c.shabdly-online.pages.dev ✅ DEPLOYED (March 12, 2026)  
 **Main Domain**: https://shabdly.online ✅ ACTIVE  
 **WWW Domain**: https://www.shabdly.online ✅ ACTIVE  
 **HeyShabdly**: https://hey.shabdly.online ✅ ACTIVE  
@@ -15,9 +16,11 @@
 ## 📊 Project Status: **95% Complete - Deployed & Active!**
 
 **✅ Latest Update (March 12, 2026):**
+- ✅ Removed Shabdly Ecosystem header from /translate page
+- ✅ Footer links to HeyShabdly remain intact for cross-platform navigation
+- ✅ Deployed latest build to Cloudflare Pages (deployment: f2811d2c)
 - ✅ Fixed Error 522 on hey.shabdly.online domain
 - ✅ Added hey.shabdly.online as custom domain to poetry-platform
-- ✅ Deployed latest build to Cloudflare Pages
 - ✅ All domains verified and working (shabdly.online, www.shabdly.online, hey.shabdly.online)
 - ✅ DNS properly configured with Cloudflare
 - ✅ SSL certificates active on all domains
