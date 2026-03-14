@@ -92,8 +92,8 @@ app.route('/', pages);
 
 // Homepage - E-commerce Translation Platform
 app.get('/', (c) => {
-  // Redirect homepage to /translate page
-  return c.redirect('/translate');
+  // Redirect homepage to dashboard (main e-commerce interface)
+  return c.redirect('/dashboard');
 });
 
 export default app;
