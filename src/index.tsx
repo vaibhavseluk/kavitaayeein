@@ -87,14 +87,13 @@ app.get('/settings', (c) => {
   `);
 });
 
-// Mount pages routes (catch-all, must be AFTER specific routes)
-app.route('/', pages);
-
-// Homepage - E-commerce Translation Platform
+// Homepage - Redirect to dashboard (MUST be before pages router)
 app.get('/', (c) => {
-  // Redirect homepage to dashboard (main e-commerce interface)
   return c.redirect('/dashboard');
 });
+
+// Mount pages routes (catch-all, must be AFTER specific routes)
+app.route('/', pages);
 
 export default app;
 
